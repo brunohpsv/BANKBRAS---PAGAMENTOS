@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BANKBRAS - PAGAMENTOS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        /* Cabeçalho */
+        header {
+            background: linear-gradient(90deg, 
+                #009739 0%, /* Verde escuro */
+                #FFCC29 25%, /* Amarelo */
+                #FFFFFF 50%, /* Branco */
+                #012169 75%, /* Azul */
+                #000000 100% /* Preto */
+            );
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .menu-toggle {
+            cursor: pointer;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 30px;
+            top: 60px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            width: 200px;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f0f0f0;
+            color: #009739;
+        }
+
+        /* Conteúdo principal */
+        .main-content {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #012169;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #009739;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-btn:hover {
+            background-color: #007a2f;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">BANKBRAS - PAGAMENTOS</div>
+        <div class="menu-toggle" id="menuToggle">⋯</div>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="#">Sobre a empresa</a>
+            <a href="#">Sua conta</a>
+            <a href="#">Suporte</a>
+            <a href="#">Política</a>
+            <a href="#">Taxas de uso</a>
+            <a href="#">Contato</a>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="login-container">
+            <h2>Faça login na sua conta</h2>
+            <div class="input-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" placeholder="Digite seu e-mail">
+            </div>
+            <div class="input-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" placeholder="Digite sua senha">
+            </div>
+            <button class="login-btn" onclick="login()">Entrar</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        © 2023 BANKBRAS - Todos os direitos reservados
+    </footer>
+
+    <script>
+        // Menu dropdown
+        const menuToggle = document.getElementById('menuToggle');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        menuToggle.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('show');
+        });
+
+        // Fechar menu quando clicar fora
+        window.addEventListener('click', (e) => {
+            if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        // Função de login (simplificada)
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (email && password) {
+                alert('Login realizado com sucesso!');
+                // Aqui você adicionaria a integração com Firebase Auth
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        }
+    </script>
+</body>
+</html>
