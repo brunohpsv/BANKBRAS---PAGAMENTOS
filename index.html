@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BANKBRAS - PAGAMENTOS</title>
+    <title>BBP - BANKBRAS - PAGAMENTOS</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
             --verde-escuro: #006b3c;
@@ -13,6 +14,8 @@
             --azul: #002776;
             --branco: #ffffff;
             --preto: #000000;
+            --cinza-claro: #f5f5f5;
+            --cinza-escuro: #333333;
         }
         
         * {
@@ -24,6 +27,8 @@
 
         body {
             background-color: #f8f9fa;
+            color: var(--cinza-escuro);
+            line-height: 1.6;
         }
 
         /* Cabeçalho Premium */
@@ -147,7 +152,7 @@
         }
 
         .dropdown-menu a:hover {
-            background-color: #f5f5f5;
+            background-color: var(--cinza-claro);
             color: var(--verde-escuro);
             padding-left: 24px;
         }
@@ -156,18 +161,193 @@
             border-bottom: none;
         }
 
-        /* Conteúdo principal (exemplo) */
+        .dropdown-menu a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Conteúdo principal */
         .main-content {
             padding: 60px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-title {
             text-align: center;
+            margin-bottom: 50px;
+            color: var(--verde-escuro);
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--cinza-escuro);
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: var(--branco);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--verde-escuro);
+            margin-bottom: 20px;
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--azul);
+        }
+
+        .service-description {
+            color: var(--cinza-escuro);
+            margin-bottom: 20px;
+        }
+
+        .highlight-banner {
+            background: linear-gradient(135deg, var(--verde-escuro) 0%, var(--azul) 100%);
+            color: var(--branco);
+            padding: 60px 40px;
+            border-radius: 12px;
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .highlight-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .highlight-text {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--branco);
+            color: var(--verde-escuro);
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid var(--branco);
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--branco);
+        }
+
+        .btn-primary {
+            background: var(--amarelo);
+            color: var(--preto);
+            border-color: var(--amarelo);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--amarelo);
+        }
+
+        footer {
+            background: var(--preto);
+            color: var(--branco);
+            padding: 40px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo .logo-icon {
+            background: linear-gradient(135deg, var(--amarelo) 0%, var(--branco) 100%);
+            color: var(--preto);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--branco);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--amarelo);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 0 20px;
+            }
+            
+            .main-content {
+                padding: 40px 20px;
+            }
+            
+            .dropdown-menu {
+                right: 20px;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">
-            <div class="logo-icon">BB</div>
-            <div class="logo-text">BANK<span>BRAS</span></div>
+            <div class="logo-icon">BBP</div>
+            <div class="logo-text">BANK<span>BRAS</span> PAGAMENTOS</div>
         </div>
         
         <div class="nav-container">
@@ -175,19 +355,99 @@
                 <span>⋯</span>
             </div>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="#"><i class="icon"></i> Sobre a empresa</a>
-                <a href="#"><i class="icon"></i> Sua conta</a>
-                <a href="#"><i class="icon"></i> Suporte</a>
-                <a href="#"><i class="icon"></i> Política</a>
-                <a href="#"><i class="icon"></i> Taxas de uso</a>
-                <a href="#"><i class="icon"></i> Contato</a>
+                <a href="#"><i class="fas fa-building"></i> Sobre a empresa</a>
+                <a href="#"><i class="fas fa-user-circle"></i> Sua conta</a>
+                <a href="#"><i class="fas fa-headset"></i> Suporte</a>
+                <a href="#"><i class="fas fa-file-alt"></i> Política</a>
+                <a href="#"><i class="fas fa-percentage"></i> Taxas de uso</a>
+                <a href="#"><i class="fas fa-envelope"></i> Contato</a>
             </div>
         </div>
     </header>
 
     <div class="main-content">
-        <!-- Seu conteúdo aqui -->
+        <h1 class="page-title">BBP - BANKBRAS PAGAMENTOS</h1>
+        <p class="page-subtitle">A plataforma completa para unificação e pagamento de todos os seus impostos e contas, seja você pessoa física ou jurídica. Simplifique sua vida financeira com nossa solução integrada.</p>
+        
+        <div class="services-container">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+                <h3 class="service-title">Impostos Federais</h3>
+                <p class="service-description">Pague IRPF, IRPJ, IPTU, IPVA e todos os impostos federais em um único lugar, com lembretes automáticos e histórico organizado.</p>
+                <a href="#" class="btn btn-primary">Saiba mais</a>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <h3 class="service-title">Impostos Municipais</h3>
+                <p class="service-description">ISS, ITBI e demais tributos municipais pagos de forma rápida e segura, com comprovantes válidos em todos os municípios.</p>
+                <a href="#" class="btn btn-primary">Saiba mais</a>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-university"></i>
+                </div>
+                <h3 class="service-title">Impostos Estaduais</h3>
+                <p class="service-description">ICMS, ITCMD e outros tributos estaduais com pagamento facilitado e integração direta com os órgãos arrecadadores.</p>
+                <a href="#" class="btn btn-primary">Saiba mais</a>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h3 class="service-title">Contas de Consumo</h3>
+                <p class="service-description">Água, luz, gás, telefone e TV por assinatura em uma plataforma única com agendamento e pagamento automático.</p>
+                <a href="#" class="btn btn-primary">Saiba mais</a>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="service-title">Relatórios Financeiros</h3>
+                <p class="service-description">Tenha controle total sobre seus pagamentos com relatórios detalhados e personalizados para melhor gestão financeira.</p>
+                <a href="#" class="btn btn-primary">Saiba mais</a>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3 class="service-title">Segurança Total</h3>
+                <p class="service-description">Tecnologia de ponta para garantir a segurança de seus dados e transações, com certificação bancária e criptografia avançada.</p>
+                <a href="#" class="btn btn-primary">Saiba mais</a>
+            </div>
+        </div>
+        
+        <div class="highlight-banner">
+            <h2 class="highlight-title">Tudo em um só lugar</h2>
+            <p class="highlight-text">O BBP BankBras Pagamentos reúne todos os tributos e contas que você precisa pagar em uma única plataforma intuitiva e segura. Economize tempo e evite multas com nossa solução completa.</p>
+            <a href="#" class="btn">Cadastre-se agora</a>
+        </div>
     </div>
+
+    <footer>
+        <div class="footer-logo">
+            <div class="logo-icon">BBP</div>
+            <div class="logo-text">BANK<span>BRAS</span> PAGAMENTOS</div>
+        </div>
+        
+        <div class="footer-links">
+            <a href="#">Termos de uso</a>
+            <a href="#">Política de privacidade</a>
+            <a href="#">Trabalhe conosco</a>
+            <a href="#">Dúvidas frequentes</a>
+            <a href="#">Contato</a>
+        </div>
+        
+        <p class="copyright">© 2023 BBP BankBras Pagamentos. Todos os direitos reservados.</p>
+    </footer>
 
     <script>
         // Menu dropdown
