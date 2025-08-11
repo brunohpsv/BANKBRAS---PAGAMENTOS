@@ -337,15 +337,15 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px;
             margin-bottom: 40px;
         }
 
         .flow-step {
             background: var(--branco);
             border-radius: 12px;
-            padding: 25px;
-            width: 220px;
+            padding: 20px;
+            width: 180px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             position: relative;
         }
@@ -353,21 +353,21 @@
         .flow-step:not(:last-child)::after {
             content: "→";
             position: absolute;
-            right: -25px;
+            right: -15px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--cinza-escuro);
-            font-size: 1.5rem;
+            font-size: 1.2rem;
         }
 
         .flow-step-icon {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--verde-escuro);
             margin-bottom: 15px;
         }
 
         .flow-step-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 10px;
             color: var(--azul);
@@ -375,40 +375,43 @@
 
         .flow-step-desc {
             color: var(--cinza-escuro);
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         .pain-points {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-top: 40px;
         }
 
         .pain-point {
             background: var(--branco);
             border-radius: 12px;
-            padding: 30px;
+            padding: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             text-align: center;
             border-top: 4px solid var(--amarelo);
+            width: 220px;
         }
 
         .pain-point-icon {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--azul);
             margin-bottom: 15px;
         }
 
         .pain-point-title {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             color: var(--verde-escuro);
         }
 
         .pain-point-desc {
             color: var(--cinza-escuro);
+            font-size: 0.8rem;
         }
 
         /* Rodapé melhorado */
@@ -484,6 +487,14 @@
             color: var(--preto);
         }
 
+        .footer-logo .logo-text {
+            color: var(--branco);
+        }
+
+        .footer-logo .logo-text span {
+            color: var(--amarelo);
+        }
+
         .footer-about p {
             margin-bottom: 20px;
             opacity: 0.8;
@@ -550,12 +561,12 @@
                 display: none;
             }
             
-            .flow-steps {
+            .flow-steps, .pain-points {
                 flex-direction: column;
                 align-items: center;
             }
             
-            .flow-step {
+            .flow-step, .pain-point {
                 width: 100%;
                 max-width: 400px;
             }
@@ -715,7 +726,7 @@
                         <i class="fas fa-user-plus"></i>
                     </div>
                     <h3 class="flow-step-title">1. Cadastro</h3>
-                    <p class="flow-step-desc">Crie sua conta e vincule seus documentos e contas</p>
+                    <p class="flow-step-desc">Informe apenas seu CPF e nós buscamos todos os impostos e contas vinculados</p>
                 </div>
                 
                 <div class="flow-step">
@@ -817,20 +828,8 @@
                 <ul>
                     <li><a href="#"><i class="fas fa-chevron-right"></i> Página Inicial</a></li>
                     <li><a href="#"><i class="fas fa-chevron-right"></i> Sobre Nós</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Serviços</a></li>
                     <li><a href="#"><i class="fas fa-chevron-right"></i> Planos</a></li>
                     <li><a href="#"><i class="fas fa-chevron-right"></i> Contato</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-column">
-                <h3>Serviços</h3>
-                <ul>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Pagamento Unificado</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Impostos Automáticos</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Contas Programadas</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Relatórios Financeiros</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Consultoria Tributária</a></li>
                 </ul>
             </div>
             
@@ -849,9 +848,6 @@
             <div class="footer-links">
                 <a href="#">Termos de Uso</a>
                 <a href="#">Política de Privacidade</a>
-                <a href="#">Cookies</a>
-                <a href="#">FAQ</a>
-                <a href="#">Trabalhe Conosco</a>
             </div>
             <p class="copyright">© 2023 BBP BankBras Pagamentos. Todos os direitos reservados. CNPJ: 12.345.678/0001-99</p>
         </div>
