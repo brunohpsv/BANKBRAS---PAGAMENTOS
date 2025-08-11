@@ -4,203 +4,217 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BANKBRAS - PAGAMENTOS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --verde-escuro: #006b3c;
+            --verde-claro: #009639;
+            --amarelo: #f7d417;
+            --azul: #002776;
+            --branco: #ffffff;
+            --preto: #000000;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Montserrat', sans-serif;
         }
 
         body {
-            background-color: #f5f5f5;
+            background-color: #f8f9fa;
         }
 
-        /* Cabeçalho */
+        /* Cabeçalho Premium */
         header {
-            background: linear-gradient(90deg, 
-                #009739 0%, /* Verde escuro */
-                #FFCC29 25%, /* Amarelo */
-                #FFFFFF 50%, /* Branco */
-                #012169 75%, /* Azul */
-                #000000 100% /* Preto */
-            );
-            padding: 15px 30px;
+            background: var(--branco);
+            padding: 0 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             position: relative;
+            height: 80px;
+            border-bottom: 4px solid transparent;
+            background-image: linear-gradient(to right, 
+                var(--verde-escuro) 0%, 
+                var(--verde-claro) 25%, 
+                var(--amarelo) 50%, 
+                var(--azul) 75%, 
+                var(--preto) 100%);
+            background-size: 100% 4px;
+            background-repeat: no-repeat;
+            background-position: bottom;
         }
 
         .logo {
-            color: white;
-            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--verde-escuro) 0%, var(--azul) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--branco);
             font-weight: bold;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            font-size: 18px;
+        }
+
+        .logo-text {
+            color: var(--preto);
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text span {
+            color: var(--verde-escuro);
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            gap: 30px;
         }
 
         .menu-toggle {
             cursor: pointer;
-            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--verde-claro) 0%, var(--azul) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-toggle span {
+            color: var(--branco);
             font-size: 24px;
             font-weight: bold;
+            line-height: 1;
+            margin-top: -4px;
         }
 
         .dropdown-menu {
             display: none;
             position: absolute;
-            right: 30px;
-            top: 60px;
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            right: 40px;
+            top: 80px;
+            background-color: var(--branco);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
             z-index: 100;
-            width: 200px;
+            width: 240px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .dropdown-menu.show {
             display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .dropdown-menu a {
-            display: block;
-            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
             color: #333;
             text-decoration: none;
-            border-bottom: 1px solid #eee;
-            transition: all 0.3s;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
         }
 
         .dropdown-menu a:hover {
-            background-color: #f0f0f0;
-            color: #009739;
+            background-color: #f5f5f5;
+            color: var(--verde-escuro);
+            padding-left: 24px;
         }
 
-        /* Conteúdo principal */
+        .dropdown-menu a:last-child {
+            border-bottom: none;
+        }
+
+        /* Conteúdo principal (exemplo) */
         .main-content {
-            padding: 30px;
+            padding: 60px 40px;
             text-align: center;
-        }
-
-        .login-container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 30px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .login-container h2 {
-            margin-bottom: 20px;
-            color: #012169;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: #009739;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .login-btn:hover {
-            background-color: #007a2f;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="logo">BANKBRAS - PAGAMENTOS</div>
-        <div class="menu-toggle" id="menuToggle">⋯</div>
-        <div class="dropdown-menu" id="dropdownMenu">
-            <a href="#">Sobre a empresa</a>
-            <a href="#">Sua conta</a>
-            <a href="#">Suporte</a>
-            <a href="#">Política</a>
-            <a href="#">Taxas de uso</a>
-            <a href="#">Contato</a>
+        <div class="logo">
+            <div class="logo-icon">BB</div>
+            <div class="logo-text">BANK<span>BRAS</span></div>
+        </div>
+        
+        <div class="nav-container">
+            <div class="menu-toggle" id="menuToggle">
+                <span>⋯</span>
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="#"><i class="icon"></i> Sobre a empresa</a>
+                <a href="#"><i class="icon"></i> Sua conta</a>
+                <a href="#"><i class="icon"></i> Suporte</a>
+                <a href="#"><i class="icon"></i> Política</a>
+                <a href="#"><i class="icon"></i> Taxas de uso</a>
+                <a href="#"><i class="icon"></i> Contato</a>
+            </div>
         </div>
     </header>
 
     <div class="main-content">
-        <div class="login-container">
-            <h2>Faça login na sua conta</h2>
-            <div class="input-group">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" placeholder="Digite seu e-mail">
-            </div>
-            <div class="input-group">
-                <label for="password">Senha</label>
-                <input type="password" id="password" placeholder="Digite sua senha">
-            </div>
-            <button class="login-btn" onclick="login()">Entrar</button>
-        </div>
+        <!-- Seu conteúdo aqui -->
     </div>
-
-    <footer class="footer">
-        © 2023 BANKBRAS - Todos os direitos reservados
-    </footer>
 
     <script>
         // Menu dropdown
         const menuToggle = document.getElementById('menuToggle');
         const dropdownMenu = document.getElementById('dropdownMenu');
 
-        menuToggle.addEventListener('click', () => {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
             dropdownMenu.classList.toggle('show');
         });
 
         // Fechar menu quando clicar fora
-        window.addEventListener('click', (e) => {
+        document.addEventListener('click', (e) => {
             if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
                 dropdownMenu.classList.remove('show');
             }
         });
 
-        // Função de login (simplificada)
-        function login() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            if (email && password) {
-                alert('Login realizado com sucesso!');
-                // Aqui você adicionaria a integração com Firebase Auth
+        // Animação ao rolar
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
             } else {
-                alert('Por favor, preencha todos os campos.');
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
             }
-        }
+        });
     </script>
 </body>
 </html>
