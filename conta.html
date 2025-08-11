@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - BBP BANKBRAS PAGAMENTOS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <style>
+        :root {
+            --verde-escuro: #006b3c;
+            --verde-claro: #009639;
+            --amarelo: #f7d417;
+            --azul: #002776;
+            --branco: #ffffff;
+            --preto: #000000;
+            --cinza-claro: #f5f5f5;
+            --cinza-escuro: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: var(--cinza-escuro);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Cabeçalho Premium */
+        header {
+            background: var(--branco);
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            position: relative;
+            height: 80px;
+            border-bottom: 4px solid transparent;
+            background-image: linear-gradient(to right, 
+                var(--verde-escuro) 0%, 
+                var(--verde-claro) 25%, 
+                var(--amarelo) 50%, 
+                var(--azul) 75%, 
+                var(--preto) 100%);
+            background-size: 100% 4px;
+            background-repeat: no-repeat;
+            background-position: bottom;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--verde-escuro) 0%, var(--azul) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--branco);
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            color: var(--preto);
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text span {
+            color: var(--verde-escuro);
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .menu-toggle {
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--verde-claro) 0%, var(--azul) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-toggle .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle .hamburger span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background-color: var(--branco);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active .hamburger span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .menu-toggle.active .hamburger span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active .hamburger span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .menu-toggle .bbp-logo {
+            position: absolute;
+            color: var(--branco);
+            font-weight: bold;
+            font-size: 18px;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active .bbp-logo {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .menu-toggle.active .hamburger {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 40px;
+            top: 80px;
+            background-color: var(--branco);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            z-index: 100;
+            width: 240px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dropdown-menu.show {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--cinza-claro);
+            color: var(--verde-escuro);
+            padding-left: 24px;
+        }
+
+        .dropdown-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-menu a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Conteúdo principal - Página de Login */
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .login-container {
+            background: var(--branco);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(to right, 
+                var(--verde-escuro) 0%, 
+                var(--verde-claro) 25%, 
+                var(--amarelo) 50%, 
+                var(--azul) 75%, 
+                var(--preto) 100%);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: var(--verde-escuro);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: var(--cinza-escuro);
+            font-size: 0.9rem;
+        }
+
+        .login-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-form .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--cinza-escuro);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .login-form .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .login-form .form-group input:focus {
+            border-color: var(--verde-escuro);
+            box-shadow: 0 0 0 3px rgba(0, 107, 60, 0.1);
+            outline: none;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 8px;
+        }
+
+        .forgot-password a {
+            color: var(--verde-escuro);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: var(--azul);
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(to right, var(--verde-escuro), var(--verde-claro));
+            color: var(--branco);
+            border: none;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 107, 60, 0.2);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .divider span {
+            padding: 0 10px;
+            color: var(--cinza-escuro);
+            font-size: 0.9rem;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .register-link a {
+            color: var(--verde-escuro);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .register-link a:hover {
+            color: var(--azul);
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert i {
+            margin-right: 10px;
+        }
+
+        /* Rodapé melhorado */
+        footer {
+            background: var(--preto);
+            color: var(--branco);
+            padding: 40px 20px 20px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--amarelo);
+            position: relative;
+            padding-bottom: 8px;
+        }
+
+        .footer-column h3::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--amarelo);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: var(--branco);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--amarelo);
+        }
+
+        .footer-column ul li a i {
+            width: 18px;
+            text-align: center;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            header {
+                padding: 0 20px;
+            }
+            
+            .login-container {
+                padding: 30px;
+            }
+            
+            .dropdown-menu {
+                right: 20px;
+                width: calc(100% - 40px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-text {
+                font-size: 16px;
+            }
+            
+            .login-container {
+                padding: 25px 20px;
+            }
+            
+            .remember-forgot {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <div class="logo-icon">BBP</div>
+            <div class="logo-text">BANK<span>BRAS</span> PAGAMENTOS</div>
+        </div>
+        
+        <div class="nav-container">
+            <div class="menu-toggle" id="menuToggle">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="bbp-logo">BBP</div>
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="index.html"><i class="fas fa-home"></i> Página Inicial</a>
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="suporte.html"><i class="fas fa-headset"></i> Suporte</a>
+                <a href="politica.html"><i class="fas fa-file-alt"></i> Política</a>
+                <a href="taxas.html"><i class="fas fa-percentage"></i> Taxas de uso</a>
+                <a href="contato.html"><i class="fas fa-envelope"></i> Contato</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>Acesse sua conta</h1>
+                <p>Entre com seu e-mail e senha para acessar sua conta</p>
+            </div>
+            
+            <div id="alertMessage" class="alert" style="display: none;"></div>
+            
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" required placeholder="Digite seu e-mail">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" required placeholder="Digite sua senha">
+                </div>
+                
+                <div class="remember-forgot">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Lembrar-me</label>
+                    </div>
+                    <div class="forgot-password">
+                        <a href="recuperar-senha.html">Esqueceu a senha?</a>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-btn">Entrar</button>
+                
+                <div class="register-link">
+                    Não tem uma conta? <a href="cadastro.html">Cadastre-se</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Sobre Nós</h3>
+                <ul>
+                    <li><a href="sobre.html"><i class="fas fa-chevron-right"></i> Quem Somos</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Nossos Serviços</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Termos de Uso</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Suporte</h3>
+                <ul>
+                    <li><a href="suporte.html"><i class="fas fa-chevron-right"></i> Central de Ajuda</a></li>
+                    <li><a href="contato.html"><i class="fas fa-chevron-right"></i> Fale Conosco</a></li>
+                    <li><a href="politica.html"><i class="fas fa-chevron-right"></i> Política de Privacidade</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Contato</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Av. Paulista, 1000 - São Paulo/SP</a></li>
+                    <li><a href="#"><i class="fas fa-phone-alt"></i> (11) 4004-4004</a></li>
+                    <li><a href="#"><i class="fas fa-envelope"></i> contato@bbppagamentos.com.br</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2023 BBP BankBras Pagamentos. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAoOFEJ3VDvupYEy5819iDwA4uxe_jvW6c",
+            authDomain: "bankbras-55829.firebaseapp.com",
+            projectId: "bankbras-55829",
+            storageBucket: "bankbras-55829.appspot.com",
+            messagingSenderId: "405398139462",
+            appId: "1:405398139462:web:3d7f6a5c1c2f0a6a4e3a8a"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Menu dropdown com animação
+        const menuToggle = document.getElementById('menuToggle');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menuToggle.classList.toggle('active');
+            dropdownMenu.classList.toggle('show');
+        });
+
+        // Fechar menu quando clicar fora
+        document.addEventListener('click', (e) => {
+            if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                menuToggle.classList.remove('active');
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        // Animação ao rolar
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
+            }
+        });
+
+        // Função para mostrar mensagens de alerta
+        function showAlert(message, type) {
+            const alertDiv = document.getElementById('alertMessage');
+            alertDiv.textContent = message;
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.display = 'flex';
+            
+            // Adiciona ícone conforme o tipo
+            const icon = document.createElement('i');
+            icon.className = type === 'danger' ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+            alertDiv.insertBefore(icon, alertDiv.firstChild);
+            
+            // Remove o alerta após 5 segundos
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Login com e-mail e senha
+        const loginForm = document.getElementById('loginForm');
+        
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            
+            // Configura a persistência da sessão
+            const persistence = remember ? firebase.auth.Auth.Persistence.LOCAL : 
+                                         firebase.auth.Auth.Persistence.SESSION;
+            
+            auth.setPersistence(persistence)
+                .then(() => {
+                    return auth.signInWithEmailAndPassword(email, password);
+                })
+                .then((userCredential) => {
+                    // Login bem-sucedido - redireciona para a página de dashboard
+                    window.location.href = 'dashboard.html';
+                })
+                .catch((error) => {
+                    // Trata erros de login
+                    let errorMessage;
+                    switch (error.code) {
+                        case 'auth/invalid-email':
+                            errorMessage = 'E-mail inválido. Por favor, verifique.';
+                            break;
+                        case 'auth/user-disabled':
+                            errorMessage = 'Esta conta foi desativada.';
+                            break;
+                        case 'auth/user-not-found':
+                        case 'auth/wrong-password':
+                            errorMessage = 'E-mail ou senha incorretos.';
+                            break;
+                        default:
+                            errorMessage = 'Ocorreu um erro ao fazer login. Tente novamente.';
+                    }
+                    showAlert(errorMessage, 'danger');
+                });
+        });
+
+        // Verifica se há um usuário logado ao carregar a página
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Se o usuário já estiver logado, redireciona para o dashboard
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>
