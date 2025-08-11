@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro - BBP BANKBRAS PAGAMENTOS</title>
+    <title>Login - BBP BANKBRAS PAGAMENTOS</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <style>
         :root {
             --verde-escuro: #006b3c;
@@ -214,7 +213,7 @@
             text-align: center;
         }
 
-        /* Conteúdo principal - Página de Cadastro */
+        /* Conteúdo principal - Página de Login */
         .main-content {
             flex: 1;
             display: flex;
@@ -223,18 +222,18 @@
             padding: 40px;
         }
 
-        .register-container {
+        .login-container {
             background: var(--branco);
             border-radius: 12px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
             padding: 40px;
             position: relative;
             overflow: hidden;
         }
 
-        .register-container::before {
+        .login-container::before {
             content: '';
             position: absolute;
             top: 0;
@@ -249,27 +248,27 @@
                 var(--preto) 100%);
         }
 
-        .register-header {
+        .login-header {
             text-align: center;
             margin-bottom: 30px;
         }
 
-        .register-header h1 {
+        .login-header h1 {
             color: var(--verde-escuro);
             font-size: 2rem;
             margin-bottom: 10px;
         }
 
-        .register-header p {
+        .login-header p {
             color: var(--cinza-escuro);
             font-size: 0.9rem;
         }
 
-        .register-form .form-group {
+        .login-form .form-group {
             margin-bottom: 20px;
         }
 
-        .register-form .form-group label {
+        .login-form .form-group label {
             display: block;
             margin-bottom: 8px;
             color: var(--cinza-escuro);
@@ -277,8 +276,7 @@
             font-size: 0.9rem;
         }
 
-        .register-form .form-group input,
-        .register-form .form-group select {
+        .login-form .form-group input {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid #ddd;
@@ -287,50 +285,41 @@
             transition: all 0.3s ease;
         }
 
-        .register-form .form-group input:focus,
-        .register-form .form-group select:focus {
+        .login-form .form-group input:focus {
             border-color: var(--verde-escuro);
             box-shadow: 0 0 0 3px rgba(0, 107, 60, 0.1);
             outline: none;
         }
 
-        .form-row {
+        .remember-forgot {
             display: flex;
-            gap: 20px;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-        }
-
-        .terms-conditions {
-            display: flex;
-            align-items: flex-start;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
         }
 
-        .terms-conditions input {
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
             margin-right: 8px;
-            margin-top: 3px;
         }
 
-        .terms-conditions label {
-            font-size: 0.9rem;
-            color: var(--cinza-escuro);
-        }
-
-        .terms-conditions a {
+        .forgot-password a {
             color: var(--verde-escuro);
             text-decoration: none;
+            font-size: 0.9rem;
             transition: color 0.3s ease;
         }
 
-        .terms-conditions a:hover {
+        .forgot-password a:hover {
             color: var(--azul);
             text-decoration: underline;
         }
 
-        .register-btn {
+        .login-btn {
             width: 100%;
             background: linear-gradient(to right, var(--verde-escuro), var(--verde-claro));
             color: var(--branco);
@@ -344,7 +333,7 @@
             margin-bottom: 20px;
         }
 
-        .register-btn:hover {
+        .login-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 107, 60, 0.2);
         }
@@ -369,20 +358,20 @@
             font-size: 0.9rem;
         }
 
-        .login-link {
+        .register-link {
             text-align: center;
             margin-top: 20px;
             font-size: 0.9rem;
         }
 
-        .login-link a {
+        .register-link a {
             color: var(--verde-escuro);
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s ease;
         }
 
-        .login-link a:hover {
+        .register-link a:hover {
             color: var(--azul);
             text-decoration: underline;
         }
@@ -487,18 +476,13 @@
                 padding: 0 20px;
             }
             
-            .register-container {
+            .login-container {
                 padding: 30px;
             }
             
             .dropdown-menu {
                 right: 20px;
                 width: calc(100% - 40px);
-            }
-            
-            .form-row {
-                flex-direction: column;
-                gap: 0;
             }
         }
 
@@ -507,8 +491,14 @@
                 font-size: 16px;
             }
             
-            .register-container {
+            .login-container {
                 padding: 25px 20px;
+            }
+            
+            .remember-forgot {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
             }
         }
     </style>
@@ -541,81 +531,45 @@
     </header>
 
     <div class="main-content">
-        <div class="register-container">
-            <div class="register-header">
-                <h1>Crie sua conta</h1>
-                <p>Preencha os dados abaixo para criar sua conta</p>
+        <div class="login-container">
+            <div class="login-header">
+                <h1>Acesse sua conta</h1>
+                <p>Entre com seu e-mail e senha para acessar sua conta</p>
             </div>
             
             <div id="alertMessage" class="alert" style="display: none;"></div>
             
-            <form class="register-form" id="registerForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="nome">Nome completo</label>
-                        <input type="text" id="nome" name="nome" required placeholder="Digite seu nome completo">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="tipoDocumento">Tipo de documento</label>
-                        <select id="tipoDocumento" name="tipoDocumento" required>
-                            <option value="" disabled selected>Selecione</option>
-                            <option value="CPF">CPF</option>
-                            <option value="CNPJ">CNPJ</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="documento">CPF/CNPJ</label>
-                        <input type="text" id="documento" name="documento" required placeholder="Digite seu CPF ou CNPJ">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="dataNascimento">Data de nascimento</label>
-                        <input type="date" id="dataNascimento" name="dataNascimento" required>
-                    </div>
-                </div>
-                
+            <!-- Verifica se há um parâmetro de sucesso na URL -->
+            <div id="successMessage" class="alert alert-success" style="display: none;">
+                <i class="fas fa-check-circle"></i>
+                <span>Conta criada com sucesso! Agora você pode fazer login.</span>
+            </div>
+            
+            <form class="login-form" id="loginForm">
                 <div class="form-group">
                     <label for="email">E-mail</label>
                     <input type="email" id="email" name="email" required placeholder="Digite seu e-mail">
                 </div>
                 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="telefone">Telefone</label>
-                        <input type="tel" id="telefone" name="telefone" required placeholder="(00) 00000-0000">
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" required placeholder="Digite sua senha">
+                </div>
+                
+                <div class="remember-forgot">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Lembrar-me</label>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="celular">Celular</label>
-                        <input type="tel" id="celular" name="celular" placeholder="(00) 00000-0000">
+                    <div class="forgot-password">
+                        <a href="recuperar-senha.html">Esqueceu a senha?</a>
                     </div>
                 </div>
                 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="senha">Senha</label>
-                        <input type="password" id="senha" name="senha" required placeholder="Crie uma senha forte">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="confirmarSenha">Confirmar senha</label>
-                        <input type="password" id="confirmarSenha" name="confirmarSenha" required placeholder="Repita a senha">
-                    </div>
-                </div>
+                <button type="submit" class="login-btn">Entrar</button>
                 
-                <div class="terms-conditions">
-                    <input type="checkbox" id="termos" name="termos" required>
-                    <label for="termos">Li e concordo com os <a href="termos.html">Termos de Uso</a> e <a href="politica.html">Política de Privacidade</a></label>
-                </div>
-                
-                <button type="submit" class="register-btn">Criar conta</button>
-                
-                <div class="login-link">
-                    Já tem uma conta? <a href="conta.html">Faça login</a>
+                <div class="register-link">
+                    Não tem uma conta? <a href="cadastro.html">Cadastre-se</a>
                 </div>
             </form>
         </div>
@@ -670,7 +624,6 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        const db = firebase.firestore();
 
         // Menu dropdown com animação
         const menuToggle = document.getElementById('menuToggle');
@@ -700,53 +653,6 @@
             }
         });
 
-        // Máscara para CPF/CNPJ
-        document.getElementById('documento').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            const tipoDocumento = document.getElementById('tipoDocumento').value;
-            
-            if (tipoDocumento === 'CPF') {
-                if (value.length > 11) value = value.substring(0, 11);
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-            } else if (tipoDocumento === 'CNPJ') {
-                if (value.length > 14) value = value.substring(0, 14);
-                value = value.replace(/(\d{2})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1/$2');
-                value = value.replace(/(\d{4})(\d)/, '$1-$2');
-            }
-            
-            e.target.value = value;
-        });
-
-        // Máscara para telefone
-        function mascaraTelefone(input) {
-            let value = input.value.replace(/\D/g, '');
-            
-            if (value.length > 11) value = value.substring(0, 11);
-            
-            if (value.length > 2) {
-                value = value.replace(/^(\d{2})/, '($1) ');
-                if (value.length > 10) {
-                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
-                } else {
-                    value = value.replace(/(\d{4})(\d)/, '$1-$2');
-                }
-            }
-            
-            input.value = value;
-        }
-
-        document.getElementById('telefone').addEventListener('input', function(e) {
-            mascaraTelefone(e.target);
-        });
-
-        document.getElementById('celular').addEventListener('input', function(e) {
-            mascaraTelefone(e.target);
-        });
-
         // Função para mostrar mensagens de alerta
         function showAlert(message, type) {
             const alertDiv = document.getElementById('alertMessage');
@@ -765,83 +671,66 @@
             }, 5000);
         }
 
-        // Cadastro com e-mail e senha + Firestore
-        const registerForm = document.getElementById('registerForm');
+        // Verifica se há um parâmetro de sucesso na URL (vindo do cadastro)
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const success = urlParams.get('success');
+            
+            if (success === 'true') {
+                const successMessage = document.getElementById('successMessage');
+                successMessage.style.display = 'flex';
+                
+                // Preenche o e-mail se foi passado como parâmetro
+                const emailParam = urlParams.get('email');
+                if (emailParam) {
+                    document.getElementById('email').value = decodeURIComponent(emailParam);
+                }
+                
+                // Remove a mensagem após 5 segundos
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
+            }
+        });
+
+        // Login com e-mail e senha
+        const loginForm = document.getElementById('loginForm');
         
-        registerForm.addEventListener('submit', (e) => {
+        loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // Obter valores do formulário
-            const nome = document.getElementById('nome').value;
-            const tipoDocumento = document.getElementById('tipoDocumento').value;
-            const documento = document.getElementById('documento').value.replace(/\D/g, '');
-            const dataNascimento = document.getElementById('dataNascimento').value;
             const email = document.getElementById('email').value;
-            const telefone = document.getElementById('telefone').value.replace(/\D/g, '');
-            const celular = document.getElementById('celular').value.replace(/\D/g, '');
-            const senha = document.getElementById('senha').value;
-            const confirmarSenha = document.getElementById('confirmarSenha').value;
-            const termos = document.getElementById('termos').checked;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
             
-            // Validações básicas
-            if (!termos) {
-                showAlert('Você deve aceitar os Termos de Uso e Política de Privacidade para continuar.', 'danger');
-                return;
-            }
+            // Configura a persistência da sessão
+            const persistence = remember ? firebase.auth.Auth.Persistence.LOCAL : 
+                                         firebase.auth.Auth.Persistence.SESSION;
             
-            if (senha !== confirmarSenha) {
-                showAlert('As senhas não coincidem. Por favor, verifique.', 'danger');
-                return;
-            }
-            
-            if (senha.length < 6) {
-                showAlert('A senha deve ter pelo menos 6 caracteres.', 'danger');
-                return;
-            }
-            
-            // Criar usuário no Firebase Auth
-            auth.createUserWithEmailAndPassword(email, senha)
-                .then((userCredential) => {
-                    // Usuário criado com sucesso
-                    const user = userCredential.user;
-                    
-                    // Salvar informações adicionais no Firestore
-                    return db.collection('usuarios').doc(documento).set({
-                        uid: user.uid,
-                        nome: nome,
-                        tipoDocumento: tipoDocumento,
-                        documento: documento,
-                        dataNascimento: dataNascimento,
-                        email: email,
-                        telefone: telefone,
-                        celular: celular,
-                        dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
-                        status: 'ativo',
-                        tipoConta: 'comum'
-                    });
-                })
+            auth.setPersistence(persistence)
                 .then(() => {
-                    // Redirecionar para dashboard após cadastro bem-sucedido
-                    showAlert('Cadastro realizado com sucesso! Redirecionando...', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 2000);
+                    return auth.signInWithEmailAndPassword(email, password);
+                })
+                .then((userCredential) => {
+                    // Login bem-sucedido - redireciona para a página de dashboard
+                    window.location.href = 'dashboard.html';
                 })
                 .catch((error) => {
-                    // Tratar erros de cadastro
+                    // Trata erros de login
                     let errorMessage;
                     switch (error.code) {
-                        case 'auth/email-already-in-use':
-                            errorMessage = 'Este e-mail já está em uso. Por favor, use outro e-mail.';
-                            break;
                         case 'auth/invalid-email':
                             errorMessage = 'E-mail inválido. Por favor, verifique.';
                             break;
-                        case 'auth/weak-password':
-                            errorMessage = 'Senha muito fraca. Use uma senha mais forte.';
+                        case 'auth/user-disabled':
+                            errorMessage = 'Esta conta foi desativada.';
+                            break;
+                        case 'auth/user-not-found':
+                        case 'auth/wrong-password':
+                            errorMessage = 'E-mail ou senha incorretos.';
                             break;
                         default:
-                            errorMessage = 'Ocorreu um erro ao criar sua conta. Tente novamente.';
+                            errorMessage = 'Ocorreu um erro ao fazer login. Tente novamente.';
                     }
                     showAlert(errorMessage, 'danger');
                 });
