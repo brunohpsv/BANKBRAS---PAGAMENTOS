@@ -381,7 +381,7 @@
             border-radius: 6px;
             margin-bottom: 20px;
             font-size: 0.9rem;
-            display: flex;
+            display: none;
             align-items: center;
         }
 
@@ -537,7 +537,7 @@
                 <p>Entre com seu e-mail e senha para acessar sua conta</p>
             </div>
             
-            <div id="alertMessage" class="alert" style="display: none;"></div>
+            <div id="alertMessage" class="alert"></div>
             
             <form class="login-form" id="loginForm">
                 <div class="form-group">
@@ -616,7 +616,9 @@
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const auth = firebase.auth();
 
         // Menu dropdown com animação
@@ -654,7 +656,12 @@
             alertDiv.className = `alert alert-${type}`;
             alertDiv.style.display = 'flex';
             
-            // Adiciona ícone conforme o tipo
+            // Remove qualquer ícone existente
+            while (alertDiv.firstChild) {
+                alertDiv.removeChild(alertDiv.firstChild);
+            }
+            
+            // Adiciona novo ícone conforme o tipo
             const icon = document.createElement('i');
             icon.className = type === 'danger' ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
             alertDiv.insertBefore(icon, alertDiv.firstChild);
@@ -674,6 +681,17 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const remember = document.getElementById('remember').checked;
+            
+            // Validação básica do formulário
+            if (!email || !password) {
+                showAlert('Por favor, preencha todos os campos.', 'danger');
+                return;
+            }
+
+            // Mostrar estado de carregamento
+            const loginBtn = loginForm.querySelector('.login-btn');
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
             
             // Configura a persistência da sessão
             const persistence = remember ? firebase.auth.Auth.Persistence.LOCAL : 
@@ -701,10 +719,22 @@
                         case 'auth/wrong-password':
                             errorMessage = 'E-mail ou senha incorretos.';
                             break;
+                        case 'auth/too-many-requests':
+                            errorMessage = 'Muitas tentativas de login. Tente novamente mais tarde.';
+                            break;
+                        case 'auth/network-request-failed':
+                            errorMessage = 'Erro de conexão. Verifique sua internet.';
+                            break;
                         default:
                             errorMessage = 'Ocorreu um erro ao fazer login. Tente novamente.';
+                            console.error('Erro de login:', error);
                     }
                     showAlert(errorMessage, 'danger');
+                })
+                .finally(() => {
+                    // Restaurar estado normal do botão
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Entrar';
                 });
         });
 
@@ -713,6 +743,13 @@
             if (user) {
                 // Se o usuário já estiver logado, redireciona para o dashboard
                 window.location.href = 'dashboard.html';
+            }
+        });
+
+        // Prevenir envio do formulário ao pressionar Enter em campos que não são de submit
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.target.tagName.toLowerCase() !== 'textarea' && e.target.type !== 'submit') {
+                e.preventDefault();
             }
         });
     </script>
