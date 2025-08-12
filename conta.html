@@ -9,6 +9,7 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <style>
         :root {
             --verde-escuro: #006b3c;
@@ -620,6 +621,7 @@
             firebase.initializeApp(firebaseConfig);
         }
         const auth = firebase.auth();
+        const db = firebase.firestore();
 
         // Menu dropdown com animação
         const menuToggle = document.getElementById('menuToggle');
@@ -702,12 +704,25 @@
                     return auth.signInWithEmailAndPassword(email, password);
                 })
                 .then((userCredential) => {
-                    // Login bem-sucedido - redireciona para a página de dashboard
-                    showAlert('Login realizado com sucesso!', 'success');
-                    // Adicione um pequeno atraso antes do redirecionamento para o usuário ver a mensagem
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 1500);
+                    // Verifica se o usuário existe no Firestore
+                    return db.collection('users').doc(userCredential.user.uid).get();
+                })
+                .then((doc) => {
+                    if (doc.exists) {
+                        // Usuário encontrado no Firestore - redireciona para o dashboard
+                        showAlert('Login realizado com sucesso!', 'success');
+                        // Adicione um pequeno atraso antes do redirecionamento para o usuário ver a mensagem
+                        setTimeout(() => {
+                            // Passa o email como parâmetro na URL
+                            window.location.href = `dashboard.html?email=${encodeURIComponent(email)}`;
+                        }, 1500);
+                    } else {
+                        // Usuário não encontrado no Firestore
+                        auth.signOut(); // Desloga o usuário
+                        showAlert('Conta não encontrada. Por favor, cadastre-se primeiro.', 'danger');
+                        loginBtn.disabled = false;
+                        loginBtn.textContent = 'Entrar';
+                    }
                 })
                 .catch((error) => {
                     // Trata erros de login
@@ -734,24 +749,24 @@
                             console.error('Erro de login:', error);
                     }
                     showAlert(errorMessage, 'danger');
-                })
-                .finally(() => {
-                    // Restaurar estado normal do botão
                     loginBtn.disabled = false;
                     loginBtn.textContent = 'Entrar';
                 });
         });
 
         // Verifica se há um usuário logado ao carregar a página
-        // COMENTEI ESTA PARTE PARA EVITAR O REDIRECIONAMENTO AUTOMÁTICO
-        /*
         auth.onAuthStateChanged((user) => {
             if (user) {
-                // Se o usuário já estiver logado, redireciona para o dashboard
-                window.location.href = 'dashboard.html';
+                // Verifica se o usuário existe no Firestore
+                db.collection('users').doc(user.uid).get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            // Se o usuário já estiver logado e existir no Firestore, redireciona para o dashboard
+                            window.location.href = `dashboard.html?email=${encodeURIComponent(user.email)}`;
+                        }
+                    });
             }
         });
-        */
 
         // Prevenir envio do formulário ao pressionar Enter em campos que não são de submit
         document.addEventListener('keypress', function(e) {
