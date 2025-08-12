@@ -17,6 +17,7 @@
             --cinza-claro: #f5f5f5;
             --cinza-escuro: #333333;
             --cinza-medio: #e0e0e0;
+            --vermelho: #e74c3c;
         }
         
         * {
@@ -228,6 +229,12 @@
             font-weight: 700;
         }
 
+        .user-name {
+            color: var(--azul);
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
         .dashboard-subtitle {
             color: var(--cinza-escuro);
             font-size: 1rem;
@@ -352,7 +359,7 @@
 
         .payments-header {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 100px 100px;
+            grid-template-columns: 2fr 1fr 1fr 1fr 100px 120px;
             padding: 15px 20px;
             background: var(--cinza-claro);
             font-weight: 600;
@@ -363,7 +370,7 @@
 
         .payment-item {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 100px 100px;
+            grid-template-columns: 2fr 1fr 1fr 1fr 100px 120px;
             padding: 15px 20px;
             align-items: center;
             border-bottom: 1px solid var(--cinza-medio);
@@ -456,6 +463,24 @@
 
         .action-btn.detail-btn:hover {
             background: #003399;
+        }
+
+        .action-btn.delete-btn {
+            background: var(--vermelho);
+            color: white;
+        }
+
+        .action-btn.delete-btn:hover {
+            background: #c0392b;
+        }
+
+        .action-btn.document-btn {
+            background: var(--amarelo);
+            color: var(--preto);
+        }
+
+        .action-btn.document-btn:hover {
+            background: #e6c115;
         }
 
         .payment-total {
@@ -623,6 +648,61 @@
             gap: 10px;
         }
 
+        /* Modal de Pagar Tudo */
+        .pay-all-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+            border: 1px solid var(--cinza-medio);
+            border-radius: 6px;
+        }
+
+        .pay-all-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--cinza-medio);
+        }
+
+        .pay-all-item:last-child {
+            border-bottom: none;
+        }
+
+        .pay-all-item-name {
+            font-weight: 600;
+        }
+
+        .pay-all-item-amount {
+            color: var(--verde-escuro);
+            font-weight: 600;
+        }
+
+        /* Modal de Documento */
+        .document-preview {
+            margin-top: 20px;
+            border: 1px solid var(--cinza-medio);
+            border-radius: 6px;
+            padding: 15px;
+            background: var(--cinza-claro);
+        }
+
+        .document-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--azul);
+        }
+
+        .document-link {
+            color: var(--verde-escuro);
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .document-link:hover {
+            text-decoration: underline;
+        }
+
         /* Responsividade */
         @media (max-width: 768px) {
             .dashboard-header {
@@ -689,6 +769,7 @@
     <div class="dashboard-container">
         <div class="dashboard-header">
             <div>
+                <div class="user-name" id="user-name">Olá, João da Silva</div>
                 <h1 class="dashboard-title">Meus Pagamentos</h1>
                 <p class="dashboard-subtitle">Gerencie e realize seus pagamentos de impostos e contas</p>
             </div>
@@ -750,7 +831,7 @@
                 <div>Ações</div>
             </div>
 
-            <div class="payment-item">
+            <div class="payment-item" data-id="1">
                 <div class="payment-name">
                     IRPF - Imposto de Renda
                 </div>
@@ -762,13 +843,19 @@
                     <button class="action-btn detail-btn" onclick="openPaymentDetail(1)">
                         <i class="fas fa-eye"></i>
                     </button>
+                    <button class="action-btn document-btn" onclick="openDocumentModal(1)">
+                        <i class="fas fa-file-alt"></i>
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deletePayment(1)">
+                        <i class="fas fa-times"></i>
+                    </button>
                     <button class="action-btn pay-btn">
                         <i class="fas fa-money-bill-wave"></i>
                     </button>
                 </div>
             </div>
 
-            <div class="payment-item">
+            <div class="payment-item" data-id="2">
                 <div class="payment-name">
                     Conta de Luz
                 </div>
@@ -780,13 +867,19 @@
                     <button class="action-btn detail-btn" onclick="openPaymentDetail(2)">
                         <i class="fas fa-eye"></i>
                     </button>
+                    <button class="action-btn document-btn" onclick="openDocumentModal(2)">
+                        <i class="fas fa-file-alt"></i>
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deletePayment(2)">
+                        <i class="fas fa-times"></i>
+                    </button>
                     <button class="action-btn pay-btn">
                         <i class="fas fa-money-bill-wave"></i>
                     </button>
                 </div>
             </div>
 
-            <div class="payment-item">
+            <div class="payment-item" data-id="3">
                 <div class="payment-name">
                     Conta de Água
                 </div>
@@ -798,13 +891,19 @@
                     <button class="action-btn detail-btn" onclick="openPaymentDetail(3)">
                         <i class="fas fa-eye"></i>
                     </button>
+                    <button class="action-btn document-btn" onclick="openDocumentModal(3)">
+                        <i class="fas fa-file-alt"></i>
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deletePayment(3)">
+                        <i class="fas fa-times"></i>
+                    </button>
                     <button class="action-btn" disabled>
                         <i class="fas fa-check"></i>
                     </button>
                 </div>
             </div>
 
-            <div class="payment-item">
+            <div class="payment-item" data-id="4">
                 <div class="payment-name">
                     Telefone Celular
                 </div>
@@ -816,13 +915,19 @@
                     <button class="action-btn detail-btn" onclick="openPaymentDetail(4)">
                         <i class="fas fa-eye"></i>
                     </button>
+                    <button class="action-btn document-btn" onclick="openDocumentModal(4)">
+                        <i class="fas fa-file-alt"></i>
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deletePayment(4)">
+                        <i class="fas fa-times"></i>
+                    </button>
                     <button class="action-btn pay-btn">
                         <i class="fas fa-money-bill-wave"></i>
                     </button>
                 </div>
             </div>
 
-            <div class="payment-item">
+            <div class="payment-item" data-id="5">
                 <div class="payment-name">
                     Condomínio
                 </div>
@@ -833,6 +938,12 @@
                 <div class="payment-actions">
                     <button class="action-btn detail-btn" onclick="openPaymentDetail(5)">
                         <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn document-btn" onclick="openDocumentModal(5)">
+                        <i class="fas fa-file-alt"></i>
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deletePayment(5)">
+                        <i class="fas fa-times"></i>
                     </button>
                     <button class="action-btn" disabled>
                         <i class="fas fa-check"></i>
@@ -846,7 +957,7 @@
                     <span class="total-amount">R$ 1.660,40</span>
                 </div>
                 <div class="total-action">
-                    <button class="btn-pay-all">
+                    <button class="btn-pay-all" onclick="openPayAllModal()">
                         <i class="fas fa-money-bill-wave"></i>
                         Pagar Tudo
                     </button>
@@ -965,7 +1076,64 @@
         </div>
     </div>
 
+    <!-- Modal de Pagar Tudo -->
+    <div class="modal-overlay" id="payAllModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirmar Pagamento de Todos os Itens</h3>
+                <button class="modal-close" onclick="closePayAllModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Você está prestes a realizar o pagamento dos seguintes itens pendentes:</p>
+                
+                <div class="pay-all-list" id="payAllList">
+                    <!-- Itens serão adicionados dinamicamente aqui -->
+                </div>
+                
+                <div style="margin-top: 20px; font-weight: 600; text-align: right;">
+                    <div>Total a pagar: <span id="payAllTotal" style="color: var(--verde-escuro);">R$ 1.660,40</span></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePayAllModal()">Fechar</button>
+                <button class="btn btn-primary" onclick="payAll()">
+                    <i class="fas fa-money-bill-wave"></i>
+                    Realizar Pagamento
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Documento -->
+    <div class="modal-overlay" id="documentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Documento Anexado</h3>
+                <button class="modal-close" onclick="closeDocumentModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="document-preview">
+                    <div class="document-title" id="document-title">Documento.pdf</div>
+                    <p>Este documento foi anexado ao pagamento e está armazenado em nossos servidores.</p>
+                    <a href="docs.html" class="document-link" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Acessar todos os documentos
+                    </a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDocumentModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Dados do usuário (simulando dados do banco de dados)
+        const userData = {
+            name: "João da Silva",
+            email: "joao.silva@example.com",
+            document: "123.456.789-00"
+        };
+
         // Menu dropdown com animação
         const menuToggle = document.getElementById('menuToggle');
         const dropdownMenu = document.getElementById('dropdownMenu');
@@ -997,6 +1165,8 @@
         // Modal de detalhes
         const paymentDetailModal = document.getElementById('paymentDetailModal');
         const addPaymentModal = document.getElementById('addPaymentModal');
+        const payAllModal = document.getElementById('payAllModal');
+        const documentModal = document.getElementById('documentModal');
         
         // Dados de exemplo para os pagamentos
         const paymentDetails = {
@@ -1008,7 +1178,8 @@
                 status: "Pendente",
                 amount: "R$ 1.250,00",
                 barcode: "85690000001-0 25000000012-5 00000000000-0 00000000000-0",
-                notes: "Dedução de R$ 1.500,00 por dependentes declarados."
+                notes: "Dedução de R$ 1.500,00 por dependentes declarados.",
+                document: "IRPF_2023_JoaoSilva.pdf"
             },
             2: {
                 name: "Conta de Luz",
@@ -1018,7 +1189,8 @@
                 status: "Pendente",
                 amount: "R$ 320,50",
                 barcode: "84610000002-0 32050000012-5 00000000000-0 00000000000-0",
-                notes: "Consumo de 320 kWh no mês de julho."
+                notes: "Consumo de 320 kWh no mês de julho.",
+                document: "ContaLuz_Julho2023_JoaoSilva.pdf"
             },
             3: {
                 name: "Conta de Água",
@@ -1028,7 +1200,8 @@
                 status: "Pago",
                 amount: "R$ 180,75",
                 barcode: "83620000003-0 18075000012-5 00000000000-0 00000000000-0",
-                notes: "Pagamento realizado em 03/08/2023."
+                notes: "Pagamento realizado em 03/08/2023.",
+                document: "ContaAgua_Julho2023_JoaoSilva.pdf"
             },
             4: {
                 name: "Telefone Celular",
@@ -1038,7 +1211,8 @@
                 status: "Pendente",
                 amount: "R$ 89,90",
                 barcode: "82630000004-0 08990000012-5 00000000000-0 00000000000-0",
-                notes: "Plano pós-pago com 10GB de internet."
+                notes: "Plano pós-pago com 10GB de internet.",
+                document: "FaturaVivo_Agosto2023_JoaoSilva.pdf"
             },
             5: {
                 name: "Condomínio",
@@ -1048,9 +1222,13 @@
                 status: "Pago",
                 amount: "R$ 650,00",
                 barcode: "81640000005-0 65000000012-5 00000000000-0 00000000000-0",
-                notes: "Inclui taxa de reserva de R$ 50,00."
+                notes: "Inclui taxa de reserva de R$ 50,00.",
+                document: "Condominio_Agosto2023_JoaoSilva.pdf"
             }
         };
+
+        // Mostrar nome do usuário
+        document.getElementById('user-name').textContent = `Olá, ${userData.name}`;
 
         function openPaymentDetail(paymentId) {
             const detail = paymentDetails[paymentId];
@@ -1094,6 +1272,62 @@
             addPaymentModal.classList.remove('active');
         }
 
+        function openPayAllModal() {
+            const pendingItems = document.querySelectorAll('.payment-status.status-pending');
+            if (pendingItems.length === 0) {
+                alert('Não há pagamentos pendentes para realizar!');
+                return;
+            }
+
+            const payAllList = document.getElementById('payAllList');
+            payAllList.innerHTML = '';
+            
+            let total = 0;
+            
+            pendingItems.forEach(item => {
+                const paymentItem = item.closest('.payment-item');
+                const paymentId = paymentItem.getAttribute('data-id');
+                const detail = paymentDetails[paymentId];
+                
+                if (detail) {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'pay-all-item';
+                    itemElement.innerHTML = `
+                        <div class="pay-all-item-name">${detail.name}</div>
+                        <div class="pay-all-item-amount">${detail.amount}</div>
+                    `;
+                    payAllList.appendChild(itemElement);
+                    
+                    // Calcular total
+                    const amount = parseFloat(detail.amount.replace('R$ ', '').replace('.', '').replace(',', '.'));
+                    total += amount;
+                }
+            });
+            
+            // Atualizar total
+            document.getElementById('payAllTotal').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            
+            payAllModal.classList.add('active');
+        }
+
+        function closePayAllModal() {
+            payAllModal.classList.remove('active');
+        }
+
+        function openDocumentModal(paymentId) {
+            const detail = paymentDetails[paymentId];
+            if (detail && detail.document) {
+                document.getElementById('document-title').textContent = detail.document;
+                documentModal.classList.add('active');
+            } else {
+                alert('Nenhum documento anexado a este pagamento.');
+            }
+        }
+
+        function closeDocumentModal() {
+            documentModal.classList.remove('active');
+        }
+
         function addNewPayment() {
             const type = document.getElementById('payment-type').value;
             const name = document.getElementById('payment-name').value;
@@ -1125,6 +1359,15 @@
             // Criar novo ID para o pagamento
             const newId = Object.keys(paymentDetails).length + 1;
             
+            // Nome do arquivo
+            let fileName = "Nenhum documento anexado";
+            if (file) {
+                fileName = `${file.name}`;
+                // Aqui você enviaria o arquivo para o servidor/github
+                // Simulando o envio
+                console.log(`Documento ${file.name} enviado para docs.html com referência ao email ${userData.email}`);
+            }
+            
             // Adicionar aos detalhes do pagamento
             paymentDetails[newId] = {
                 name: name,
@@ -1138,13 +1381,15 @@
                 status: "Pendente",
                 amount: `R$ ${formattedValue}`,
                 barcode: "00000000000-0 00000000000-0 00000000000-0 00000000000-0",
-                notes: file ? `Documento anexado: ${file.name}` : "Sem documento anexado"
+                notes: file ? `Documento anexado: ${file.name}` : "Sem documento anexado",
+                document: file ? fileName : null
             };
             
             // Criar o novo elemento na lista
             const paymentsList = document.querySelector('.payments-list');
             const paymentItem = document.createElement('div');
             paymentItem.className = 'payment-item';
+            paymentItem.setAttribute('data-id', newId);
             paymentItem.innerHTML = `
                 <div class="payment-name">${name}</div>
                 <div class="payment-entity">${paymentDetails[newId].entity}</div>
@@ -1154,6 +1399,12 @@
                 <div class="payment-actions">
                     <button class="action-btn detail-btn" onclick="openPaymentDetail(${newId})">
                         <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn document-btn" onclick="openDocumentModal(${newId})">
+                        <i class="fas fa-file-alt"></i>
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deletePayment(${newId})">
+                        <i class="fas fa-times"></i>
                     </button>
                     <button class="action-btn pay-btn">
                         <i class="fas fa-money-bill-wave"></i>
@@ -1179,6 +1430,7 @@
                 const paymentItem = document.querySelector(`.payment-item[data-id="${paymentId}"]`);
                 if (paymentItem) {
                     paymentItem.remove();
+                    delete paymentDetails[paymentId];
                     updateTotal();
                     alert('Pagamento excluído com sucesso!');
                 }
@@ -1193,25 +1445,31 @@
                 return;
             }
 
-            if (confirm(`Deseja realmente pagar todos os ${pendingItems.length} itens pendentes?`)) {
-                pendingItems.forEach(item => {
-                    item.textContent = 'Pago';
-                    item.classList.remove('status-pending');
-                    item.classList.add('status-paid');
-                    
-                    // Desabilitar botão de pagar
-                    const paymentItem = item.closest('.payment-item');
-                    const payButton = paymentItem.querySelector('.action-btn.pay-btn');
-                    if (payButton) {
-                        payButton.innerHTML = '<i class="fas fa-check"></i>';
-                        payButton.classList.remove('pay-btn');
-                        payButton.disabled = true;
-                    }
-                });
+            pendingItems.forEach(item => {
+                const paymentItem = item.closest('.payment-item');
+                const paymentId = paymentItem.getAttribute('data-id');
                 
-                updateTotal();
-                alert('Todos os pagamentos foram realizados com sucesso!');
-            }
+                item.textContent = 'Pago';
+                item.classList.remove('status-pending');
+                item.classList.add('status-paid');
+                
+                // Atualizar status nos dados
+                if (paymentDetails[paymentId]) {
+                    paymentDetails[paymentId].status = 'Pago';
+                }
+                
+                // Desabilitar botão de pagar
+                const payButton = paymentItem.querySelector('.action-btn.pay-btn');
+                if (payButton) {
+                    payButton.innerHTML = '<i class="fas fa-check"></i>';
+                    payButton.classList.remove('pay-btn');
+                    payButton.disabled = true;
+                }
+            });
+            
+            closePayAllModal();
+            updateTotal();
+            alert('Todos os pagamentos foram realizados com sucesso!');
         }
 
         // Função para atualizar o total a pagar
@@ -1235,12 +1493,6 @@
 
         // Inicializar eventos
         document.addEventListener('DOMContentLoaded', function() {
-            // Adicionar evento ao botão de pagar tudo
-            const payAllButton = document.querySelector('.btn-pay-all');
-            if (payAllButton) {
-                payAllButton.addEventListener('click', payAll);
-            }
-            
             // Atualizar total inicial
             updateTotal();
         });
@@ -1258,8 +1510,17 @@
             }
         });
 
-        // Adicionar evento ao botão de adicionar
-        document.querySelector('.btn-primary').addEventListener('click', openAddPayment);
+        payAllModal.addEventListener('click', (e) => {
+            if (e.target === payAllModal) {
+                closePayAllModal();
+            }
+        });
+
+        documentModal.addEventListener('click', (e) => {
+            if (e.target === documentModal) {
+                closeDocumentModal();
+            }
+        });
     </script>
 </body>
 </html>
