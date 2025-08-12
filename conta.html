@@ -703,7 +703,11 @@
                 })
                 .then((userCredential) => {
                     // Login bem-sucedido - redireciona para a página de dashboard
-                    window.location.href = 'dashboard.html';
+                    showAlert('Login realizado com sucesso!', 'success');
+                    // Adicione um pequeno atraso antes do redirecionamento para o usuário ver a mensagem
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
                 })
                 .catch((error) => {
                     // Trata erros de login
@@ -739,12 +743,15 @@
         });
 
         // Verifica se há um usuário logado ao carregar a página
+        // COMENTEI ESTA PARTE PARA EVITAR O REDIRECIONAMENTO AUTOMÁTICO
+        /*
         auth.onAuthStateChanged((user) => {
             if (user) {
                 // Se o usuário já estiver logado, redireciona para o dashboard
                 window.location.href = 'dashboard.html';
             }
         });
+        */
 
         // Prevenir envio do formulário ao pressionar Enter em campos que não são de submit
         document.addEventListener('keypress', function(e) {
