@@ -3,24 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Impostos - BBP BANKBRAS PAGAMENTOS</title>
+    <title>Dashboard - BBP - BANKBRAS PAGAMENTOS</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <style>
         :root {
             --verde-escuro: #006b3c;
             --verde-claro: #009639;
+            --amarelo: #f7d417;
+            --azul: #002776;
             --branco: #ffffff;
             --preto: #000000;
             --cinza-claro: #f5f5f5;
             --cinza-escuro: #333333;
             --cinza-medio: #e0e0e0;
         }
-
+        
         * {
             margin: 0;
             padding: 0;
@@ -32,234 +30,225 @@
             background-color: var(--cinza-claro);
             color: var(--cinza-escuro);
             line-height: 1.6;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
         }
 
-        /* Cabeçalho */
+        /* Cabeçalho Premium (mantido do original) */
         header {
             background: var(--branco);
-            padding: 0 20px;
+            padding: 0 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            height: 70px;
-            border-bottom: 3px solid var(--verde-escuro);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            position: relative;
+            height: 80px;
+            border-bottom: 4px solid transparent;
+            background-image: linear-gradient(to right, 
+                var(--verde-escuro) 0%, 
+                var(--verde-claro) 25%, 
+                var(--amarelo) 50%, 
+                var(--azul) 75%, 
+                var(--preto) 100%);
+            background-size: 100% 4px;
+            background-repeat: no-repeat;
+            background-position: bottom;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .logo-icon {
-            width: 30px;
-            height: 30px;
-            background: var(--verde-escuro);
-            border-radius: 5px;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--verde-escuro) 0%, var(--azul) 100%);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--branco);
             font-weight: bold;
-            font-size: 14px;
+            font-size: 18px;
         }
 
         .logo-text {
             color: var(--preto);
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .logo-text span {
             color: var(--verde-escuro);
         }
 
-        .user-profile {
+        .nav-container {
             display: flex;
             align-items: center;
-            gap: 10px;
-            cursor: pointer;
+            gap: 30px;
         }
 
-        .user-avatar {
-            width: 36px;
-            height: 36px;
+        .menu-toggle {
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: var(--verde-escuro);
+            background: linear-gradient(135deg, var(--verde-claro) 0%, var(--azul) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-toggle .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle .hamburger span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background-color: var(--branco);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active .hamburger span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .menu-toggle.active .hamburger span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active .hamburger span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .menu-toggle .bbp-logo {
+            position: absolute;
             color: var(--branco);
             font-weight: bold;
-            font-size: 14px;
+            font-size: 18px;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.3s ease;
         }
 
-        .user-name {
-            font-weight: 600;
-            font-size: 14px;
+        .menu-toggle.active .bbp-logo {
+            opacity: 1;
+            transform: scale(1);
         }
 
-        /* Conteúdo principal */
-        .main-content {
-            flex: 1;
-            display: flex;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
+        .menu-toggle.active .hamburger {
+            opacity: 0;
+            transform: scale(0.5);
         }
 
-        .sidebar {
-            width: 200px;
-            background: var(--branco);
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            padding: 15px;
-            margin-right: 20px;
-            height: fit-content;
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 40px;
+            top: 80px;
+            background-color: var(--branco);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            z-index: 100;
+            width: 240px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .sidebar-menu {
-            list-style: none;
+        .dropdown-menu.show {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
         }
 
-        .sidebar-menu li {
-            margin-bottom: 5px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .sidebar-menu a {
+        .dropdown-menu a {
             display: flex;
             align-items: center;
-            padding: 10px;
-            color: var(--cinza-escuro);
+            padding: 14px 20px;
+            color: #333;
             text-decoration: none;
-            border-radius: 5px;
-            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
             font-size: 14px;
+            font-weight: 500;
         }
 
-        .sidebar-menu a:hover, .sidebar-menu a.active {
+        .dropdown-menu a:hover {
             background-color: var(--cinza-claro);
             color: var(--verde-escuro);
+            padding-left: 24px;
         }
 
-        .sidebar-menu a i {
+        .dropdown-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-menu a i {
             margin-right: 10px;
             width: 20px;
             text-align: center;
         }
 
-        .content-area {
-            flex: 1;
+        /* Dashboard Styles */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
-        .welcome-banner {
-            background: var(--verde-escuro);
-            color: var(--branco);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .welcome-banner h1 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
-
-        .welcome-banner p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .summary-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .summary-card {
-            background: var(--branco);
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .summary-card .card-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .summary-card .card-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 6px;
-            background: var(--cinza-claro);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 10px;
-            color: var(--verde-escuro);
-        }
-
-        .summary-card .card-title {
-            font-size: 0.8rem;
-            color: var(--cinza-escuro);
-            font-weight: 600;
-        }
-
-        .summary-card .card-value {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--verde-escuro);
-            margin-bottom: 5px;
-        }
-
-        .summary-card .card-footer {
-            font-size: 0.7rem;
-            color: var(--cinza-escuro);
-        }
-
-        .taxes-section {
-            background: var(--branco);
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .section-header {
+        .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 30px;
         }
 
-        .section-header h2 {
-            font-size: 1.1rem;
+        .dashboard-title {
             color: var(--verde-escuro);
+            font-size: 1.8rem;
+            font-weight: 700;
         }
 
-        .section-actions {
+        .dashboard-subtitle {
+            color: var(--cinza-escuro);
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .dashboard-actions {
             display: flex;
-            gap: 8px;
+            gap: 15px;
         }
 
         .btn {
-            padding: 6px 12px;
-            border-radius: 4px;
-            border: none;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
             cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
 
         .btn-primary {
@@ -271,195 +260,427 @@
             background: var(--verde-claro);
         }
 
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--cinza-medio);
+        .btn-secondary {
+            background: var(--cinza-medio);
             color: var(--cinza-escuro);
         }
 
-        .btn-outline:hover {
-            background: var(--cinza-claro);
+        .btn-secondary:hover {
+            background: #d0d0d0;
         }
 
-        .taxes-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.8rem;
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .taxes-table thead th {
-            text-align: left;
-            padding: 10px;
-            background: var(--cinza-claro);
-            color: var(--cinza-escuro);
+        .btn-icon i {
+            font-size: 0.9rem;
+        }
+
+        .filters-container {
+            background: var(--branco);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .filters-title {
+            font-size: 1.1rem;
             font-weight: 600;
+            color: var(--azul);
         }
 
-        .taxes-table tbody tr {
+        .filter-reset {
+            color: var(--verde-escuro);
+            font-size: 0.9rem;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .filter-reset:hover {
+            text-decoration: underline;
+        }
+
+        .filter-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .filter-group {
+            margin-bottom: 5px;
+        }
+
+        .filter-label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            color: var(--cinza-escuro);
+            font-weight: 500;
+        }
+
+        .filter-select, .filter-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--cinza-medio);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background-color: var(--branco);
+        }
+
+        .filter-select:focus, .filter-input:focus {
+            outline: none;
+            border-color: var(--verde-claro);
+        }
+
+        .payments-list {
+            background: var(--branco);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .payments-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 100px;
+            padding: 15px 20px;
+            background: var(--cinza-claro);
+            font-weight: 600;
+            color: var(--azul);
+            font-size: 0.9rem;
             border-bottom: 1px solid var(--cinza-medio);
         }
 
-        .taxes-table tbody td {
-            padding: 10px;
+        .payment-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 100px;
+            padding: 15px 20px;
+            align-items: center;
+            border-bottom: 1px solid var(--cinza-medio);
+            transition: background 0.2s ease;
         }
 
-        .taxes-table .tax-name {
+        .payment-item:last-child {
+            border-bottom: none;
+        }
+
+        .payment-item:hover {
+            background: rgba(0, 107, 60, 0.03);
+        }
+
+        .payment-name {
             font-weight: 600;
+            color: var(--cinza-escuro);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .payment-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--cinza-claro);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: var(--verde-escuro);
         }
 
-        .taxes-table .tax-amount {
-            font-weight: 700;
+        .payment-entity {
+            color: var(--cinza-escuro);
+            font-size: 0.9rem;
         }
 
-        .taxes-table .tax-status {
-            display: inline-block;
-            padding: 3px 6px;
-            border-radius: 3px;
-            font-size: 0.7rem;
+        .payment-due {
+            color: var(--cinza-escuro);
+            font-size: 0.9rem;
+        }
+
+        .payment-status {
+            font-size: 0.8rem;
             font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 12px;
+            text-align: center;
         }
 
         .status-pending {
-            background: #fff3cd;
-            color: #856404;
+            background: rgba(255, 193, 7, 0.2);
+            color: #ff9800;
         }
 
         .status-paid {
-            background: #d4edda;
-            color: #155724;
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
         }
 
-        .status-overdue {
-            background: #f8d7da;
-            color: #721c24;
+        .payment-amount {
+            font-weight: 600;
+            color: var(--cinza-escuro);
         }
 
-        .taxes-table .tax-actions {
+        .payment-actions {
             display: flex;
             gap: 5px;
         }
 
         .action-btn {
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: none;
-            background: var(--cinza-claro);
-            color: var(--cinza-escuro);
             cursor: pointer;
             transition: all 0.2s ease;
-            font-size: 0.7rem;
+            border: none;
+            background: transparent;
+            color: var(--cinza-escuro);
         }
 
         .action-btn:hover {
-            background: var(--verde-escuro);
-            color: var(--branco);
+            background: var(--cinza-claro);
         }
 
-        .total-row {
+        .action-btn.pay-btn {
+            background: var(--verde-escuro);
+            color: white;
+        }
+
+        .action-btn.pay-btn:hover {
+            background: var(--verde-claro);
+        }
+
+        .action-btn.detail-btn {
+            background: var(--azul);
+            color: white;
+        }
+
+        .action-btn.detail-btn:hover {
+            background: #003399;
+        }
+
+        .payment-total {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 100px;
+            padding: 20px;
             background: var(--cinza-claro);
             font-weight: 700;
+            color: var(--azul);
+            border-top: 2px solid var(--cinza-medio);
         }
 
-        .total-row td {
-            padding: 10px;
+        .total-label {
+            grid-column: 4;
+            text-align: right;
+            padding-right: 15px;
         }
 
-        /* Modal Styles */
-        .modal {
-            display: none;
+        .total-amount {
+            color: var(--verde-escuro);
+            font-size: 1.1rem;
+        }
+
+        .total-action {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-pay-all {
+            padding: 8px 20px;
+            background: var(--verde-escuro);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-pay-all:hover {
+            background: var(--verde-claro);
+        }
+
+        .empty-state {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--cinza-escuro);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            color: var(--cinza-medio);
+            margin-bottom: 20px;
+        }
+
+        .empty-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--azul);
+        }
+
+        .empty-description {
+            margin-bottom: 20px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Modal */
+        .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
             justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--cinza-medio);
+            display: flex;
+            justify-content: space-between;
             align-items: center;
         }
 
-        .modal-content {
-            background: white;
+        .modal-title {
+            font-size: 1.3rem;
+            color: var(--verde-escuro);
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--cinza-escuro);
+        }
+
+        .modal-body {
             padding: 20px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 500px;
+        }
+
+        .payment-detail {
+            margin-bottom: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .detail-label {
+            width: 150px;
+            font-weight: 600;
+            color: var(--cinza-escuro);
+        }
+
+        .detail-value {
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--cinza-medio);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
         }
 
         /* Responsividade */
         @media (max-width: 768px) {
-            .main-content {
+            .dashboard-header {
                 flex-direction: column;
-                padding: 15px;
+                align-items: flex-start;
+                gap: 15px;
             }
-
-            .sidebar {
+            
+            .dashboard-actions {
                 width: 100%;
-                margin-right: 0;
-                margin-bottom: 15px;
+                justify-content: flex-end;
             }
-
-            .summary-cards {
-                grid-template-columns: 1fr 1fr;
+            
+            .payments-header, .payment-item {
+                grid-template-columns: 2fr 1fr 1fr 80px;
+            }
+            
+            .payment-entity {
+                display: none;
+            }
+            
+            .payment-total {
+                grid-template-columns: 2fr 1fr 1fr 80px;
+            }
+            
+            .total-label {
+                grid-column: 3;
             }
         }
 
         @media (max-width: 480px) {
-            .logo-text {
-                font-size: 16px;
+            .payments-header, .payment-item {
+                grid-template-columns: 2fr 1fr 60px;
             }
-
-            .summary-cards {
+            
+            .payment-due {
+                display: none;
+            }
+            
+            .payment-total {
+                grid-template-columns: 2fr 1fr 60px;
+            }
+            
+            .total-label {
+                grid-column: 2;
+            }
+            
+            .filter-options {
                 grid-template-columns: 1fr;
             }
-
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .section-actions {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .tax-actions .btn {
-                padding: 3px 5px;
-                font-size: 0.6rem;
-            }
-
-            #payAllBtn {
-                padding: 5px 8px;
-                font-size: 0.7rem;
-            }
-
-	    .delete-btn {
-    background: #f8d7da !important;
-    color: #721c24 !important;
-}
-
-.delete-btn:hover {
-    background: #f1b0b7 !important;
-}
-
-.pay-btn {
-    margin-right: 5px;
-}
-
-#payAllTableBody tr {
-    border-bottom: 1px solid var(--cinza-medio);
-}
-
-#payAllTableBody td {
-    padding: 10px;
-}
-
         }
     </style>
 </head>
@@ -469,620 +690,383 @@
             <div class="logo-icon">BBP</div>
             <div class="logo-text">BANK<span>BRAS</span> PAGAMENTOS</div>
         </div>
-
-        <div class="user-profile" id="userProfile">
-            <div class="user-avatar" id="userAvatar">U</div>
-            <div class="user-name" id="userName">Usuário</div>
+        
+        <div class="nav-container">
+            <div class="menu-toggle" id="menuToggle">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="bbp-logo">BBP</div>
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
+                <a href="perfil.html"><i class="fas fa-user-circle"></i> Meu Perfil</a>
+                <a href="historico.html"><i class="fas fa-history"></i> Histórico</a>
+                <a href="configuracoes.html"><i class="fas fa-cog"></i> Configurações</a>
+                <a href="sair.html"><i class="fas fa-sign-out-alt"></i> Sair</a>
+            </div>
         </div>
     </header>
 
-    <div class="main-content">
-        <aside class="sidebar">
-            <ul class="sidebar-menu">
-                <li><a href="dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
-                <li><a href="meusdados.html"><i class="fas fa-file-alt"></i> Meus dados</a></li>
-                <li><a href="impostos.html"><i class="fas fa-file-invoice-dollar"></i> Meus Impostos</a></li>
-                <li><a href="pagamentos.html"><i class="fas fa-credit-card"></i> Pagamentos</a></li>
-                <li><a href="extratos.html"><i class="fas fa-file-alt"></i> Extratos</a></li>
-                <li><a href="notificacoes.html"><i class="fas fa-bell"></i> Notificações</a></li>
-                <li><a href="suporte.html"><i class="fas fa-question-circle"></i> Ajuda</a></li>
-                <li><a href="conta.html" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
-            </ul>
-        </aside>
-
-        <main class="content-area">
-            <div class="welcome-banner">
-                <h1>Olá, <span id="welcomeUserName">Usuário</span>!</h1>
-                <p>Aqui você pode visualizar e gerenciar todos os seus impostos devidos em um só lugar.</p>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div>
+                <h1 class="dashboard-title">Meus Pagamentos</h1>
+                <p class="dashboard-subtitle">Gerencie e realize seus pagamentos de impostos e contas</p>
             </div>
+            <div class="dashboard-actions">
+                <button class="btn btn-primary btn-icon">
+                    <i class="fas fa-plus"></i>
+                    Adicionar
+                </button>
+                <button class="btn btn-secondary btn-icon">
+                    <i class="fas fa-file-export"></i>
+                    Exportar
+                </button>
+            </div>
+        </div>
 
-            <div class="summary-cards">
-                <div class="summary-card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-file-invoice-dollar"></i>
-                        </div>
-                        <div class="card-title">Total Devido</div>
-                    </div>
-                    <div class="card-value" id="totalDue">R$ 0,00</div>
-                    <div class="card-footer">Atualizado em <span id="lastUpdate">--/--/----</span></div>
+        <div class="filters-container">
+            <div class="filters-header">
+                <h3 class="filters-title">Filtrar Pagamentos</h3>
+                <a href="#" class="filter-reset">Limpar filtros</a>
+            </div>
+            <div class="filter-options">
+                <div class="filter-group">
+                    <label class="filter-label">Tipo</label>
+                    <select class="filter-select">
+                        <option value="">Todos</option>
+                        <option value="imposto">Imposto</option>
+                        <option value="conta">Conta</option>
+                        <option value="taxa">Taxa</option>
+                    </select>
                 </div>
-                <div class="summary-card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="card-title">Vencidos</div>
-                    </div>
-                    <div class="card-value" id="overdueAmount">R$ 0,00</div>
-                    <div class="card-footer"><span id="overdueCount">0</span> impostos</div>
+                <div class="filter-group">
+                    <label class="filter-label">Status</label>
+                    <select class="filter-select">
+                        <option value="">Todos</option>
+                        <option value="pendente">Pendente</option>
+                        <option value="pago">Pago</option>
+                        <option value="atrasado">Atrasado</option>
+                    </select>
                 </div>
-                <div class="summary-card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="card-title">A Vencer</div>
-                    </div>
-                    <div class="card-value" id="pendingAmount">R$ 0,00</div>
-                    <div class="card-footer"><span id="pendingCount">0</span> impostos</div>
+                <div class="filter-group">
+                    <label class="filter-label">Vencimento</label>
+                    <select class="filter-select">
+                        <option value="">Todos</option>
+                        <option value="hoje">Hoje</option>
+                        <option value="semana">Esta semana</option>
+                        <option value="mes">Este mês</option>
+                    </select>
                 </div>
-                <div class="summary-card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div class="card-title">Pagamentos</div>
-                    </div>
-                    <div class="card-value" id="paidAmount">R$ 0,00</div>
-                    <div class="card-footer"><span id="paidCount">0</span> este mês</div>
+                <div class="filter-group">
+                    <label class="filter-label">Valor mínimo</label>
+                    <input type="number" class="filter-input" placeholder="R$ 0,00">
                 </div>
             </div>
+        </div>
 
-            <div class="taxes-section">
-                <div class="section-header">
-                    <h2>Impostos Devidos</h2>
-                    <div class="section-actions">
-                        <button class="btn btn-outline" id="filterBtn">
-                            <i class="fas fa-filter"></i> Filtrar
-                        </button>
-                        <button class="btn btn-primary" id="newPaymentBtn">
-                            <i class="fas fa-plus"></i> Novo Pagamento
-                        </button>
+        <div class="payments-list">
+            <div class="payments-header">
+                <div>Descrição</div>
+                <div>Entidade</div>
+                <div>Vencimento</div>
+                <div>Status</div>
+                <div>Valor</div>
+            </div>
+
+            <div class="payment-item">
+                <div class="payment-name">
+                    <div class="payment-icon">
+                        <i class="fas fa-landmark"></i>
                     </div>
+                    IRPF - Imposto de Renda
                 </div>
-
-                <table class="taxes-table">
-                    <thead>
-                        <tr>
-                            <th>Imposto</th>
-                            <th>Órgão Cobrador</th>
-                            <th>Vencimento</th>
-                            <th>Valor</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="taxesTableBody">
-                        <!-- Dados serão inseridos via JavaScript -->
-                    </tbody>
-                    <tfoot>
-                        <tr class="total-row">
-                            <td colspan="2">Total</td>
-                            <td id="totalTaxesCount">0 impostos</td>
-                            <td id="totalTaxesAmount">R$ 0,00</td>
-                            <td colspan="2">
-                                <button class="btn btn-primary" id="payAllBtn" style="float: right;">
-                                    <i class="fas fa-money-bill-wave"></i> Pagar tudo
-                                </button>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </main>
-    </div>
-
-    <!-- Modal Novo Pagamento -->
-    <div id="paymentModal" class="modal">
-        <div class="modal-content">
-            <h2 style="margin-bottom: 15px; color: var(--verde-escuro);">Novo Pagamento</h2>
-
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Tipo de Imposto</label>
-                <select id="taxType" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px;">
-                    <option value="IPTU">IPTU</option>
-                    <option value="IRPF">IRPF</option>
-                    <option value="ISS">ISS</option>
-                    <option value="INSS">INSS</option>
-                    <option value="OUTRO">Outro</option>
-                </select>
+                <div class="payment-entity">Receita Federal</div>
+                <div class="payment-due">15/08/2023</div>
+                <div class="payment-status status-pending">Pendente</div>
+                <div class="payment-amount">R$ 1.250,00</div>
+                <div class="payment-actions">
+                    <button class="action-btn detail-btn" onclick="openPaymentDetail(1)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn pay-btn">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </button>
+                </div>
             </div>
 
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Valor</label>
-                <input type="number" id="paymentValue" step="0.01" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px;">
+            <div class="payment-item">
+                <div class="payment-name">
+                    <div class="payment-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    Conta de Luz
+                </div>
+                <div class="payment-entity">Enel</div>
+                <div class="payment-due">10/08/2023</div>
+                <div class="payment-status status-pending">Pendente</div>
+                <div class="payment-amount">R$ 320,50</div>
+                <div class="payment-actions">
+                    <button class="action-btn detail-btn" onclick="openPaymentDetail(2)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn pay-btn">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </button>
+                </div>
             </div>
 
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Data de Vencimento</label>
-                <input type="date" id="dueDate" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px;">
+            <div class="payment-item">
+                <div class="payment-name">
+                    <div class="payment-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    Conta de Água
+                </div>
+                <div class="payment-entity">Sabesp</div>
+                <div class="payment-due">05/08/2023</div>
+                <div class="payment-status status-paid">Pago</div>
+                <div class="payment-amount">R$ 180,75</div>
+                <div class="payment-actions">
+                    <button class="action-btn detail-btn" onclick="openPaymentDetail(3)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn" disabled>
+                        <i class="fas fa-check"></i>
+                    </button>
+                </div>
             </div>
 
-            <div style="margin-bottom: 15px;">
-    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Tipo de Imposto</label>
-    <input type="text" id="taxType" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px; text-transform: uppercase;" oninput="this.value = this.value.toUpperCase()">
-</div>
+            <div class="payment-item">
+                <div class="payment-name">
+                    <div class="payment-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    Telefone Celular
+                </div>
+                <div class="payment-entity">Vivo</div>
+                <div class="payment-due">12/08/2023</div>
+                <div class="payment-status status-pending">Pendente</div>
+                <div class="payment-amount">R$ 89,90</div>
+                <div class="payment-actions">
+                    <button class="action-btn detail-btn" onclick="openPaymentDetail(4)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn pay-btn">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </button>
+                </div>
+            </div>
 
-            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
-                <button id="cancelPayment" class="btn btn-outline">Cancelar</button>
-                <button id="confirmPayment" class="btn btn-primary">Confirmar</button>
+            <div class="payment-item">
+                <div class="payment-name">
+                    <div class="payment-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    Condomínio
+                </div>
+                <div class="payment-entity">Edifício Solar</div>
+                <div class="payment-due">05/08/2023</div>
+                <div class="payment-status status-paid">Pago</div>
+                <div class="payment-amount">R$ 650,00</div>
+                <div class="payment-actions">
+                    <button class="action-btn detail-btn" onclick="openPaymentDetail(5)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn" disabled>
+                        <i class="fas fa-check"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="payment-total">
+                <div class="total-label">Total Pendente:</div>
+                <div class="total-amount">R$ 1.660,40</div>
+                <div class="total-action">
+                    <button class="btn-pay-all">
+                        <i class="fas fa-money-bill-wave"></i>
+                        Pagar Tudo
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Visualizar Boleto -->
-    <div id="boletoModal" class="modal">
-        <div class="modal-content">
-            <h2 style="margin-bottom: 15px; color: var(--verde-escuro);">Boleto de Pagamento</h2>
-
-            <div id="boletoContent" style="margin-bottom: 20px; padding: 15px; background: var(--cinza-claro); border-radius: 4px;">
-                <!-- Conteúdo do boleto será inserido aqui -->
+    <!-- Modal de Detalhes -->
+    <div class="modal-overlay" id="paymentDetailModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Detalhes do Pagamento</h3>
+                <button class="modal-close" onclick="closePaymentDetail()">&times;</button>
             </div>
-
-            <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                <button id="closeBoleto" class="btn btn-primary">Fechar</button>
+            <div class="modal-body">
+                <div class="payment-detail">
+                    <div class="detail-row">
+                        <div class="detail-label">Descrição:</div>
+                        <div class="detail-value" id="detail-name">IRPF - Imposto de Renda</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Entidade:</div>
+                        <div class="detail-value" id="detail-entity">Receita Federal</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Tipo:</div>
+                        <div class="detail-value" id="detail-type">Imposto Federal</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Vencimento:</div>
+                        <div class="detail-value" id="detail-due">15/08/2023</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Status:</div>
+                        <div class="detail-value" id="detail-status"><span class="status-pending">Pendente</span></div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Valor:</div>
+                        <div class="detail-value" id="detail-amount">R$ 1.250,00</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Código de Barras:</div>
+                        <div class="detail-value" id="detail-barcode">85690000001-0 25000000012-5 00000000000-0 00000000000-0</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Observações:</div>
+                        <div class="detail-value" id="detail-notes">Dedução de R$ 1.500,00 por dependentes declarados.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePaymentDetail()">Fechar</button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-money-bill-wave"></i>
+                    Realizar Pagamento
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-    // Firebase Configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyAoOFEJ3VDvupYEy5819iDwA4uxe_jvW6c",
-        authDomain: "bankbras-55829.firebaseapp.com",
-        projectId: "bankbras-55829",
-        storageBucket: "bankbras-55829.appspot.com",
-        messagingSenderId: "405398139462",
-        appId: "1:405398139462:web:3d7f6a5c1c2f0a6a4e3a8a"
-    };
+        // Menu dropdown com animação
+        const menuToggle = document.getElementById('menuToggle');
+        const dropdownMenu = document.getElementById('dropdownMenu');
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-
-    // Elementos da interface
-    const userAvatar = document.getElementById('userAvatar');
-    const userName = document.getElementById('userName');
-    const welcomeUserName = document.getElementById('welcomeUserName');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const taxesTableBody = document.getElementById('taxesTableBody');
-    const newPaymentBtn = document.getElementById('newPaymentBtn');
-    const payAllBtn = document.getElementById('payAllBtn');
-    const filterBtn = document.getElementById('filterBtn');
-    const paymentModal = document.getElementById('paymentModal');
-    const boletoModal = document.getElementById('boletoModal');
-    const cancelPayment = document.getElementById('cancelPayment');
-    const confirmPayment = document.getElementById('confirmPayment');
-    const closeBoleto = document.getElementById('closeBoleto');
-    const boletoContent = document.getElementById('boletoContent');
-    const payAllModal = document.getElementById('payAllModal');
-    const payAllTableBody = document.getElementById('payAllTableBody');
-    const payAllTotalAmount = document.getElementById('payAllTotalAmount');
-    const confirmPayAll = document.getElementById('confirmPayAll');
-    const cancelPayAll = document.getElementById('cancelPayAll');
-
-    // Dados de exemplo
-    let taxesData = [
-        {
-            id: '1',
-            name: 'IPTU',
-            collector: 'Prefeitura de São Paulo',
-            dueDate: '2023-05-10',
-            amount: 1250.50,
-            status: 'overdue'
-        },
-        {
-            id: '2',
-            name: 'IRPF',
-            collector: 'Receita Federal',
-            dueDate: '2023-05-30',
-            amount: 3200.00,
-            status: 'pending'
-        },
-        {
-            id: '3',
-            name: 'ISS',
-            collector: 'Prefeitura de São Paulo',
-            dueDate: '2023-06-15',
-            amount: 850.75,
-            status: 'pending'
-        },
-        {
-            id: '4',
-            name: 'INSS',
-            collector: 'Governo Federal',
-            dueDate: '2023-04-28',
-            amount: 1750.30,
-            status: 'paid'
-        }
-    ];
-
-    // Verificar autenticação
-    auth.onAuthStateChanged((user) => {
-        if (!user) {
-            window.location.href = 'login.html';
-        } else {
-            loadUserData(user);
-            loadUserTaxes(user.uid);
-        }
-    });
-
-    // Carrega dados do usuário
-    function loadUserData(user) {
-        const displayName = user.displayName || user.email.split('@')[0];
-        const initial = displayName.charAt(0).toUpperCase();
-
-        userName.textContent = displayName;
-        welcomeUserName.textContent = displayName;
-        userAvatar.textContent = initial;
-    }
-
-    // Carrega impostos do usuário
-    function loadUserTaxes(userId) {
-        renderTaxesTable(taxesData);
-        updateSummaryCards(taxesData);
-    }
-
-    // Renderiza a tabela de impostos
-    function renderTaxesTable(taxes) {
-        taxesTableBody.innerHTML = taxes.map(tax => `
-            <tr>
-                <td class="tax-name">${tax.name}</td>
-                <td>${tax.collector}</td>
-                <td>${formatDate(tax.dueDate)}</td>
-                <td class="tax-amount">${formatCurrency(tax.amount)}</td>
-                <td>
-                    <span class="tax-status ${getStatusClass(tax.status)}">
-                        ${getStatusText(tax.status)}
-                    </span>
-                </td>
-                <td>
-                    <div class="tax-actions">
-                        <button class="btn btn-outline pay-btn" data-tax-id="${tax.id}" style="padding: 3px 8px; font-size: 0.7rem;">
-                            <i class="fas fa-money-bill-wave"></i> PAGAR/DETALHES
-                        </button>
-                        <button class="action-btn delete-btn" data-tax-id="${tax.id}" style="background: #f8d7da; color: #721c24;">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        `).join('');
-    }
-
-    // Atualiza os cartões de resumo
-    function updateSummaryCards(taxes) {
-        const now = new Date();
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-        // Total devido
-        const totalDue = taxes
-            .filter(tax => tax.status !== 'paid')
-            .reduce((sum, tax) => sum + tax.amount, 0);
-
-        // Impostos vencidos
-        const overdueTaxes = taxes.filter(tax => {
-            if (tax.status === 'paid') return false;
-            const dueDate = new Date(tax.dueDate);
-            return dueDate < today;
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menuToggle.classList.toggle('active');
+            dropdownMenu.classList.toggle('show');
         });
 
-        const overdueAmount = overdueTaxes.reduce((sum, tax) => sum + tax.amount, 0);
-
-        // Impostos a vencer
-        const pendingTaxes = taxes.filter(tax => {
-            if (tax.status === 'paid') return false;
-            const dueDate = new Date(tax.dueDate);
-            return dueDate >= today;
-        });
-
-        const pendingAmount = pendingTaxes.reduce((sum, tax) => sum + tax.amount, 0);
-
-        // Impostos pagos
-        const paidTaxes = taxes.filter(tax => tax.status === 'paid');
-        const paidAmount = paidTaxes.reduce((sum, tax) => sum + tax.amount, 0);
-
-        // Atualiza a interface
-        document.getElementById('totalDue').textContent = formatCurrency(totalDue);
-        document.getElementById('overdueAmount').textContent = formatCurrency(overdueAmount);
-        document.getElementById('overdueCount').textContent = overdueTaxes.length;
-        document.getElementById('pendingAmount').textContent = formatCurrency(pendingAmount);
-        document.getElementById('pendingCount').textContent = pendingTaxes.length;
-        document.getElementById('paidAmount').textContent = formatCurrency(paidAmount);
-        document.getElementById('paidCount').textContent = paidTaxes.length;
-        document.getElementById('totalTaxesCount').textContent = `${taxes.length} impostos`;
-        document.getElementById('totalTaxesAmount').textContent = formatCurrency(
-            taxes.reduce((sum, tax) => sum + tax.amount, 0)
-        );
-        document.getElementById('lastUpdate').textContent = formatDate(new Date().toISOString());
-    }
-
-    // Funções auxiliares
-    function formatDate(dateString) {
-        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-        return new Date(dateString).toLocaleDateString('pt-BR', options);
-    }
-
-    function formatCurrency(value) {
-        return new Intl.NumberFormat('pt-BR', { 
-            style: 'currency', 
-            currency: 'BRL' 
-        }).format(value);
-    }
-
-    function getStatusText(status) {
-        const statusMap = {
-            'pending': 'A Vencer',
-            'overdue': 'Vencido',
-            'paid': 'Pago'
-        };
-        return statusMap[status] || status;
-    }
-
-    function getStatusClass(status) {
-        const classMap = {
-            'pending': 'status-pending',
-            'overdue': 'status-overdue',
-            'paid': 'status-paid'
-        };
-        return classMap[status] || '';
-    }
-
-    // Função para marcar imposto como pago
-    function markTaxAsPaid(taxId) {
-        taxesData = taxesData.map(tax => {
-            if (tax.id === taxId) {
-                return { ...tax, status: 'paid' };
+        // Fechar menu quando clicar fora
+        document.addEventListener('click', (e) => {
+            if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                menuToggle.classList.remove('active');
+                dropdownMenu.classList.remove('show');
             }
-            return tax;
         });
-        renderTaxesTable(taxesData);
-        updateSummaryCards(taxesData);
-    }
 
-    // Função para pagar todos os impostos
-    function payAllTaxes() {
-        const unpaidTaxes = taxesData.filter(tax => tax.status !== 'paid');
+        // Animação ao rolar
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
+            }
+        });
+
+        // Modal de detalhes
+        const paymentDetailModal = document.getElementById('paymentDetailModal');
         
-        if (unpaidTaxes.length === 0) {
-            alert('Não há impostos para pagar!');
-            return;
-        }
-        
-        if (confirm(`Deseja pagar todos os ${unpaidTaxes.length} impostos no valor total de ${formatCurrency(unpaidTaxes.reduce((sum, tax) => sum + tax.amount, 0))}?`)) {
-            taxesData = taxesData.map(tax => {
-                if (tax.status !== 'paid') {
-                    return { ...tax, status: 'paid' };
-                }
-                return tax;
-            });
-            
-            renderTaxesTable(taxesData);
-            updateSummaryCards(taxesData);
-            alert('Pagamento de todos os impostos realizado com sucesso!');
-        }
-    }
-
-    // Event Listeners
-    // Abrir modal de novo pagamento
-    newPaymentBtn.addEventListener('click', () => {
-        paymentModal.style.display = 'flex';
-    });
-
-    // Fechar modal de novo pagamento
-    cancelPayment.addEventListener('click', () => {
-        paymentModal.style.display = 'none';
-    });
-
-    // Confirmar novo pagamento
-    confirmPayment.addEventListener('click', () => {
-        const taxType = document.getElementById('taxType').value;
-        const paymentValue = parseFloat(document.getElementById('paymentValue').value);
-        const dueDate = document.getElementById('dueDate').value;
-
-        if (!taxType || !paymentValue || !dueDate) {
-            alert('Preencha todos os campos obrigatórios');
-            return;
-        }
-
-        // Adiciona novo imposto
-        const newTax = {
-            id: Date.now().toString(),
-            name: taxType,
-            name: taxType.toUpperCase(),
-            collector: taxType.includes('IP') ? 'Prefeitura' : 'Governo Federal',
-            dueDate: dueDate,
-            amount: paymentValue,
-            status: new Date(dueDate) < new Date() ? 'overdue' : 'pending'
+        // Dados de exemplo para os pagamentos
+        const paymentDetails = {
+            1: {
+                name: "IRPF - Imposto de Renda",
+                entity: "Receita Federal",
+                type: "Imposto Federal",
+                due: "15/08/2023",
+                status: "Pendente",
+                amount: "R$ 1.250,00",
+                barcode: "85690000001-0 25000000012-5 00000000000-0 00000000000-0",
+                notes: "Dedução de R$ 1.500,00 por dependentes declarados."
+            },
+            2: {
+                name: "Conta de Luz",
+                entity: "Enel",
+                type: "Conta de Consumo",
+                due: "10/08/2023",
+                status: "Pendente",
+                amount: "R$ 320,50",
+                barcode: "84610000002-0 32050000012-5 00000000000-0 00000000000-0",
+                notes: "Consumo de 320 kWh no mês de julho."
+            },
+            3: {
+                name: "Conta de Água",
+                entity: "Sabesp",
+                type: "Conta de Consumo",
+                due: "05/08/2023",
+                status: "Pago",
+                amount: "R$ 180,75",
+                barcode: "83620000003-0 18075000012-5 00000000000-0 00000000000-0",
+                notes: "Pagamento realizado em 03/08/2023."
+            },
+            4: {
+                name: "Telefone Celular",
+                entity: "Vivo",
+                type: "Serviço de Telecomunicação",
+                due: "12/08/2023",
+                status: "Pendente",
+                amount: "R$ 89,90",
+                barcode: "82630000004-0 08990000012-5 00000000000-0 00000000000-0",
+                notes: "Plano pós-pago com 10GB de internet."
+            },
+            5: {
+                name: "Condomínio",
+                entity: "Edifício Solar",
+                type: "Taxa Condominial",
+                due: "05/08/2023",
+                status: "Pago",
+                amount: "R$ 650,00",
+                barcode: "81640000005-0 65000000012-5 00000000000-0 00000000000-0",
+                notes: "Inclui taxa de reserva de R$ 50,00."
+            }
         };
 
-        taxesData.push(newTax);
-        renderTaxesTable(taxesData);
-        updateSummaryCards(taxesData);
-        paymentModal.style.display = 'none';
-        alert('Imposto adicionado com sucesso!');
-    });
-
-    // Fechar modal de boleto
-    closeBoleto.addEventListener('click', () => {
-        boletoModal.style.display = 'none';
-    });
-
-    // Pagar tudo - abrir modal
-    payAllBtn.addEventListener('click', () => {
-        const unpaidTaxes = taxesData.filter(tax => tax.status !== 'paid');
-        
-        if (unpaidTaxes.length === 0) {
-            alert('Não há impostos para pagar!');
-            return;
-        }
-        
-        payAllTableBody.innerHTML = unpaidTaxes.map(tax => `
-            <tr>
-                <td class="tax-name">${tax.name}</td>
-                <td>${tax.collector}</td>
-                <td>${formatDate(tax.dueDate)}</td>
-                <td class="tax-amount">${formatCurrency(tax.amount)}</td>
-                <td>
-                    <span class="tax-status ${getStatusClass(tax.status)}">
-                        ${getStatusText(tax.status)}
-                    </span>
-                </td>
-            </tr>
-        `).join('');
-        
-        payAllTotalAmount.textContent = formatCurrency(
-            unpaidTaxes.reduce((sum, tax) => sum + tax.amount, 0)
-        );
-        
-        payAllModal.style.display = 'flex';
-    });
-
-    // Confirmar pagamento de tudo
-    confirmPayAll.addEventListener('click', () => {
-        taxesData = taxesData.map(tax => {
-            if (tax.status !== 'paid') {
-                return { ...tax, status: 'paid' };
-            }
-            return tax;
-        });
-        
-        renderTaxesTable(taxesData);
-        updateSummaryCards(taxesData);
-        payAllModal.style.display = 'none';
-        alert('Pagamento de todos os impostos realizado com sucesso!');
-    });
-
-    // Cancelar pagamento de tudo
-    cancelPayAll.addEventListener('click', () => {
-        payAllModal.style.display = 'none';
-    });
-    // Pagar tudo
-    payAllBtn.addEventListener('click', payAllTaxes);
-
-    // Event listener para deletar imposto
-    document.addEventListener('click', (e) => {
-        if (e.target.closest('.delete-btn')) {
-            const btn = e.target.closest('.delete-btn');
-            const taxId = btn.getAttribute('data-tax-id');
-
-            if (confirm('Deseja realmente excluir este imposto?')) {
-                taxesData = taxesData.filter(tax => tax.id !== taxId);
-                renderTaxesTable(taxesData);
-                updateSummaryCards(taxesData);
-            }
-        }
-
-        // Event listener para pagar imposto individual
-        // Event listener para pagar imposto individual ou ver detalhes
-        if (e.target.closest('.pay-btn')) {
-            const btn = e.target.closest('.pay-btn');
-            const taxId = btn.getAttribute('data-tax-id');
-            const tax = taxesData.find(t => t.id === taxId);
-
-            if (confirm('Deseja marcar este imposto como pago?')) {
-                markTaxAsPaid(taxId);
-            if (tax) {
-                if (tax.status !== 'paid') {
-                    if (confirm(`Deseja marcar o imposto ${tax.name} como pago no valor de ${formatCurrency(tax.amount)}?`)) {
-                        markTaxAsPaid(taxId);
-                    }
-                } else {
-                    boletoContent.innerHTML = `
-                        <h3>${tax.name}</h3>
-                        <p><strong>Órgão Cobrador:</strong> ${tax.collector}</p>
-                        <p><strong>Vencimento:</strong> ${formatDate(tax.dueDate)}</p>
-                        <p><strong>Valor:</strong> ${formatCurrency(tax.amount)}</p>
-                        <p><strong>Status:</strong> <span class="tax-status ${getStatusClass(tax.status)}">${getStatusText(tax.status)}</span></p>
-                        <p><strong>Código de Barras:</strong> 12345.67890 12345.678901 12345.678901 1 12345678901234</p>
-                        <div style="margin-top: 20px; text-align: center;">
-                            <button class="btn btn-primary" onclick="alert('Comprovante de pagamento gerado para ${tax.name}')">
-                                <i class="fas fa-file-pdf"></i> Gerar Comprovante
-                            </button>
-                        </div>
-                    `;
-                    
-                    boletoModal.style.display = 'flex';
-                }
-            }
-        }
-    });
-
-    // Filtrar
-    filterBtn.addEventListener('click', () => {
-        const status = prompt('Filtrar por status (digite: todos, pendentes, vencidos ou pagos):');
-
-        if (status) {
-            let filteredTaxes = [...taxesData];
-
-            switch (status.toLowerCase()) {
-                case 'pendentes':
-                    filteredTaxes = taxesData.filter(tax => tax.status === 'pending');
-                    break;
-                case 'vencidos':
-                    filteredTaxes = taxesData.filter(tax => tax.status === 'overdue');
-                    break;
-                case 'pagos':
-                    filteredTaxes = taxesData.filter(tax => tax.status === 'paid');
-                    break;
-                case 'todos':
-                    // Mostra todos sem filtrar
-                    break;
-                default:
-                    alert('Opção inválida. Mostrando todos os impostos.');
-                    break;
-            }
-
-            renderTaxesTable(filteredTaxes);
-        }
-    });
-
-    // Visualizar boleto/detalhes
-    document.addEventListener('click', (e) => {
-        if (e.target.closest('[data-tax-id]')) {
-            const btn = e.target.closest('[data-tax-id]');
-            const taxId = btn.getAttribute('data-tax-id');
-            const tax = taxesData.find(t => t.id === taxId);
-            
-            if (tax) {
-                boletoContent.innerHTML = `
-                    <h3>${tax.name}</h3>
-                    <p><strong>Órgão Cobrador:</strong> ${tax.collector}</p>
-                    <p><strong>Vencimento:</strong> ${formatDate(tax.dueDate)}</p>
-                    <p><strong>Valor:</strong> ${formatCurrency(tax.amount)}</p>
-                    <p><strong>Código de Barras:</strong> 12345.67890 12345.678901 12345.678901 1 12345678901234</p>
-                    <div style="margin-top: 20px; text-align: center;">
-                        <button class="btn btn-primary" onclick="alert('Pagamento realizado para ${tax.name}')">
-                            <i class="fas fa-money-bill-wave"></i> Confirmar Pagamento
-                        </button>
-                    </div>
-                `;
+        function openPaymentDetail(paymentId) {
+            const detail = paymentDetails[paymentId];
+            if (detail) {
+                document.getElementById('detail-name').textContent = detail.name;
+                document.getElementById('detail-entity').textContent = detail.entity;
+                document.getElementById('detail-type').textContent = detail.type;
+                document.getElementById('detail-due').textContent = detail.due;
                 
-                boletoModal.style.display = 'flex';
+                const statusElement = document.getElementById('detail-status');
+                statusElement.innerHTML = '';
+                const statusSpan = document.createElement('span');
+                statusSpan.className = detail.status === 'Pago' ? 'status-paid' : 'status-pending';
+                statusSpan.textContent = detail.status;
+                statusElement.appendChild(statusSpan);
+                
+                document.getElementById('detail-amount').textContent = detail.amount;
+                document.getElementById('detail-barcode').textContent = detail.barcode;
+                document.getElementById('detail-notes').textContent = detail.notes;
+                
+                paymentDetailModal.classList.add('active');
             }
         }
-    });
 
-    // Logout
-    logoutBtn.addEventListener('click', () => {
-        auth.signOut().then(() => {
-            window.location.href = 'login.html';
-        }).catch((error) => {
-            alert('Erro ao fazer logout: ' + error.message);
+        function closePaymentDetail() {
+            paymentDetailModal.classList.remove('active');
+        }
+
+        // Fechar modal ao clicar fora
+        paymentDetailModal.addEventListener('click', (e) => {
+            if (e.target === paymentDetailModal) {
+                closePaymentDetail();
+            }
         });
-    });
-</script>
+    </script>
 </body>
 </html>
