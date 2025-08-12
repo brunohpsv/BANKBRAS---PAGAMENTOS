@@ -32,7 +32,7 @@
             line-height: 1.6;
         }
 
-        /* Cabeçalho Premium (mantido do original) */
+        /* Cabeçalho Premium */
         header {
             background: var(--branco);
             padding: 0 40px;
@@ -208,7 +208,7 @@
             text-align: center;
         }
 
-        /* Dashboard Styles */
+        /* Estilos do Dashboard */
         .dashboard-container {
             max-width: 1200px;
             margin: 40px auto;
@@ -1128,6 +1128,78 @@
         closeAddPayment();
         alert('Pagamento adicionado com sucesso!');
     }
+
+    // Função para deletar um pagamento
+    function deletePayment(paymentId) {
+        if (confirm('Tem certeza que deseja excluir este pagamento?')) {
+            const paymentItem = document.querySelector(`.payment-item[data-id="${paymentId}"]`);
+            if (paymentItem) {
+                paymentItem.remove();
+                updateTotal();
+                alert('Pagamento excluído com sucesso!');
+            }
+        }
+    }
+
+    // Função para pagar todos os itens pendentes
+    function payAll() {
+        const pendingItems = document.querySelectorAll('.payment-status.status-pending');
+        if (pendingItems.length === 0) {
+            alert('Não há pagamentos pendentes para realizar!');
+            return;
+        }
+
+        if (confirm(`Deseja realmente pagar todos os ${pendingItems.length} itens pendentes?`)) {
+            pendingItems.forEach(item => {
+                item.textContent = 'Pago';
+                item.classList.remove('status-pending');
+                item.classList.add('status-paid');
+                
+                // Desabilitar botão de pagar
+                const paymentItem = item.closest('.payment-item');
+                const payButton = paymentItem.querySelector('.action-btn.pay-btn');
+                if (payButton) {
+                    payButton.innerHTML = '<i class="fas fa-check"></i>';
+                    payButton.classList.remove('pay-btn');
+                    payButton.disabled = true;
+                }
+            });
+            
+            updateTotal();
+            alert('Todos os pagamentos foram realizados com sucesso!');
+        }
+    }
+
+    // Função para atualizar o total a pagar
+    function updateTotal() {
+        let total = 0;
+        document.querySelectorAll('.payment-item').forEach(item => {
+            const status = item.querySelector('.payment-status');
+            const amountText = item.querySelector('.payment-amount').textContent;
+            
+            if (status && status.classList.contains('status-pending')) {
+                const amount = parseFloat(amountText.replace('R$ ', '').replace('.', '').replace(',', '.'));
+                total += amount;
+            }
+        });
+        
+        const totalElement = document.querySelector('.total-amount');
+        if (totalElement) {
+            totalElement.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+    }
+
+    // Inicializar eventos
+    document.addEventListener('DOMContentLoaded', function() {
+        // Adicionar evento ao botão de pagar tudo
+        const payAllButton = document.querySelector('.btn-pay-all');
+        if (payAllButton) {
+            payAllButton.addEventListener('click', payAll);
+        }
+        
+        // Atualizar total inicial
+        updateTotal();
+    });
 
     // Fechar modais ao clicar fora
     paymentDetailModal.addEventListener('click', (e) => {
