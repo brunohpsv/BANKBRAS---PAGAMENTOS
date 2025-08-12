@@ -14,8 +14,6 @@
         :root {
             --verde-escuro: #006b3c;
             --verde-claro: #009639;
-            --amarelo: #f7d417;
-            --azul: #002776;
             --branco: #ffffff;
             --preto: #000000;
             --cinza-claro: #f5f5f5;
@@ -31,7 +29,7 @@
         }
 
         body {
-            background-color: #f8f9fa;
+            background-color: var(--cinza-claro);
             color: var(--cinza-escuro);
             line-height: 1.6;
             display: flex;
@@ -39,62 +37,45 @@
             min-height: 100vh;
         }
 
-        /* Cabeçalho Premium */
+        /* Cabeçalho */
         header {
             background: var(--branco);
-            padding: 0 40px;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            position: relative;
-            height: 80px;
-            border-bottom: 4px solid transparent;
-            background-image: linear-gradient(to right, 
-                var(--verde-escuro) 0%, 
-                var(--verde-claro) 25%, 
-                var(--amarelo) 50%, 
-                var(--azul) 75%, 
-                var(--preto) 100%);
-            background-size: 100% 4px;
-            background-repeat: no-repeat;
-            background-position: bottom;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            height: 70px;
+            border-bottom: 3px solid var(--verde-escuro);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--verde-escuro) 0%, var(--azul) 100%);
-            border-radius: 8px;
+            width: 30px;
+            height: 30px;
+            background: var(--verde-escuro);
+            border-radius: 5px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--branco);
             font-weight: bold;
-            font-size: 18px;
+            font-size: 14px;
         }
 
         .logo-text {
             color: var(--preto);
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
-            letter-spacing: 0.5px;
         }
 
         .logo-text span {
             color: var(--verde-escuro);
-        }
-
-        .nav-container {
-            display: flex;
-            align-items: center;
-            gap: 30px;
         }
 
         .user-profile {
@@ -105,16 +86,16 @@
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--verde-claro) 0%, var(--azul) 100%);
+            background: var(--verde-escuro);
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--branco);
             font-weight: bold;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .user-name {
@@ -122,117 +103,22 @@
             font-size: 14px;
         }
 
-        .menu-toggle {
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--verde-claro) 0%, var(--azul) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .menu-toggle:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .menu-toggle .hamburger {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .menu-toggle .hamburger span {
-            display: block;
-            width: 20px;
-            height: 2px;
-            background-color: var(--branco);
-            transition: all 0.3s ease;
-        }
-
-        .menu-toggle.active .hamburger span:nth-child(1) {
-            transform: translateY(7px) rotate(45deg);
-        }
-
-        .menu-toggle.active .hamburger span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-toggle.active .hamburger span:nth-child(3) {
-            transform: translateY(-7px) rotate(-45deg);
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            right: 40px;
-            top: 80px;
-            background-color: var(--branco);
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            z-index: 100;
-            width: 240px;
-            overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .dropdown-menu.show {
-            display: block;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .dropdown-menu a {
-            display: flex;
-            align-items: center;
-            padding: 14px 20px;
-            color: #333;
-            text-decoration: none;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .dropdown-menu a:hover {
-            background-color: var(--cinza-claro);
-            color: var(--verde-escuro);
-            padding-left: 24px;
-        }
-
-        .dropdown-menu a:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-menu a i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-
-        /* Conteúdo principal - Dashboard */
+        /* Conteúdo principal */
         .main-content {
             flex: 1;
             display: flex;
             padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .sidebar {
-            width: 250px;
+            width: 200px;
             background: var(--branco);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            padding: 15px;
             margin-right: 20px;
             height: fit-content;
         }
@@ -248,13 +134,12 @@
         .sidebar-menu a {
             display: flex;
             align-items: center;
-            padding: 12px 15px;
+            padding: 10px;
             color: var(--cinza-escuro);
             text-decoration: none;
-            border-radius: 6px;
-            transition: all 0.3s ease;
+            border-radius: 5px;
+            transition: all 0.2s ease;
             font-size: 14px;
-            font-weight: 500;
         }
 
         .sidebar-menu a:hover, .sidebar-menu a.active {
@@ -273,135 +158,117 @@
         }
 
         .welcome-banner {
-            background: linear-gradient(135deg, var(--verde-escuro) 0%, var(--azul) 100%);
+            background: var(--verde-escuro);
             color: var(--branco);
-            border-radius: 12px;
-            padding: 30px;
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .welcome-banner::after {
-            content: '';
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
         }
 
         .welcome-banner h1 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
         }
 
         .welcome-banner p {
-            font-size: 1rem;
+            font-size: 0.9rem;
             opacity: 0.9;
-            max-width: 70%;
         }
 
         .summary-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
             margin-bottom: 20px;
         }
 
         .summary-card {
             background: var(--branco);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            display: flex;
-            flex-direction: column;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
         .summary-card .card-header {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .summary-card .card-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
             background: var(--cinza-claro);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
+            margin-right: 10px;
             color: var(--verde-escuro);
         }
 
         .summary-card .card-title {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: var(--cinza-escuro);
             font-weight: 600;
         }
 
         .summary-card .card-value {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--verde-escuro);
+            margin-bottom: 5px;
         }
 
         .summary-card .card-footer {
-            margin-top: auto;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: var(--cinza-escuro);
         }
 
         .taxes-section {
             background: var(--branco);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .section-header h2 {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             color: var(--verde-escuro);
         }
 
         .section-actions {
             display: flex;
-            gap: 10px;
-        }
-
-        .btn {
-            padding: 8px 16px;
-            border-radius: 6px;
-            border: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
             gap: 8px;
         }
 
+        .btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
         .btn-primary {
-            background: linear-gradient(to right, var(--verde-escuro), var(--verde-claro));
+            background: var(--verde-escuro);
             color: var(--branco);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 107, 60, 0.2);
+            background: var(--verde-claro);
         }
 
         .btn-outline {
@@ -417,28 +284,23 @@
         .taxes-table {
             width: 100%;
             border-collapse: collapse;
+            font-size: 0.8rem;
         }
 
         .taxes-table thead th {
             text-align: left;
-            padding: 12px 15px;
+            padding: 10px;
             background: var(--cinza-claro);
             color: var(--cinza-escuro);
             font-weight: 600;
-            font-size: 0.9rem;
         }
 
         .taxes-table tbody tr {
             border-bottom: 1px solid var(--cinza-medio);
         }
 
-        .taxes-table tbody tr:last-child {
-            border-bottom: none;
-        }
-
         .taxes-table tbody td {
-            padding: 15px;
-            font-size: 0.9rem;
+            padding: 10px;
         }
 
         .taxes-table .tax-name {
@@ -452,9 +314,9 @@
 
         .taxes-table .tax-status {
             display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 0.7rem;
             font-weight: 600;
         }
 
@@ -479,8 +341,8 @@
         }
 
         .action-btn {
-            width: 30px;
-            height: 30px;
+            width: 25px;
+            height: 25px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -489,7 +351,8 @@
             background: var(--cinza-claro);
             color: var(--cinza-escuro);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            font-size: 0.7rem;
         }
 
         .action-btn:hover {
@@ -503,103 +366,82 @@
         }
 
         .total-row td {
-            padding: 15px;
+            padding: 10px;
         }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--branco);
-            border-radius: 12px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .modal-header {
+        /* Rodapé */
+        footer {
+            background: var(--verde-escuro);
+            color: var(--branco);
             padding: 20px;
-            border-bottom: 1px solid var(--cinza-medio);
+            margin-top: auto;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .footer-column h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 5px;
+        }
+
+        .footer-column a {
+            color: var(--branco);
+            text-decoration: none;
+            font-size: 0.8rem;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 5px;
         }
 
-        .modal-header h3 {
-            font-size: 1.2rem;
-            color: var(--verde-escuro);
+        .footer-column a:hover {
+            text-decoration: underline;
         }
 
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--cinza-escuro);
+        .footer-column i {
+            font-size: 0.7rem;
         }
 
-        .modal-body {
-            padding: 20px;
-        }
-
-        .modal-footer {
-            padding: 15px 20px;
-            border-top: 1px solid var(--cinza-medio);
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
+        .footer-bottom {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.7rem;
         }
 
         /* Responsividade */
-        @media (max-width: 992px) {
-            .sidebar {
-                width: 220px;
-            }
-        }
-
         @media (max-width: 768px) {
-            header {
-                padding: 0 20px;
-            }
-            
             .main-content {
                 flex-direction: column;
+                padding: 15px;
             }
             
             .sidebar {
                 width: 100%;
                 margin-right: 0;
-                margin-bottom: 20px;
+                margin-bottom: 15px;
             }
             
-            .welcome-banner p {
-                max-width: 100%;
-            }
-            
-            .dropdown-menu {
-                right: 20px;
-                width: calc(100% - 40px);
+            .summary-cards {
+                grid-template-columns: 1fr 1fr;
             }
         }
 
-        @media (max-width: 576px) {
+        @media (max-width: 480px) {
             .logo-text {
                 font-size: 16px;
             }
@@ -619,32 +461,8 @@
                 justify-content: space-between;
             }
             
-            .taxes-table thead {
-                display: none;
-            }
-            
-            .taxes-table tbody tr {
-                display: block;
-                margin-bottom: 15px;
-                border-bottom: 1px solid var(--cinza-medio);
-            }
-            
-            .taxes-table tbody td {
-                display: flex;
-                justify-content: space-between;
-                padding: 10px 15px;
-                border-bottom: none;
-            }
-            
-            .taxes-table tbody td::before {
-                content: attr(data-label);
-                font-weight: 600;
-                margin-right: 10px;
-                color: var(--cinza-escuro);
-            }
-            
-            .taxes-table .tax-actions {
-                justify-content: flex-end;
+            .footer-container {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -656,26 +474,9 @@
             <div class="logo-text">BANK<span>BRAS</span> PAGAMENTOS</div>
         </div>
         
-        <div class="nav-container">
-            <div class="user-profile" id="userProfile">
-                <div class="user-avatar" id="userAvatar">U</div>
-                <div class="user-name" id="userName">Usuário</div>
-            </div>
-            <div class="menu-toggle" id="menuToggle">
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <div class="bbp-logo">BBP</div>
-            </div>
-            <div class="dropdown-menu" id="dropdownMenu">
-                <a href="dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a>
-                <a href="perfil.html"><i class="fas fa-user"></i> Meu Perfil</a>
-                <a href="historico.html"><i class="fas fa-history"></i> Histórico</a>
-                <a href="configuracoes.html"><i class="fas fa-cog"></i> Configurações</a>
-                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</a>
-            </div>
+        <div class="user-profile" id="userProfile">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <div class="user-name" id="userName">Usuário</div>
         </div>
     </header>
 
@@ -688,6 +489,7 @@
                 <li><a href="extratos.html"><i class="fas fa-file-alt"></i> Extratos</a></li>
                 <li><a href="notificacoes.html"><i class="fas fa-bell"></i> Notificações</a></li>
                 <li><a href="ajuda.html"><i class="fas fa-question-circle"></i> Ajuda</a></li>
+                <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
             </ul>
         </aside>
 
@@ -756,78 +558,31 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
-                    <table class="taxes-table">
-                        <thead>
-                            <tr>
-                                <th>Imposto</th>
-                                <th>Órgão Cobrador</th>
-                                <th>Banco</th>
-                                <th>Empresa</th>
-                                <th>Vencimento</th>
-                                <th>Valor</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="taxesTableBody">
-                            <!-- Dados serão inseridos via JavaScript -->
-                        </tbody>
-                        <tfoot>
-                            <tr class="total-row">
-                                <td colspan="4">Total</td>
-                                <td id="totalTaxesCount">0 impostos</td>
-                                <td id="totalTaxesAmount">R$ 0,00</td>
-                                <td colspan="2"></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                <table class="taxes-table">
+                    <thead>
+                        <tr>
+                            <th>Imposto</th>
+                            <th>Órgão Cobrador</th>
+                            <th>Vencimento</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="taxesTableBody">
+                        <!-- Dados serão inseridos via JavaScript -->
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td colspan="2">Total</td>
+                            <td id="totalTaxesCount">0 impostos</td>
+                            <td id="totalTaxesAmount">R$ 0,00</td>
+                            <td colspan="2"></td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </main>
-    </div>
-
-    <!-- Modal de Pagamento -->
-    <div class="modal" id="paymentModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Realizar Pagamento</h3>
-                <button class="modal-close" id="closeModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="paymentForm">
-                    <div class="form-group">
-                        <label for="taxSelect">Selecione o Imposto</label>
-                        <select id="taxSelect" class="form-control" required>
-                            <option value="">Selecione...</option>
-                            <!-- Opções serão preenchidas via JavaScript -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="paymentMethod">Método de Pagamento</label>
-                        <select id="paymentMethod" class="form-control" required>
-                            <option value="">Selecione...</option>
-                            <option value="pix">PIX</option>
-                            <option value="boleto">Boleto Bancário</option>
-                            <option value="credito">Cartão de Crédito</option>
-                            <option value="debito">Cartão de Débito</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="paymentAmount">Valor (R$)</label>
-                        <input type="number" id="paymentAmount" class="form-control" step="0.01" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="paymentDate">Data do Pagamento</label>
-                        <input type="date" id="paymentDate" class="form-control" required>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" id="cancelPayment">Cancelar</button>
-                <button class="btn btn-primary" id="confirmPayment">Confirmar Pagamento</button>
-            </div>
-        </div>
     </div>
 
     <footer>
@@ -882,29 +637,19 @@
         const db = firebase.firestore();
 
         // Elementos da interface
-        const menuToggle = document.getElementById('menuToggle');
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        const userProfile = document.getElementById('userProfile');
         const userAvatar = document.getElementById('userAvatar');
         const userName = document.getElementById('userName');
         const welcomeUserName = document.getElementById('welcomeUserName');
         const logoutBtn = document.getElementById('logoutBtn');
         const taxesTableBody = document.getElementById('taxesTableBody');
         const newPaymentBtn = document.getElementById('newPaymentBtn');
-        const paymentModal = document.getElementById('paymentModal');
-        const closeModal = document.getElementById('closeModal');
-        const cancelPayment = document.getElementById('cancelPayment');
-        const taxSelect = document.getElementById('taxSelect');
-        const paymentForm = document.getElementById('paymentForm');
 
-        // Dados de exemplo (seriam substituídos por dados do Firebase)
+        // Dados de exemplo
         let taxesData = [
             {
                 id: '1',
                 name: 'IPTU',
                 collector: 'Prefeitura de São Paulo',
-                bank: 'Banco do Brasil',
-                company: 'Imobiliária XYZ',
                 dueDate: '2023-05-10',
                 amount: 1250.50,
                 status: 'overdue'
@@ -913,8 +658,6 @@
                 id: '2',
                 name: 'IRPF',
                 collector: 'Receita Federal',
-                bank: 'Banco BBP',
-                company: 'Contabilidade ABC',
                 dueDate: '2023-05-30',
                 amount: 3200.00,
                 status: 'pending'
@@ -923,8 +666,6 @@
                 id: '3',
                 name: 'ISS',
                 collector: 'Prefeitura de São Paulo',
-                bank: 'Itaú',
-                company: 'Serviços LTDA',
                 dueDate: '2023-06-15',
                 amount: 850.75,
                 status: 'pending'
@@ -933,44 +674,18 @@
                 id: '4',
                 name: 'INSS',
                 collector: 'Governo Federal',
-                bank: 'Caixa Econômica',
-                company: 'Empresa 123',
                 dueDate: '2023-04-28',
                 amount: 1750.30,
                 status: 'paid'
             }
         ];
 
-        // Menu dropdown
-        menuToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            menuToggle.classList.toggle('active');
-            dropdownMenu.classList.toggle('show');
-        });
-
-        userProfile.addEventListener('click', (e) => {
-            e.stopPropagation();
-            menuToggle.classList.toggle('active');
-            dropdownMenu.classList.toggle('show');
-        });
-
-        // Fechar menu quando clicar fora
-        document.addEventListener('click', (e) => {
-            if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target) {
-                menuToggle.classList.remove('active');
-                dropdownMenu.classList.remove('show');
-            }
-        });
-
         // Verificar autenticação
         auth.onAuthStateChanged((user) => {
             if (!user) {
-                // Se não estiver autenticado, redireciona para login
                 window.location.href = 'login.html';
             } else {
-                // Carrega dados do usuário
                 loadUserData(user);
-                // Carrega impostos do usuário
                 loadUserTaxes(user.uid);
             }
         });
@@ -985,20 +700,10 @@
             userAvatar.textContent = initial;
         }
 
-        // Carrega impostos do usuário (simulado)
+        // Carrega impostos do usuário
         function loadUserTaxes(userId) {
-            // Aqui você faria uma consulta ao Firestore
-            // db.collection('users').doc(userId).collection('taxes').get()...
-            
-            // Por enquanto, usamos os dados de exemplo
             renderTaxesTable(taxesData);
             updateSummaryCards(taxesData);
-            
-            // Preenche o select no modal
-            taxSelect.innerHTML = '<option value="">Selecione...</option>' + 
-                taxesData.filter(tax => tax.status !== 'paid')
-                    .map(tax => `<option value="${tax.id}" data-amount="${tax.amount}">${tax.name} - ${formatCurrency(tax.amount)}</option>`)
-                    .join('');
         }
 
         // Renderiza a tabela de impostos
@@ -1007,8 +712,6 @@
                 <tr>
                     <td class="tax-name">${tax.name}</td>
                     <td>${tax.collector}</td>
-                    <td>${tax.bank}</td>
-                    <td>${tax.company}</td>
                     <td>${formatDate(tax.dueDate)}</td>
                     <td class="tax-amount">${formatCurrency(tax.amount)}</td>
                     <td>
@@ -1024,9 +727,6 @@
                             <button class="action-btn" data-tax-id="${tax.id}" title="Detalhes">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            <button class="action-btn" data-tax-id="${tax.id}" title="Compartilhar">
-                                <i class="fas fa-share-alt"></i>
-                            </button>
                         </div>
                     </td>
                 </tr>
@@ -1039,14 +739,9 @@
                     const action = btn.querySelector('i').className.split(' ')[1];
                     
                     if (action === 'fa-money-bill-wave') {
-                        // Ação de pagar
-                        openPaymentModal(taxId);
+                        alert(`Pagar imposto ${taxId}`);
                     } else if (action === 'fa-eye') {
-                        // Ação de visualizar
                         alert(`Visualizar imposto ${taxId}`);
-                    } else if (action === 'fa-share-alt') {
-                        // Ação de compartilhar
-                        alert(`Compartilhar imposto ${taxId}`);
                     }
                 });
             });
@@ -1057,7 +752,7 @@
             const now = new Date();
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             
-            // Total devido (todos os impostos não pagos)
+            // Total devido
             const totalDue = taxes
                 .filter(tax => tax.status !== 'paid')
                 .reduce((sum, tax) => sum + tax.amount, 0);
@@ -1080,13 +775,8 @@
             
             const pendingAmount = pendingTaxes.reduce((sum, tax) => sum + tax.amount, 0);
             
-            // Impostos pagos (este mês)
-            const paidTaxes = taxes.filter(tax => {
-                if (tax.status !== 'paid') return false;
-                // Simulando que foram pagos este mês
-                return true;
-            });
-            
+            // Impostos pagos
+            const paidTaxes = taxes.filter(tax => tax.status === 'paid');
             const paidAmount = paidTaxes.reduce((sum, tax) => sum + tax.amount, 0);
             
             // Atualiza a interface
@@ -1135,66 +825,9 @@
             return classMap[status] || '';
         }
 
-        // Modal de pagamento
-        function openPaymentModal(taxId = null) {
-            if (taxId) {
-                const tax = taxesData.find(t => t.id === taxId);
-                if (tax) {
-                    taxSelect.value = taxId;
-                    document.getElementById('paymentAmount').value = tax.amount.toFixed(2);
-                    
-                    // Define a data de vencimento como data de pagamento padrão
-                    const dueDate = new Date(tax.dueDate);
-                    const today = new Date();
-                    const paymentDate = dueDate < today ? today : dueDate;
-                    document.getElementById('paymentDate').valueAsDate = paymentDate;
-                }
-            }
-            
-            paymentModal.classList.add('show');
-        }
-
-        newPaymentBtn.addEventListener('click', () => openPaymentModal());
-        closeModal.addEventListener('click', () => paymentModal.classList.remove('show'));
-        cancelPayment.addEventListener('click', () => paymentModal.classList.remove('show'));
-
-        // Quando um imposto é selecionado, atualiza o valor
-        taxSelect.addEventListener('change', (e) => {
-            const selectedOption = e.target.options[e.target.selectedIndex];
-            if (selectedOption.value) {
-                const amount = parseFloat(selectedOption.getAttribute('data-amount'));
-                document.getElementById('paymentAmount').value = amount.toFixed(2);
-            }
-        });
-
-        // Confirmar pagamento
-        document.getElementById('confirmPayment').addEventListener('click', () => {
-            const taxId = taxSelect.value;
-            const paymentMethod = document.getElementById('paymentMethod').value;
-            const paymentAmount = parseFloat(document.getElementById('paymentAmount').value);
-            const paymentDate = document.getElementById('paymentDate').value;
-            
-            if (!taxId || !paymentMethod || !paymentAmount || !paymentDate) {
-                alert('Por favor, preencha todos os campos.');
-                return;
-            }
-            
-            // Aqui você faria a chamada para o Firebase para registrar o pagamento
-            // Por enquanto, apenas simulamos
-            const taxIndex = taxesData.findIndex(t => t.id === taxId);
-            if (taxIndex !== -1) {
-                taxesData[taxIndex].status = 'paid';
-                
-                // Atualiza a interface
-                renderTaxesTable(taxesData);
-                updateSummaryCards(taxesData);
-                
-                // Fecha o modal
-                paymentModal.classList.remove('show');
-                paymentForm.reset();
-                
-                alert('Pagamento realizado com sucesso!');
-            }
+        // Novo pagamento
+        newPaymentBtn.addEventListener('click', () => {
+            alert('Funcionalidade de novo pagamento será implementada aqui');
         });
 
         // Logout
@@ -1204,13 +837,6 @@
             }).catch((error) => {
                 alert('Erro ao fazer logout: ' + error.message);
             });
-        });
-
-        // Fechar modal ao clicar fora
-        window.addEventListener('click', (e) => {
-            if (e.target === paymentModal) {
-                paymentModal.classList.remove('show');
-            }
         });
     </script>
 </body>
