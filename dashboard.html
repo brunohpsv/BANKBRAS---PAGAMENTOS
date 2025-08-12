@@ -369,58 +369,26 @@
             padding: 10px;
         }
 
-        /* Rodapé */
-        footer {
-            background: var(--verde-escuro);
-            color: var(--branco);
-            padding: 20px;
-            margin-top: auto;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .footer-column h3 {
-            font-size: 1rem;
-            margin-bottom: 10px;
-        }
-
-        .footer-column ul {
-            list-style: none;
-        }
-
-        .footer-column li {
-            margin-bottom: 5px;
-        }
-
-        .footer-column a {
-            color: var(--branco);
-            text-decoration: none;
-            font-size: 0.8rem;
-            display: flex;
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
             align-items: center;
-            gap: 5px;
         }
 
-        .footer-column a:hover {
-            text-decoration: underline;
-        }
-
-        .footer-column i {
-            font-size: 0.7rem;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.7rem;
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
         }
 
         /* Responsividade */
@@ -461,44 +429,15 @@
                 justify-content: space-between;
             }
             
-            .footer-container {
-                grid-template-columns: 1fr;
+            .tax-actions .btn {
+                padding: 3px 5px;
+                font-size: 0.6rem;
             }
-
-	    /* Modal Styles */
-#paymentModal, #boletoModal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 500px;
-}
-
-/* Responsive adjustments */
-@media (max-width: 480px) {
-    .tax-actions .btn {
-        padding: 3px 5px;
-        font-size: 0.6rem;
-    }
-    
-    #payAllBtn {
-        padding: 5px 8px;
-        font-size: 0.7rem;
-    }
-}
+            
+            #payAllBtn {
+                padding: 5px 8px;
+                font-size: 0.7rem;
+            }
         }
     </style>
 </head>
@@ -582,13 +521,13 @@
                 <div class="section-header">
                     <h2>Impostos Devidos</h2>
                     <div class="section-actions">
-    <button class="btn btn-outline" id="filterBtn">
-        <i class="fas fa-filter"></i> Filtrar
-    </button>
-    <button class="btn btn-primary" id="newPaymentBtn">
-        <i class="fas fa-plus"></i> Novo Pagamento
-    </button>
-</div>
+                        <button class="btn btn-outline" id="filterBtn">
+                            <i class="fas fa-filter"></i> Filtrar
+                        </button>
+                        <button class="btn btn-primary" id="newPaymentBtn">
+                            <i class="fas fa-plus"></i> Novo Pagamento
+                        </button>
+                    </div>
                 </div>
 
                 <table class="taxes-table">
@@ -606,56 +545,74 @@
                         <!-- Dados serão inseridos via JavaScript -->
                     </tbody>
                     <tfoot>
-    <tr class="total-row">
-        <td colspan="2">Total</td>
-        <td id="totalTaxesCount">0 impostos</td>
-        <td id="totalTaxesAmount">R$ 0,00</td>
-        <td colspan="2">
-            <button class="btn btn-primary" id="payAllBtn" style="float: right;">
-                <i class="fas fa-money-bill-wave"></i> Pagar tudo
-            </button>
-        </td>
-    </tr>
-</tfoot>
+                        <tr class="total-row">
+                            <td colspan="2">Total</td>
+                            <td id="totalTaxesCount">0 impostos</td>
+                            <td id="totalTaxesAmount">R$ 0,00</td>
+                            <td colspan="2">
+                                <button class="btn btn-primary" id="payAllBtn" style="float: right;">
+                                    <i class="fas fa-money-bill-wave"></i> Pagar tudo
+                                </button>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </main>
     </div>
 
-    <footer>
-        <div class="footer-container">
-            <div class="footer-column">
-                <h3>Sobre Nós</h3>
-                <ul>
-                    <li><a href="sobre.html"><i class="fas fa-chevron-right"></i> Quem Somos</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Nossos Serviços</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Termos de Uso</a></li>
-                </ul>
+    <!-- Modal Novo Pagamento -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 15px; color: var(--verde-escuro);">Novo Pagamento</h2>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Tipo de Imposto</label>
+                <select id="taxType" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px;">
+                    <option value="IPTU">IPTU</option>
+                    <option value="IRPF">IRPF</option>
+                    <option value="ISS">ISS</option>
+                    <option value="INSS">INSS</option>
+                    <option value="OUTRO">Outro</option>
+                </select>
             </div>
             
-            <div class="footer-column">
-                <h3>Suporte</h3>
-                <ul>
-                    <li><a href="suporte.html"><i class="fas fa-chevron-right"></i> Central de Ajuda</a></li>
-                    <li><a href="contato.html"><i class="fas fa-chevron-right"></i> Fale Conosco</a></li>
-                    <li><a href="politica.html"><i class="fas fa-chevron-right"></i> Política de Privacidade</a></li>
-                </ul>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Valor</label>
+                <input type="number" id="paymentValue" step="0.01" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px;">
             </div>
             
-            <div class="footer-column">
-                <h3>Contato</h3>
-                <ul>
-                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Av. Paulista, 1000 - São Paulo/SP</a></li>
-                    <li><a href="#"><i class="fas fa-phone-alt"></i> (11) 4004-4004</a></li>
-                    <li><a href="#"><i class="fas fa-envelope"></i> contato@bbppagamentos.com.br</a></li>
-                </ul>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Data de Vencimento</label>
+                <input type="date" id="dueDate" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px;">
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Anexar Documento</label>
+                <input type="file" id="documentFile" style="width: 100%;">
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                <button id="cancelPayment" class="btn btn-outline">Cancelar</button>
+                <button id="confirmPayment" class="btn btn-primary">Confirmar</button>
             </div>
         </div>
-        
-        <div class="footer-bottom">
-            <p>© 2023 BBP BankBras Pagamentos. Todos os direitos reservados.</p>
+    </div>
+
+    <!-- Modal Visualizar Boleto -->
+    <div id="boletoModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 15px; color: var(--verde-escuro);">Boleto de Pagamento</h2>
+            
+            <div id="boletoContent" style="margin-bottom: 20px; padding: 15px; background: var(--cinza-claro); border-radius: 4px;">
+                <!-- Conteúdo do boleto será inserido aqui -->
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button id="closeBoleto" class="btn btn-primary">Fechar</button>
+            </div>
         </div>
-    </footer>
+    </div>
 
     <script>
         // Firebase Configuration
@@ -680,6 +637,14 @@
         const logoutBtn = document.getElementById('logoutBtn');
         const taxesTableBody = document.getElementById('taxesTableBody');
         const newPaymentBtn = document.getElementById('newPaymentBtn');
+        const payAllBtn = document.getElementById('payAllBtn');
+        const filterBtn = document.getElementById('filterBtn');
+        const paymentModal = document.getElementById('paymentModal');
+        const boletoModal = document.getElementById('boletoModal');
+        const cancelPayment = document.getElementById('cancelPayment');
+        const confirmPayment = document.getElementById('confirmPayment');
+        const closeBoleto = document.getElementById('closeBoleto');
+        const boletoContent = document.getElementById('boletoContent');
 
         // Dados de exemplo
         let taxesData = [
@@ -757,28 +722,14 @@
                         </span>
                     </td>
                     <td>
-    <div class="tax-actions">
-        <button class="btn btn-outline" data-tax-id="${tax.id}" style="padding: 3px 8px; font-size: 0.7rem;">
-            <i class="fas fa-money-bill-wave"></i> PAGAR/DETALHES
-        </button>
-    </div>
-</td>
-                
+                        <div class="tax-actions">
+                            <button class="btn btn-outline" data-tax-id="${tax.id}" style="padding: 3px 8px; font-size: 0.7rem;">
+                                <i class="fas fa-money-bill-wave"></i> PAGAR/DETALHES
+                            </button>
+                        </div>
+                    </td>
+                </tr>
             `).join('');
-            
-            // Adiciona eventos aos botões de ação
-            document.querySelectorAll('.action-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const taxId = btn.getAttribute('data-tax-id');
-                    const action = btn.querySelector('i').className.split(' ')[1];
-                    
-                    if (action === 'fa-money-bill-wave') {
-                        alert(`Pagar imposto ${taxId}`);
-                    } else if (action === 'fa-eye') {
-                        alert(`Visualizar imposto ${taxId}`);
-                    }
-                });
-            });
         }
 
         // Atualiza os cartões de resumo
@@ -859,9 +810,112 @@
             return classMap[status] || '';
         }
 
-        // Novo pagamento
+        // Event Listeners
+        // Abrir modal de novo pagamento
         newPaymentBtn.addEventListener('click', () => {
-            alert('Funcionalidade de novo pagamento será implementada aqui');
+            paymentModal.style.display = 'flex';
+        });
+
+        // Fechar modal de novo pagamento
+        cancelPayment.addEventListener('click', () => {
+            paymentModal.style.display = 'none';
+        });
+
+        // Confirmar novo pagamento
+        confirmPayment.addEventListener('click', () => {
+            const taxType = document.getElementById('taxType').value;
+            const paymentValue = parseFloat(document.getElementById('paymentValue').value);
+            const dueDate = document.getElementById('dueDate').value;
+            const fileInput = document.getElementById('documentFile');
+            
+            if (!taxType || !paymentValue || !dueDate) {
+                alert('Preencha todos os campos obrigatórios');
+                return;
+            }
+            
+            // Simulação de salvamento
+            const user = auth.currentUser;
+            if (user) {
+                const paymentData = {
+                    taxType,
+                    paymentValue,
+                    dueDate,
+                    file: fileInput.files[0] ? fileInput.files[0].name : null,
+                    userId: user.uid,
+                    createdAt: new Date().toISOString()
+                };
+                
+                alert('Pagamento registrado com sucesso!');
+                paymentModal.style.display = 'none';
+            }
+        });
+
+        // Fechar modal de boleto
+        closeBoleto.addEventListener('click', () => {
+            boletoModal.style.display = 'none';
+        });
+
+        // Pagar tudo
+        payAllBtn.addEventListener('click', () => {
+            if (confirm('Deseja pagar todos os impostos listados?')) {
+                alert('Pagamento total realizado com sucesso!');
+                // Aqui você implementaria a lógica real de pagamento
+            }
+        });
+
+        // Filtrar
+        filterBtn.addEventListener('click', () => {
+            const status = prompt('Filtrar por status (digite: todos, pendentes, vencidos ou pagos):');
+            
+            if (status) {
+                let filteredTaxes = [...taxesData];
+                
+                switch (status.toLowerCase()) {
+                    case 'pendentes':
+                        filteredTaxes = taxesData.filter(tax => tax.status === 'pending');
+                        break;
+                    case 'vencidos':
+                        filteredTaxes = taxesData.filter(tax => tax.status === 'overdue');
+                        break;
+                    case 'pagos':
+                        filteredTaxes = taxesData.filter(tax => tax.status === 'paid');
+                        break;
+                    case 'todos':
+                        // Não filtra
+                        break;
+                    default:
+                        alert('Opção inválida');
+                        return;
+                }
+                
+                renderTaxesTable(filteredTaxes);
+            }
+        });
+
+        // Visualizar boleto/detalhes
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('[data-tax-id]')) {
+                const btn = e.target.closest('[data-tax-id]');
+                const taxId = btn.getAttribute('data-tax-id');
+                const tax = taxesData.find(t => t.id === taxId);
+                
+                if (tax) {
+                    boletoContent.innerHTML = `
+                        <h3>${tax.name}</h3>
+                        <p><strong>Órgão Cobrador:</strong> ${tax.collector}</p>
+                        <p><strong>Vencimento:</strong> ${formatDate(tax.dueDate)}</p>
+                        <p><strong>Valor:</strong> ${formatCurrency(tax.amount)}</p>
+                        <p><strong>Código de Barras:</strong> 12345.67890 12345.678901 12345.678901 1 12345678901234</p>
+                        <div style="margin-top: 20px; text-align: center;">
+                            <button class="btn btn-primary" onclick="alert('Pagamento realizado para ${tax.name}')">
+                                <i class="fas fa-money-bill-wave"></i> Confirmar Pagamento
+                            </button>
+                        </div>
+                    `;
+                    
+                    boletoModal.style.display = 'flex';
+                }
+            }
         });
 
         // Logout
@@ -872,190 +926,6 @@
                 alert('Erro ao fazer logout: ' + error.message);
             });
         });
-
-// Adicione após as outras funções JavaScript
-
-// Modal de pagamento
-const paymentModal = document.getElementById('paymentModal');
-const newPaymentBtn = document.getElementById('newPaymentBtn');
-const cancelPayment = document.getElementById('cancelPayment');
-const confirmPayment = document.getElementById('confirmPayment');
-
-// Modal de boleto
-const boletoModal = document.getElementById('boletoModal');
-const closeBoleto = document.getElementById('closeBoleto');
-const boletoContent = document.getElementById('boletoContent');
-
-// Botão pagar tudo
-const payAllBtn = document.getElementById('payAllBtn');
-
-// Botão filtrar
-const filterBtn = document.getElementById('filterBtn');
-
-// Abrir modal de novo pagamento
-newPaymentBtn.addEventListener('click', () => {
-    paymentModal.style.display = 'flex';
-});
-
-// Fechar modal de novo pagamento
-cancelPayment.addEventListener('click', () => {
-    paymentModal.style.display = 'none';
-});
-
-// Confirmar novo pagamento
-confirmPayment.addEventListener('click', () => {
-    const taxType = document.getElementById('taxType').value;
-    const paymentValue = parseFloat(document.getElementById('paymentValue').value);
-    const dueDate = document.getElementById('dueDate').value;
-    const fileInput = document.getElementById('documentFile');
-    
-    if (!taxType || !paymentValue || !dueDate) {
-        alert('Preencha todos os campos obrigatórios');
-        return;
-    }
-    
-    // Salvar no localStorage (simulação)
-    const user = auth.currentUser;
-    if (user) {
-        const paymentData = {
-            taxType,
-            paymentValue,
-            dueDate,
-            file: fileInput.files[0] ? fileInput.files[0].name : null,
-            userId: user.uid,
-            createdAt: new Date().toISOString()
-        };
-        
-        // Salvar no localStorage (na prática, você usaria o Firestore)
-        const payments = JSON.parse(localStorage.getItem('userPayments') || [];
-        payments.push(paymentData);
-        localStorage.setItem('userPayments', payments);
-        
-        alert('Pagamento registrado com sucesso!');
-        paymentModal.style.display = 'none';
-    }
-});
-
-// Fechar modal de boleto
-closeBoleto.addEventListener('click', () => {
-    boletoModal.style.display = 'none';
-});
-
-// Pagar tudo
-payAllBtn.addEventListener('click', () => {
-    if (confirm('Deseja pagar todos os impostos listados?')) {
-        alert('Pagamento total realizado com sucesso!');
-        // Aqui você implementaria a lógica real de pagamento
-    }
-});
-
-// Filtrar
-filterBtn.addEventListener('click', () => {
-    const status = prompt('Filtrar por status (digite: todos, pendentes, vencidos ou pagos):');
-    
-    if (status) {
-        let filteredTaxes = [...taxesData];
-        
-        switch (status.toLowerCase()) {
-            case 'pendentes':
-                filteredTaxes = taxesData.filter(tax => tax.status === 'pending');
-                break;
-            case 'vencidos':
-                filteredTaxes = taxesData.filter(tax => tax.status === 'overdue');
-                break;
-            case 'pagos':
-                filteredTaxes = taxesData.filter(tax => tax.status === 'paid');
-                break;
-            case 'todos':
-                // Não filtra
-                break;
-            default:
-                alert('Opção inválida');
-                return;
-        }
-        
-        renderTaxesTable(filteredTaxes);
-    }
-});
-
-// Atualize o evento de clique nos botões de pagar/detalhes
-document.addEventListener('click', (e) => {
-    if (e.target.closest('[data-tax-id]')) {
-        const btn = e.target.closest('[data-tax-id]');
-        const taxId = btn.getAttribute('data-tax-id');
-        const tax = taxesData.find(t => t.id === taxId);
-        
-        if (tax) {
-            boletoContent.innerHTML = `
-                <h3>${tax.name}</h3>
-                <p><strong>Órgão Cobrador:</strong> ${tax.collector}</p>
-                <p><strong>Vencimento:</strong> ${formatDate(tax.dueDate)}</p>
-                <p><strong>Valor:</strong> ${formatCurrency(tax.amount)}</p>
-                <p><strong>Código de Barras:</strong> 12345.67890 12345.678901 12345.678901 1 12345678901234</p>
-                <div style="margin-top: 20px; text-align: center;">
-                    <button class="btn btn-primary" onclick="alert('Pagamento realizado para ${tax.name}')">
-                        <i class="fas fa-money-bill-wave"></i> Confirmar Pagamento
-                    </button>
-                </div>
-            `;
-            
-            boletoModal.style.display = 'flex';
-        }
-    }
-});
-
-<!-- Modal Novo Pagamento -->
-<div id="paymentModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
-    <div style="background: white; padding: 20px; border-radius: 8px; width: 90%; max-width: 500px;">
-        <h2 style="margin-bottom: 15px; color: var(--verde-escuro);">Novo Pagamento</h2>
-        
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Tipo de Imposto</label>
-            <select id="taxType" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px;">
-                <option value="IPTU">IPTU</option>
-                <option value="IRPF">IRPF</option>
-                <option value="ISS">ISS</option>
-                <option value="INSS">INSS</option>
-                <option value="OUTRO">Outro</option>
-            </select>
-        </div>
-        
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Valor</label>
-            <input type="number" id="paymentValue" step="0.01" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px;">
-        </div>
-        
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Data de Vencimento</label>
-            <input type="date" id="dueDate" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px;">
-        </div>
-        
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Anexar Documento</label>
-            <input type="file" id="documentFile" style="width: 100%;">
-        </div>
-        
-        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
-            <button id="cancelPayment" class="btn btn-outline">Cancelar</button>
-            <button id="confirmPayment" class="btn btn-primary">Confirmar</button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Visualizar Boleto -->
-<div id="boletoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
-    <div style="background: white; padding: 20px; border-radius: 8px; width: 90%; max-width: 500px;">
-        <h2 style="margin-bottom: 15px; color: var(--verde-escuro);">Boleto de Pagamento</h2>
-        
-        <div id="boletoContent" style="margin-bottom: 20px; padding: 15px; background: var(--cinza-claro); border-radius: 4px;">
-            <!-- Conteúdo do boleto será inserido aqui -->
-        </div>
-        
-        <div style="display: flex; justify-content: flex-end; gap: 10px;">
-            <button id="closeBoleto" class="btn btn-primary">Fechar</button>
-        </div>
-    </div>
-</div>
     </script>
 </body>
 </html>
