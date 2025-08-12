@@ -469,11 +469,6 @@
             <div class="logo-icon">BBP</div>
             <div class="logo-text">BANK<span>BRAS</span> PAGAMENTOS</div>
         </div>
-        
-        <div class="user-profile" id="userProfile">
-            <div class="user-avatar" id="userAvatar">U</div>
-            <div class="user-name" id="userName">Usuário</div>
-        </div>
     </header>
 
     <div class="main-content">
@@ -541,7 +536,7 @@
 
             <div class="taxes-section">
                 <div class="section-header">
-                    <h2>Impostos Devidos</h2>
+                    <h2>Os Devidos</h2>
                     <div class="section-actions">
                         <button class="btn btn-outline" id="filterBtn">
                             <i class="fas fa-filter"></i> Filtrar
@@ -587,17 +582,6 @@
     <div id="paymentModal" class="modal">
         <div class="modal-content">
             <h2 style="margin-bottom: 15px; color: var(--verde-escuro);">Novo Pagamento</h2>
-            
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Tipo de Imposto</label>
-                <select id="taxType" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px;">
-                    <option value="IPTU">IPTU</option>
-                    <option value="IRPF">IRPF</option>
-                    <option value="ISS">ISS</option>
-                    <option value="INSS">INSS</option>
-                    <option value="OUTRO">Outro</option>
-                </select>
-            </div>
             
             <div style="margin-bottom: 15px;">
                 <label style="display: block; margin-bottom: 5px; font-weight: 600;">Valor</label>
@@ -715,14 +699,36 @@
     });
 
     // Carrega dados do usuário
-    function loadUserData(user) {
+function loadUserData(user) {
+    // Referência ao documento do usuário no Firestore
+    const userRef = db.collection('users').doc(user.uid);
+    
+    userRef.get().then((doc) => {
+        if (doc.exists) {
+            const userData = doc.data();
+            // Busca o nome completo no campo "nome" do Firestore
+            const fullName = userData.nome || user.displayName || user.email.split('@')[0];
+            
+            // Atualiza a interface
+            userName.textContent = fullName;
+            welcomeUserName.textContent = fullName;
+            userAvatar.textContent = fullName.charAt(0).toUpperCase();
+        } else {
+            // Caso o documento não exista, usa o displayName ou email
+            const displayName = user.displayName || user.email.split('@')[0];
+            userName.textContent = displayName;
+            welcomeUserName.textContent = displayName;
+            userAvatar.textContent = displayName.charAt(0).toUpperCase();
+        }
+    }).catch((error) => {
+        console.error("Erro ao buscar dados do usuário:", error);
+        // Fallback caso ocorra erro
         const displayName = user.displayName || user.email.split('@')[0];
-        const initial = displayName.charAt(0).toUpperCase();
-        
         userName.textContent = displayName;
         welcomeUserName.textContent = displayName;
-        userAvatar.textContent = initial;
-    }
+        userAvatar.textContent = displayName.charAt(0).toUpperCase();
+    });
+}
 
     // Carrega impostos do usuário
     function loadUserTaxes(userId) {
