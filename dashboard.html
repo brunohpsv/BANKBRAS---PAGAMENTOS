@@ -1065,176 +1065,125 @@
     };
 
     function openPaymentDetail(paymentId) {
-    const detail = paymentDetails[paymentId];
-    if (detail) {
-        document.getElementById('detail-name').textContent = detail.name;
-        document.getElementById('detail-entity').textContent = detail.entity;
-        document.getElementById('detail-type').textContent = detail.type;
-        document.getElementById('detail-due').textContent = detail.due;
-        
-        const statusElement = document.getElementById('detail-status');
-        statusElement.innerHTML = '';
-        const statusSpan = document.createElement('span');
-        statusSpan.className = detail.status === 'Pago' ? 'status-paid' : 'status-pending';
-        statusSpan.textContent = detail.status;
-        statusElement.appendChild(statusSpan);
-        
-        document.getElementById('detail-amount').textContent = detail.amount;
-        document.getElementById('detail-barcode').textContent = detail.barcode;
-        document.getElementById('detail-notes').textContent = detail.notes;
-        
-        paymentDetailModal.classList.add('active');
+        const detail = paymentDetails[paymentId];
+        if (detail) {
+            document.getElementById('detail-name').textContent = detail.name;
+            document.getElementById('detail-entity').textContent = detail.entity;
+            document.getElementById('detail-type').textContent = detail.type;
+            document.getElementById('detail-due').textContent = detail.due;
+            
+            const statusElement = document.getElementById('detail-status');
+            statusElement.innerHTML = '';
+            const statusSpan = document.createElement('span');
+            statusSpan.className = detail.status === 'Pago' ? 'status-paid' : 'status-pending';
+            statusSpan.textContent = detail.status;
+            statusElement.appendChild(statusSpan);
+            
+            document.getElementById('detail-amount').textContent = detail.amount;
+            document.getElementById('detail-barcode').textContent = detail.barcode;
+            document.getElementById('detail-notes').textContent = detail.notes;
+            
+            paymentDetailModal.classList.add('active');
+        }
     }
-}
 
-function closePaymentDetail() {
-    paymentDetailModal.classList.remove('active');
-}
-
-function openAddPayment() {
-    // Resetar o formulário ao abrir
-    document.getElementById('payment-type').value = '';
-    document.getElementById('payment-name').value = '';
-    document.getElementById('payment-due').value = '';
-    document.getElementById('payment-value').value = '';
-    document.getElementById('payment-file').value = '';
-    
-    addPaymentModal.classList.add('active');
-}
-
-function closeAddPayment() {
-    addPaymentModal.classList.remove('active');
-}
-
-function addNewPayment() {
-    const type = document.getElementById('payment-type').value;
-    const name = document.getElementById('payment-name').value;
-    const due = document.getElementById('payment-due').value;
-    let value = document.getElementById('payment-value').value;
-    const file = document.getElementById('payment-file').files[0];
-    
-    // Validação dos campos obrigatórios
-    if (!type || !name || !due) {
-        alert('Por favor, preencha todos os campos obrigatórios');
-        return;
+    function closePaymentDetail() {
+        paymentDetailModal.classList.remove('active');
     }
-    
-    // Tratamento do valor
-    if (!value || isNaN(value.replace(',', '.'))) {
-        value = '0';
+
+    function openAddPayment() {
+        // Resetar o formulário ao abrir
+        document.getElementById('payment-type').value = '';
+        document.getElementById('payment-name').value = '';
+        document.getElementById('payment-due').value = '';
+        document.getElementById('payment-value').value = '';
+        document.getElementById('payment-file').value = '';
+        
+        addPaymentModal.classList.add('active');
     }
-    
-    // Formatar valor para o padrão brasileiro
-    const formattedValue = parseFloat(value.replace(',', '.')).toLocaleString('pt-BR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
-    
-    // Formatando a data para exibição
-    const dueDate = new Date(due);
-    const formattedDue = dueDate.toLocaleDateString('pt-BR');
-    
-    // Criar novo ID para o pagamento
-    const newId = Object.keys(paymentDetails).length + 1;
-    
-    // Adicionar aos detalhes do pagamento
-    paymentDetails[newId] = {
-        name: name,
-        entity: type === 'imposto' ? 'Receita Federal' : 
-               type === 'conta' ? 'Fornecedor' : 
-               type === 'taxa' ? 'Órgão Público' : 'Outro',
-        type: type === 'imposto' ? 'Imposto Federal' : 
-              type === 'conta' ? 'Conta' : 
-              type === 'taxa' ? 'Taxa' : 'Outro',
-        due: formattedDue,
-        status: "Pendente",
-        amount: `R$ ${formattedValue}`,
-        barcode: "00000000000-0 00000000000-0 00000000000-0 00000000000-0",
-        notes: file ? `Documento anexado: ${file.name}` : "Sem documento anexado"
-    };
-    
-    // Criar o novo elemento na lista
-    const paymentsList = document.querySelector('.payments-list');
-    const paymentItem = document.createElement('div');
-    paymentItem.className = 'payment-item';
-    paymentItem.innerHTML = `
-        <div class="payment-name">${name}</div>
-        <div class="payment-entity">${paymentDetails[newId].entity}</div>
-        <div class="payment-due">${formattedDue}</div>
-        <div class="payment-status status-pending">Pendente</div>
-        <div class="payment-amount">R$ ${formattedValue}</div>
-        <div class="payment-actions">
-            <button class="action-btn detail-btn" onclick="openPaymentDetail(${newId})">
-                <i class="fas fa-eye"></i>
-            </button>
-            <button class="action-btn pay-btn">
-                <i class="fas fa-money-bill-wave"></i>
-            </button>
-        </div>
-    `;
-    
-    // Inserir antes do total
-    const totalDiv = document.querySelector('.payment-total');
-    paymentsList.insertBefore(paymentItem, totalDiv);
-    
-    // Fechar o modal após adicionar
-    closeAddPayment();
-    alert('Pagamento adicionado com sucesso!');
-    
-    // Atualizar o total
-    updateTotal();
-}
-    
-    // Formatando a data para exibição
-    const dueDate = new Date(due);
-    const formattedDue = dueDate.toLocaleDateString('pt-BR');
-    
-    // Criar novo ID para o pagamento
-    const newId = Object.keys(paymentDetails).length + 1;
-    
-    // Adicionar aos detalhes do pagamento
-    paymentDetails[newId] = {
-        name: name,
-        entity: type === 'imposto' ? 'Receita Federal' : 'Fornecedor',
-        type: type === 'imposto' ? 'Imposto Federal' : 'Conta',
-        due: formattedDue,
-        status: "Pendente",
-        amount: `R$ ${parseFloat(value).toFixed(2).replace('.', ',')}`,
-        barcode: "00000000000-0 00000000000-0 00000000000-0 00000000000-0",
-        notes: "Pagamento adicionado pelo usuário"
-    };
-    
-    // Criar o novo elemento na lista
-    const paymentsList = document.querySelector('.payments-list');
-    const paymentItem = document.createElement('div');
-    paymentItem.className = 'payment-item';
-    paymentItem.innerHTML = `
-        <div class="payment-name">${name}</div>
-        <div class="payment-entity">${paymentDetails[newId].entity}</div>
-        <div class="payment-due">${formattedDue}</div>
-        <div class="payment-status status-pending">Pendente</div>
-        <div class="payment-amount">R$ 0,00</div>
-        <div class="payment-actions">
-            <button class="action-btn detail-btn" onclick="openPaymentDetail(${newId})">
-                <i class="fas fa-eye"></i>
-            </button>
-            <button class="action-btn pay-btn">
-                <i class="fas fa-money-bill-wave"></i>
-            </button>
-        </div>
-    `;
-    
-    // Inserir antes do total
-    const totalDiv = document.querySelector('.payment-total');
-    paymentsList.insertBefore(paymentItem, totalDiv);
-    
-    // Fechar o modal após adicionar
-    closeAddPayment();
-    alert('Pagamento adicionado com sucesso!');
-    
-    // Atualizar o total
-    updateTotal();
-}
+
+    function closeAddPayment() {
+        addPaymentModal.classList.remove('active');
+    }
+
+    function addNewPayment() {
+        const type = document.getElementById('payment-type').value;
+        const name = document.getElementById('payment-name').value;
+        const due = document.getElementById('payment-due').value;
+        let value = document.getElementById('payment-value').value;
+        const file = document.getElementById('payment-file').files[0];
+        
+        // Validação dos campos obrigatórios
+        if (!type || !name || !due) {
+            alert('Por favor, preencha todos os campos obrigatórios');
+            return;
+        }
+        
+        // Tratamento do valor
+        if (!value || isNaN(value.replace(',', '.'))) {
+            value = '0';
+        }
+        
+        // Formatar valor para o padrão brasileiro
+        const formattedValue = parseFloat(value.replace(',', '.')).toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        
+        // Formatando a data para exibição
+        const dueDate = new Date(due);
+        const formattedDue = dueDate.toLocaleDateString('pt-BR');
+        
+        // Criar novo ID para o pagamento
+        const newId = Object.keys(paymentDetails).length + 1;
+        
+        // Adicionar aos detalhes do pagamento
+        paymentDetails[newId] = {
+            name: name,
+            entity: type === 'imposto' ? 'Receita Federal' : 
+                   type === 'conta' ? 'Fornecedor' : 
+                   type === 'taxa' ? 'Órgão Público' : 'Outro',
+            type: type === 'imposto' ? 'Imposto Federal' : 
+                  type === 'conta' ? 'Conta' : 
+                  type === 'taxa' ? 'Taxa' : 'Outro',
+            due: formattedDue,
+            status: "Pendente",
+            amount: `R$ ${formattedValue}`,
+            barcode: "00000000000-0 00000000000-0 00000000000-0 00000000000-0",
+            notes: file ? `Documento anexado: ${file.name}` : "Sem documento anexado"
+        };
+        
+        // Criar o novo elemento na lista
+        const paymentsList = document.querySelector('.payments-list');
+        const paymentItem = document.createElement('div');
+        paymentItem.className = 'payment-item';
+        paymentItem.innerHTML = `
+            <div class="payment-name">${name}</div>
+            <div class="payment-entity">${paymentDetails[newId].entity}</div>
+            <div class="payment-due">${formattedDue}</div>
+            <div class="payment-status status-pending">Pendente</div>
+            <div class="payment-amount">R$ ${formattedValue}</div>
+            <div class="payment-actions">
+                <button class="action-btn detail-btn" onclick="openPaymentDetail(${newId})">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="action-btn pay-btn">
+                    <i class="fas fa-money-bill-wave"></i>
+                </button>
+            </div>
+        `;
+        
+        // Inserir antes do total
+        const totalDiv = document.querySelector('.payment-total');
+        paymentsList.insertBefore(paymentItem, totalDiv);
+        
+        // Fechar o modal após adicionar
+        closeAddPayment();
+        alert('Pagamento adicionado com sucesso!');
+        
+        // Atualizar o total
+        updateTotal();
+    }
 
     // Função para deletar um pagamento
     function deletePayment(paymentId) {
@@ -1315,13 +1264,6 @@ function addNewPayment() {
         }
     });
 
-<div class="detail-row">
-    <div class="detail-label">Valor:</div>
-    <div class="detail-value">
-        <input type="number" step="0.01" id="payment-value" class="filter-input" placeholder="R$ 0,00">
-    </div>
-</div>
-
     addPaymentModal.addEventListener('click', (e) => {
         if (e.target === addPaymentModal) {
             closeAddPayment();
@@ -1363,6 +1305,12 @@ function addNewPayment() {
                     <div class="detail-label">Data de Vencimento:</div>
                     <div class="detail-value">
                         <input type="date" id="payment-due" class="filter-input">
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Valor:</div>
+                    <div class="detail-value">
+                        <input type="number" step="0.01" id="payment-value" class="filter-input" placeholder="R$ 0,00">
                     </div>
                 </div>
                 <div class="detail-row">
