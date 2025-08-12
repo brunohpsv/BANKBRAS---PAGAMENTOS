@@ -684,7 +684,10 @@
                     return auth.signInWithEmailAndPassword(email, password);
                 })
                 .then((userCredential) => {
-                    // Login bem-sucedido - redireciona para a página de dashboard
+                    // Login bem-sucedido - armazena o email no localStorage
+                    localStorage.setItem('userEmail', email);
+                    
+                    // Redireciona para a página de dashboard
                     window.location.href = 'dashboard.html';
                 })
                 .catch((error) => {
@@ -708,13 +711,8 @@
                 });
         });
 
-        // Verifica se há um usuário logado ao carregar a página
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                // Se o usuário já estiver logado, redireciona para o dashboard
-                window.location.href = 'dashboard.html';
-            }
-        });
+        // Removemos a verificação automática de usuário logado
+        // para forçar o login manual sempre
     </script>
 </body>
 </html>
