@@ -699,26 +699,34 @@
     });
 
     // Carrega dados do usuário
+// Carrega dados do usuário
 function loadUserData(user) {
     // Referência ao documento do usuário no Firestore
-    const userRef = db.collection('users').doc(user.uid);
+    const userRef = db.collection('usuarios').doc(user.uid);
     
     userRef.get().then((doc) => {
         if (doc.exists) {
             const userData = doc.data();
-            // Busca o nome completo no campo "nome" do Firestore
-            const fullName = userData.nome || user.displayName || user.email.split('@')[0];
+            // Busca o nome no campo "nome" do Firestore
+            const nome = userData.nome || user.displayName || user.email.split('@')[0];
             
             // Atualiza a interface
-            userName.textContent = fullName;
-            welcomeUserName.textContent = fullName;
-            userAvatar.textContent = fullName.charAt(0).toUpperCase();
+            userName.textContent = nome;
+            welcomeUserName.textContent = nome;
+            userAvatar.textContent = nome.charAt(0).toUpperCase();
         } else {
             // Caso o documento não exista, usa o displayName ou email
             const displayName = user.displayName || user.email.split('@')[0];
             userName.textContent = displayName;
             welcomeUserName.textContent = displayName;
             userAvatar.textContent = displayName.charAt(0).toUpperCase();
+            
+            // Cria o documento do usuário se não existir
+            userRef.set({
+                email: user.email,
+                nome: displayName,
+                dataCriacao: firebase.firestore.FieldValue.serverTimestamp()
+            });
         }
     }).catch((error) => {
         console.error("Erro ao buscar dados do usuário:", error);
