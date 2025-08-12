@@ -352,7 +352,7 @@
 
         .payments-header {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 100px;
+            grid-template-columns: 2fr 1fr 1fr 1fr 100px 100px;
             padding: 15px 20px;
             background: var(--cinza-claro);
             font-weight: 600;
@@ -363,7 +363,7 @@
 
         .payment-item {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 100px;
+            grid-template-columns: 2fr 1fr 1fr 1fr 100px 100px;
             padding: 15px 20px;
             align-items: center;
             border-bottom: 1px solid var(--cinza-medio);
@@ -432,6 +432,7 @@
 
         .payment-actions {
             display: flex;
+            justify-content: flex-end;
             gap: 5px;
         }
 
@@ -473,18 +474,23 @@
 
         .payment-total {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 100px;
+            grid-template-columns: 1fr 1fr;
             padding: 20px;
             background: var(--cinza-claro);
             font-weight: 700;
             color: var(--azul);
             border-top: 2px solid var(--cinza-medio);
+            align-items: center;
+        }
+
+        .total-info {
+            display: flex;
+            flex-direction: column;
         }
 
         .total-label {
-            grid-column: 4;
-            text-align: right;
-            padding-right: 15px;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
         }
 
         .total-amount {
@@ -645,37 +651,21 @@
             }
             
             .payments-header, .payment-item {
-                grid-template-columns: 2fr 1fr 1fr 80px;
+                grid-template-columns: 2fr 1fr 1fr 80px 80px;
             }
             
             .payment-entity {
                 display: none;
             }
-            
-            .payment-total {
-                grid-template-columns: 2fr 1fr 1fr 80px;
-            }
-            
-            .total-label {
-                grid-column: 3;
-            }
         }
 
         @media (max-width: 480px) {
             .payments-header, .payment-item {
-                grid-template-columns: 2fr 1fr 60px;
+                grid-template-columns: 2fr 1fr 60px 60px;
             }
             
             .payment-due {
                 display: none;
-            }
-            
-            .payment-total {
-                grid-template-columns: 2fr 1fr 60px;
-            }
-            
-            .total-label {
-                grid-column: 2;
             }
             
             .filter-options {
@@ -717,13 +707,9 @@
                 <p class="dashboard-subtitle">Gerencie e realize seus pagamentos de impostos e contas</p>
             </div>
             <div class="dashboard-actions">
-                <button class="btn btn-primary btn-icon">
+                <button class="btn btn-primary btn-icon" onclick="openAddPayment()">
                     <i class="fas fa-plus"></i>
                     Adicionar
-                </button>
-                <button class="btn btn-secondary btn-icon">
-                    <i class="fas fa-file-export"></i>
-                    Exportar
                 </button>
             </div>
         </div>
@@ -775,6 +761,7 @@
                 <div>Vencimento</div>
                 <div>Status</div>
                 <div>Valor</div>
+                <div>Ações</div>
             </div>
 
             <div class="payment-item">
@@ -883,8 +870,10 @@
             </div>
 
             <div class="payment-total">
-                <div class="total-label">Total Pendente:</div>
-                <div class="total-amount">R$ 1.660,40</div>
+                <div class="total-info">
+                    <span class="total-label">Total a pagar:</span>
+                    <span class="total-amount">R$ 1.660,40</span>
+                </div>
                 <div class="total-action">
                     <button class="btn-pay-all">
                         <i class="fas fa-money-bill-wave"></i>
@@ -948,125 +937,264 @@
         </div>
     </div>
 
+    <!-- Modal de Adicionar Pagamento -->
+    <div class="modal-overlay" id="addPaymentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Adicionar Novo Pagamento</h3>
+                <button class="modal-close" onclick="closeAddPayment()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="payment-detail">
+                    <div class="detail-row">
+                        <div class="detail-label">Tipo de Débito:</div>
+                        <div class="detail-value">
+                            <select id="payment-type" class="filter-select" style="width: 100%">
+                                <option value="">Selecione</option>
+                                <option value="imposto">Imposto</option>
+                                <option value="conta">Conta</option>
+                                <option value="fatura">Fatura</option>
+                                <option value="taxa">Taxa</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Nome:</div>
+                        <div class="detail-value">
+                            <input type="text" id="payment-name" class="filter-input" placeholder="Nome do provedor ou entidade">
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Data de Vencimento:</div>
+                        <div class="detail-value">
+                            <input type="date" id="payment-due" class="filter-input">
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Anexar Documento:</div>
+                        <div class="detail-value">
+                            <input type="file" id="payment-file" class="filter-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAddPayment()">Cancelar</button>
+                <button class="btn btn-primary" onclick="addNewPayment()">
+                    <i class="fas fa-plus"></i>
+                    Adicionar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Menu dropdown com animação
-        const menuToggle = document.getElementById('menuToggle');
-        const dropdownMenu = document.getElementById('dropdownMenu');
+    // Menu dropdown com animação
+    const menuToggle = document.getElementById('menuToggle');
+    const dropdownMenu = document.getElementById('dropdownMenu');
 
-        menuToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            menuToggle.classList.toggle('active');
-            dropdownMenu.classList.toggle('show');
-        });
+    menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menuToggle.classList.toggle('active');
+        dropdownMenu.classList.toggle('show');
+    });
 
-        // Fechar menu quando clicar fora
-        document.addEventListener('click', (e) => {
-            if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                menuToggle.classList.remove('active');
-                dropdownMenu.classList.remove('show');
-            }
-        });
+    // Fechar menu quando clicar fora
+    document.addEventListener('click', (e) => {
+        if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            menuToggle.classList.remove('active');
+            dropdownMenu.classList.remove('show');
+        }
+    });
 
-        // Animação ao rolar
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 10) {
-                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
-            }
-        });
+    // Animação ao rolar
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('header');
+        if (window.scrollY > 10) {
+            header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+        } else {
+            header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
+        }
+    });
 
-        // Modal de detalhes
-        const paymentDetailModal = document.getElementById('paymentDetailModal');
+    // Modal de detalhes
+    const paymentDetailModal = document.getElementById('paymentDetailModal');
+    const addPaymentModal = document.getElementById('addPaymentModal');
+    
+    // Dados de exemplo para os pagamentos
+    const paymentDetails = {
+        1: {
+            name: "IRPF - Imposto de Renda",
+            entity: "Receita Federal",
+            type: "Imposto Federal",
+            due: "15/08/2023",
+            status: "Pendente",
+            amount: "R$ 1.250,00",
+            barcode: "85690000001-0 25000000012-5 00000000000-0 00000000000-0",
+            notes: "Dedução de R$ 1.500,00 por dependentes declarados."
+        },
+        2: {
+            name: "Conta de Luz",
+            entity: "Enel",
+            type: "Conta de Consumo",
+            due: "10/08/2023",
+            status: "Pendente",
+            amount: "R$ 320,50",
+            barcode: "84610000002-0 32050000012-5 00000000000-0 00000000000-0",
+            notes: "Consumo de 320 kWh no mês de julho."
+        },
+        3: {
+            name: "Conta de Água",
+            entity: "Sabesp",
+            type: "Conta de Consumo",
+            due: "05/08/2023",
+            status: "Pago",
+            amount: "R$ 180,75",
+            barcode: "83620000003-0 18075000012-5 00000000000-0 00000000000-0",
+            notes: "Pagamento realizado em 03/08/2023."
+        },
+        4: {
+            name: "Telefone Celular",
+            entity: "Vivo",
+            type: "Serviço de Telecomunicação",
+            due: "12/08/2023",
+            status: "Pendente",
+            amount: "R$ 89,90",
+            barcode: "82630000004-0 08990000012-5 00000000000-0 00000000000-0",
+            notes: "Plano pós-pago com 10GB de internet."
+        },
+        5: {
+            name: "Condomínio",
+            entity: "Edifício Solar",
+            type: "Taxa Condominial",
+            due: "05/08/2023",
+            status: "Pago",
+            amount: "R$ 650,00",
+            barcode: "81640000005-0 65000000012-5 00000000000-0 00000000000-0",
+            notes: "Inclui taxa de reserva de R$ 50,00."
+        }
+    };
+
+    function openPaymentDetail(paymentId) {
+        const detail = paymentDetails[paymentId];
+        if (detail) {
+            document.getElementById('detail-name').textContent = detail.name;
+            document.getElementById('detail-entity').textContent = detail.entity;
+            document.getElementById('detail-type').textContent = detail.type;
+            document.getElementById('detail-due').textContent = detail.due;
+            
+            const statusElement = document.getElementById('detail-status');
+            statusElement.innerHTML = '';
+            const statusSpan = document.createElement('span');
+            statusSpan.className = detail.status === 'Pago' ? 'status-paid' : 'status-pending';
+            statusSpan.textContent = detail.status;
+            statusElement.appendChild(statusSpan);
+            
+            document.getElementById('detail-amount').textContent = detail.amount;
+            document.getElementById('detail-barcode').textContent = detail.barcode;
+            document.getElementById('detail-notes').textContent = detail.notes;
+            
+            paymentDetailModal.classList.add('active');
+        }
+    }
+
+    function closePaymentDetail() {
+        paymentDetailModal.classList.remove('active');
+    }
+
+    function openAddPayment() {
+        addPaymentModal.classList.add('active');
+    }
+
+    function closeAddPayment() {
+        addPaymentModal.classList.remove('active');
+    }
+
+    function addNewPayment() {
+        const type = document.getElementById('payment-type').value;
+        const name = document.getElementById('payment-name').value;
+        const due = document.getElementById('payment-due').value;
+        const file = document.getElementById('payment-file').files[0];
         
-        // Dados de exemplo para os pagamentos
-        const paymentDetails = {
-            1: {
-                name: "IRPF - Imposto de Renda",
-                entity: "Receita Federal",
-                type: "Imposto Federal",
-                due: "15/08/2023",
-                status: "Pendente",
-                amount: "R$ 1.250,00",
-                barcode: "85690000001-0 25000000012-5 00000000000-0 00000000000-0",
-                notes: "Dedução de R$ 1.500,00 por dependentes declarados."
-            },
-            2: {
-                name: "Conta de Luz",
-                entity: "Enel",
-                type: "Conta de Consumo",
-                due: "10/08/2023",
-                status: "Pendente",
-                amount: "R$ 320,50",
-                barcode: "84610000002-0 32050000012-5 00000000000-0 00000000000-0",
-                notes: "Consumo de 320 kWh no mês de julho."
-            },
-            3: {
-                name: "Conta de Água",
-                entity: "Sabesp",
-                type: "Conta de Consumo",
-                due: "05/08/2023",
-                status: "Pago",
-                amount: "R$ 180,75",
-                barcode: "83620000003-0 18075000012-5 00000000000-0 00000000000-0",
-                notes: "Pagamento realizado em 03/08/2023."
-            },
-            4: {
-                name: "Telefone Celular",
-                entity: "Vivo",
-                type: "Serviço de Telecomunicação",
-                due: "12/08/2023",
-                status: "Pendente",
-                amount: "R$ 89,90",
-                barcode: "82630000004-0 08990000012-5 00000000000-0 00000000000-0",
-                notes: "Plano pós-pago com 10GB de internet."
-            },
-            5: {
-                name: "Condomínio",
-                entity: "Edifício Solar",
-                type: "Taxa Condominial",
-                due: "05/08/2023",
-                status: "Pago",
-                amount: "R$ 650,00",
-                barcode: "81640000005-0 65000000012-5 00000000000-0 00000000000-0",
-                notes: "Inclui taxa de reserva de R$ 50,00."
-            }
-        };
-
-        function openPaymentDetail(paymentId) {
-            const detail = paymentDetails[paymentId];
-            if (detail) {
-                document.getElementById('detail-name').textContent = detail.name;
-                document.getElementById('detail-entity').textContent = detail.entity;
-                document.getElementById('detail-type').textContent = detail.type;
-                document.getElementById('detail-due').textContent = detail.due;
-                
-                const statusElement = document.getElementById('detail-status');
-                statusElement.innerHTML = '';
-                const statusSpan = document.createElement('span');
-                statusSpan.className = detail.status === 'Pago' ? 'status-paid' : 'status-pending';
-                statusSpan.textContent = detail.status;
-                statusElement.appendChild(statusSpan);
-                
-                document.getElementById('detail-amount').textContent = detail.amount;
-                document.getElementById('detail-barcode').textContent = detail.barcode;
-                document.getElementById('detail-notes').textContent = detail.notes;
-                
-                paymentDetailModal.classList.add('active');
-            }
+        if (!type || !name || !due) {
+            alert('Por favor, preencha todos os campos obrigatórios');
+            return;
         }
+        
+        // Aqui você adicionaria a lógica para adicionar o novo pagamento
+        console.log('Novo pagamento adicionado:', { type, name, due, file });
+        
+        // Fechar o modal após adicionar
+        closeAddPayment();
+        alert('Pagamento adicionado com sucesso!');
+    }
 
-        function closePaymentDetail() {
-            paymentDetailModal.classList.remove('active');
+    // Fechar modais ao clicar fora
+    paymentDetailModal.addEventListener('click', (e) => {
+        if (e.target === paymentDetailModal) {
+            closePaymentDetail();
         }
+    });
 
-        // Fechar modal ao clicar fora
-        paymentDetailModal.addEventListener('click', (e) => {
-            if (e.target === paymentDetailModal) {
-                closePaymentDetail();
-            }
-        });
-    </script>
+    addPaymentModal.addEventListener('click', (e) => {
+        if (e.target === addPaymentModal) {
+            closeAddPayment();
+        }
+    });
+
+    // Adicionar evento ao botão de adicionar
+    document.querySelector('.btn-primary').addEventListener('click', openAddPayment);
+</script>
+
+<!-- Modal de Adicionar Pagamento -->
+<div class="modal-overlay" id="addPaymentModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Adicionar Novo Pagamento</h3>
+            <button class="modal-close" onclick="closeAddPayment()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="payment-detail">
+                <div class="detail-row">
+                    <div class="detail-label">Tipo de Débito:</div>
+                    <div class="detail-value">
+                        <select id="payment-type" class="filter-select" style="width: 100%">
+                            <option value="">Selecione</option>
+                            <option value="imposto">Imposto</option>
+                            <option value="conta">Conta</option>
+                            <option value="fatura">Fatura</option>
+                            <option value="taxa">Taxa</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Nome:</div>
+                    <div class="detail-value">
+                        <input type="text" id="payment-name" class="filter-input" placeholder="Nome do provedor ou entidade">
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Data de Vencimento:</div>
+                    <div class="detail-value">
+                        <input type="date" id="payment-due" class="filter-input">
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Anexar Documento:</div>
+                    <div class="detail-value">
+                        <input type="file" id="payment-file" class="filter-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeAddPayment()">Cancelar</button>
+            <button class="btn btn-primary" onclick="addNewPayment()">
+                <i class="fas fa-plus"></i>
+                Adicionar
+            </button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
