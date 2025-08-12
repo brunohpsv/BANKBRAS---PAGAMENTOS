@@ -573,6 +573,7 @@
             </div>
             <div class="dropdown-menu" id="dropdownMenu">
                 <a href="index.html"><i class="fas fa-home"></i> Página Inicial</a>
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
                 <a href="conta.html"><i class="fas fa-sign-in-alt"></i> Login</a>
                 <a href="suporte.html"><i class="fas fa-headset"></i> Suporte</a>
                 <a href="politica.html"><i class="fas fa-file-alt"></i> Política</a>
@@ -821,7 +822,7 @@
         function showSuccessMessage() {
             const registerFormContainer = document.getElementById('registerFormContainer');
             const successMessage = document.getElementById('successMessage');
-            
+
             registerFormContainer.style.display = 'none';
             successMessage.style.display = 'block';
         }
@@ -866,7 +867,7 @@
                     // Usuário criado com sucesso
                     const user = userCredential.user;
 
-                    // Salvar informações adicionais no Firestore (incluindo a senha)
+                    // Salvar informações adicionais no Firestore
                     return db.collection('usuarios').doc(documento).set({
                         uid: user.uid,
                         nome: nome,
@@ -876,7 +877,6 @@
                         email: email,
                         telefone: telefone,
                         celular: celular,
-                        senha: senha, // Adicionado campo de senha
                         dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
                         status: 'ativo',
                         tipoConta: 'comum'
