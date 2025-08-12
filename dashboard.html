@@ -20,7 +20,7 @@
             --cinza-escuro: #333333;
             --cinza-medio: #e0e0e0;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
@@ -397,13 +397,13 @@
                 flex-direction: column;
                 padding: 15px;
             }
-            
+
             .sidebar {
                 width: 100%;
                 margin-right: 0;
                 margin-bottom: 15px;
             }
-            
+
             .summary-cards {
                 grid-template-columns: 1fr 1fr;
             }
@@ -413,27 +413,27 @@
             .logo-text {
                 font-size: 16px;
             }
-            
+
             .summary-cards {
                 grid-template-columns: 1fr;
             }
-            
+
             .section-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 10px;
             }
-            
+
             .section-actions {
                 width: 100%;
                 justify-content: space-between;
             }
-            
+
             .tax-actions .btn {
                 padding: 3px 5px;
                 font-size: 0.6rem;
             }
-            
+
             #payAllBtn {
                 padding: 5px 8px;
                 font-size: 0.7rem;
@@ -468,6 +468,11 @@
         <div class="logo">
             <div class="logo-icon">BBP</div>
             <div class="logo-text">BANK<span>BRAS</span> PAGAMENTOS</div>
+        </div>
+
+        <div class="user-profile" id="userProfile">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <div class="user-name" id="userName">Usuário</div>
         </div>
     </header>
 
@@ -536,7 +541,7 @@
 
             <div class="taxes-section">
                 <div class="section-header">
-                    <h2>Os Devidos</h2>
+                    <h2>Impostos Devidos</h2>
                     <div class="section-actions">
                         <button class="btn btn-outline" id="filterBtn">
                             <i class="fas fa-filter"></i> Filtrar
@@ -582,22 +587,33 @@
     <div id="paymentModal" class="modal">
         <div class="modal-content">
             <h2 style="margin-bottom: 15px; color: var(--verde-escuro);">Novo Pagamento</h2>
-            
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Tipo de Imposto</label>
+                <select id="taxType" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px;">
+                    <option value="IPTU">IPTU</option>
+                    <option value="IRPF">IRPF</option>
+                    <option value="ISS">ISS</option>
+                    <option value="INSS">INSS</option>
+                    <option value="OUTRO">Outro</option>
+                </select>
+            </div>
+
             <div style="margin-bottom: 15px;">
                 <label style="display: block; margin-bottom: 5px; font-weight: 600;">Valor</label>
                 <input type="number" id="paymentValue" step="0.01" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px;">
             </div>
-            
+
             <div style="margin-bottom: 15px;">
                 <label style="display: block; margin-bottom: 5px; font-weight: 600;">Data de Vencimento</label>
                 <input type="date" id="dueDate" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px;">
             </div>
-            
+
             <div style="margin-bottom: 15px;">
     <label style="display: block; margin-bottom: 5px; font-weight: 600;">Tipo de Imposto</label>
     <input type="text" id="taxType" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px; text-transform: uppercase;" oninput="this.value = this.value.toUpperCase()">
 </div>
-            
+
             <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
                 <button id="cancelPayment" class="btn btn-outline">Cancelar</button>
                 <button id="confirmPayment" class="btn btn-primary">Confirmar</button>
@@ -609,11 +625,11 @@
     <div id="boletoModal" class="modal">
         <div class="modal-content">
             <h2 style="margin-bottom: 15px; color: var(--verde-escuro);">Boleto de Pagamento</h2>
-            
+
             <div id="boletoContent" style="margin-bottom: 20px; padding: 15px; background: var(--cinza-claro); border-radius: 4px;">
                 <!-- Conteúdo do boleto será inserido aqui -->
             </div>
-            
+
             <div style="display: flex; justify-content: flex-end; gap: 10px;">
                 <button id="closeBoleto" class="btn btn-primary">Fechar</button>
             </div>
@@ -645,12 +661,17 @@
     const newPaymentBtn = document.getElementById('newPaymentBtn');
     const payAllBtn = document.getElementById('payAllBtn');
     const filterBtn = document.getElementById('filterBtn');
+    const resetFilterBtn = document.getElementById('resetFilterBtn');
     const paymentModal = document.getElementById('paymentModal');
     const boletoModal = document.getElementById('boletoModal');
     const cancelPayment = document.getElementById('cancelPayment');
     const confirmPayment = document.getElementById('confirmPayment');
     const closeBoleto = document.getElementById('closeBoleto');
     const boletoContent = document.getElementById('boletoContent');
+    const confirmPayAllBtn = document.getElementById('confirmPayAllBtn');
+    const payAllModal = document.getElementById('payAllModal');
+    const payAllContent = document.getElementById('payAllContent');
+    const closePayAll = document.getElementById('closePayAll');
 
     // Dados de exemplo
     let taxesData = [
@@ -699,44 +720,14 @@
     });
 
     // Carrega dados do usuário
-// Carrega dados do usuário
-function loadUserData(user) {
-    // Referência ao documento do usuário no Firestore
-    const userRef = db.collection('usuarios').doc(user.uid);
-    
-    userRef.get().then((doc) => {
-        if (doc.exists) {
-            const userData = doc.data();
-            // Busca o nome no campo "nome" do Firestore
-            const nome = userData.nome || user.displayName || user.email.split('@')[0];
-            
-            // Atualiza a interface
-            userName.textContent = nome;
-            welcomeUserName.textContent = nome;
-            userAvatar.textContent = nome.charAt(0).toUpperCase();
-        } else {
-            // Caso o documento não exista, usa o displayName ou email
-            const displayName = user.displayName || user.email.split('@')[0];
-            userName.textContent = displayName;
-            welcomeUserName.textContent = displayName;
-            userAvatar.textContent = displayName.charAt(0).toUpperCase();
-            
-            // Cria o documento do usuário se não existir
-            userRef.set({
-                email: user.email,
-                nome: displayName,
-                dataCriacao: firebase.firestore.FieldValue.serverTimestamp()
-            });
-        }
-    }).catch((error) => {
-        console.error("Erro ao buscar dados do usuário:", error);
-        // Fallback caso ocorra erro
+    function loadUserData(user) {
         const displayName = user.displayName || user.email.split('@')[0];
+        const initial = displayName.charAt(0).toUpperCase();
+
         userName.textContent = displayName;
         welcomeUserName.textContent = displayName;
-        userAvatar.textContent = displayName.charAt(0).toUpperCase();
-    });
-}
+        userAvatar.textContent = initial;
+    }
 
     // Carrega impostos do usuário
     function loadUserTaxes(userId) {
@@ -775,34 +766,34 @@ function loadUserData(user) {
     function updateSummaryCards(taxes) {
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        
+
         // Total devido
         const totalDue = taxes
             .filter(tax => tax.status !== 'paid')
             .reduce((sum, tax) => sum + tax.amount, 0);
-        
+
         // Impostos vencidos
         const overdueTaxes = taxes.filter(tax => {
             if (tax.status === 'paid') return false;
             const dueDate = new Date(tax.dueDate);
             return dueDate < today;
         });
-        
+
         const overdueAmount = overdueTaxes.reduce((sum, tax) => sum + tax.amount, 0);
-        
+
         // Impostos a vencer
         const pendingTaxes = taxes.filter(tax => {
             if (tax.status === 'paid') return false;
             const dueDate = new Date(tax.dueDate);
             return dueDate >= today;
         });
-        
+
         const pendingAmount = pendingTaxes.reduce((sum, tax) => sum + tax.amount, 0);
-        
+
         // Impostos pagos
         const paidTaxes = taxes.filter(tax => tax.status === 'paid');
         const paidAmount = paidTaxes.reduce((sum, tax) => sum + tax.amount, 0);
-        
+
         // Atualiza a interface
         document.getElementById('totalDue').textContent = formatCurrency(totalDue);
         document.getElementById('overdueAmount').textContent = formatCurrency(overdueAmount);
@@ -865,23 +856,35 @@ function loadUserData(user) {
     function showPaymentDetails(tax) {
         boletoContent.innerHTML = `
             <h3>${tax.name}</h3>
+            <div class="boleto-details">
+                <div class="detail-row">
+                    <span class="detail-label">Órgão Cobrador:</span>
             <div class="boleto-details" style="margin-bottom: 20px;">
                 <div class="detail-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                     <span class="detail-label" style="font-weight: 600;">Órgão Cobrador:</span>
                     <span class="detail-value">${tax.collector}</span>
                 </div>
+                <div class="detail-row">
+                    <span class="detail-label">Vencimento:</span>
                 <div class="detail-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                     <span class="detail-label" style="font-weight: 600;">Vencimento:</span>
                     <span class="detail-value">${formatDate(tax.dueDate)}</span>
                 </div>
+                <div class="detail-row">
+                    <span class="detail-label">Valor:</span>
                 <div class="detail-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                     <span class="detail-label" style="font-weight: 600;">Valor:</span>
                     <span class="detail-value">${formatCurrency(tax.amount)}</span>
                 </div>
+                <div class="detail-row">
+                    <span class="detail-label">Status:</span>
                 <div class="detail-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                     <span class="detail-label" style="font-weight: 600;">Status:</span>
                     <span class="detail-value tax-status ${getStatusClass(tax.status)}">${getStatusText(tax.status)}</span>
                 </div>
+                <div class="detail-row">
+                    <span class="detail-label">Código de Barras:</span>
+                    <span class="detail-value">12345.67890 12345.678901 12345.678901 1 12345678901234</span>
                 <div class="detail-row" style="margin-top: 15px;">
                     <span class="detail-label" style="font-weight: 600; display: block; margin-bottom: 5px;">Código de Barras:</span>
                     <div style="background: #f5f5f5; padding: 10px; border-radius: 4px; font-family: monospace; text-align: center;">
@@ -889,32 +892,55 @@ function loadUserData(user) {
                     </div>
                 </div>
             </div>
+            <div class="payment-actions">
             <div class="payment-actions" style="display: flex; flex-direction: column; gap: 10px;">
                 ${tax.status !== 'paid' ? `
+                <button id="confirmSinglePayment" class="btn btn-primary" data-tax-id="${tax.id}">
                 <button id="confirmSinglePayment" class="btn btn-primary" data-tax-id="${tax.id}" style="width: 100%;">
                     <i class="fas fa-check-circle"></i> Confirmar Dados e Efetuar Pagamento
                 </button>
                 ` : ''}
+                <button class="btn btn-outline" onclick="alert('Comprovante de pagamento gerado para ${tax.name}')">
                 <button class="btn btn-outline" onclick="alert('Comprovante de pagamento gerado para ${tax.name}')" style="width: 100%;">
                     <i class="fas fa-file-pdf"></i> Gerar Comprovante
                 </button>
             </div>
         `;
-        
+
         boletoModal.style.display = 'flex';
     }
 
     // Função para mostrar modal de pagar todos
     function showPayAllModal() {
         const unpaidTaxes = taxesData.filter(tax => tax.status !== 'paid');
-        
+
         if (unpaidTaxes.length === 0) {
             alert('Não há impostos para pagar!');
             return;
         }
-        
+
         const totalAmount = unpaidTaxes.reduce((sum, tax) => sum + tax.amount, 0);
-        
+
+        payAllContent.innerHTML = `
+            <h3>Pagamento em Lote</h3>
+            <p>Você está prestes a pagar ${unpaidTaxes.length} impostos no valor total de <strong>${formatCurrency(totalAmount)}</strong>.</p>
+            
+            <div class="payall-list">
+                <h4>Impostos incluídos:</h4>
+                <ul>
+                    ${unpaidTaxes.map(tax => `
+                        <li>
+                            <span>${tax.name} - ${tax.collector}</span>
+                            <span>${formatCurrency(tax.amount)}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+            
+            <div class="payment-actions">
+                <button id="confirmPayAllBtn" class="btn btn-primary">
+                    <i class="fas fa-check-circle"></i> Confirmar Dados e Efetuar Pagamento
+                </button>
         // Criar modal dinamicamente
         const payAllModal = document.createElement('div');
         payAllModal.className = 'modal';
@@ -954,7 +980,8 @@ function loadUserData(user) {
                 </div>
             </div>
         `;
-        
+
+        payAllModal.style.display = 'flex';
         document.body.appendChild(payAllModal);
         
         // Event listeners para os botões do modal
@@ -976,9 +1003,10 @@ function loadUserData(user) {
             }
             return tax;
         });
-        
+
         renderTaxesTable(taxesData);
         updateSummaryCards(taxesData);
+        payAllModal.style.display = 'none';
         alert('Pagamento de todos os impostos realizado com sucesso!');
     }
 
@@ -997,12 +1025,12 @@ function loadUserData(user) {
     confirmPayment.addEventListener('click', () => {
         const paymentValue = parseFloat(document.getElementById('paymentValue').value);
         const dueDate = document.getElementById('dueDate').value;
-        
+
         if (!paymentValue || !dueDate) {
             alert('Preencha todos os campos obrigatórios');
             return;
         }
-        
+
         // Adiciona novo imposto
         const newTax = {
             id: Date.now().toString(),
@@ -1012,7 +1040,7 @@ function loadUserData(user) {
             amount: paymentValue,
             status: new Date(dueDate) < new Date() ? 'overdue' : 'pending'
         };
-        
+
         taxesData.push(newTax);
         renderTaxesTable(taxesData);
         updateSummaryCards(taxesData);
@@ -1025,28 +1053,40 @@ function loadUserData(user) {
         boletoModal.style.display = 'none';
     });
 
+    // Fechar modal de pagar todos
+    closePayAll.addEventListener('click', () => {
+        payAllModal.style.display = 'none';
+    });
+
     // Pagar tudo - abre o modal de confirmação
     payAllBtn.addEventListener('click', showPayAllModal);
+
+    // Confirmar pagamento de todos os impostos
+    payAllModal.addEventListener('click', (e) => {
+        if (e.target.closest('#confirmPayAllBtn')) {
+            payAllTaxes();
+        }
+    });
 
     // Event listener para deletar imposto
     document.addEventListener('click', (e) => {
         if (e.target.closest('.delete-btn')) {
             const btn = e.target.closest('.delete-btn');
             const taxId = btn.getAttribute('data-tax-id');
-            
+
             if (confirm('Deseja realmente excluir este imposto?')) {
                 taxesData = taxesData.filter(tax => tax.id !== taxId);
                 renderTaxesTable(taxesData);
                 updateSummaryCards(taxesData);
             }
         }
-        
+
         // Event listener para pagar imposto individual ou ver detalhes
         if (e.target.closest('.pay-btn')) {
             const btn = e.target.closest('.pay-btn');
             const taxId = btn.getAttribute('data-tax-id');
             const tax = taxesData.find(t => t.id === taxId);
-            
+
             if (tax) {
                 showPaymentDetails(tax);
             }
@@ -1058,7 +1098,7 @@ function loadUserData(user) {
         if (e.target.closest('#confirmSinglePayment')) {
             const btn = e.target.closest('#confirmSinglePayment');
             const taxId = btn.getAttribute('data-tax-id');
-            
+
             if (confirm('Confirmar pagamento deste imposto?')) {
                 markTaxAsPaid(taxId);
                 boletoModal.style.display = 'none';
@@ -1069,8 +1109,12 @@ function loadUserData(user) {
 
     // Filtrar
     filterBtn.addEventListener('click', () => {
+        const status = prompt('Filtrar por status (digite: pendentes, vencidos ou pagos):');
         const status = prompt('Filtrar por status (digite: pendentes, vencidos ou pagos) ou deixe em branco para mostrar todos:');
-        
+
+        if (status) {
+            let filteredTaxes = [...taxesData];
+            
         if (status === null) return;
         
         let filteredTaxes = [...taxesData];
@@ -1090,7 +1134,14 @@ function loadUserData(user) {
                     alert('Opção inválida. Use: pendentes, vencidos ou pagos.');
                     return;
             }
+            
+            renderTaxesTable(filteredTaxes);
         }
+    });
+
+    // Resetar filtro
+    resetFilterBtn.addEventListener('click', () => {
+        renderTaxesTable(taxesData);
         
         renderTaxesTable(filteredTaxes);
     });
