@@ -573,7 +573,7 @@
             </div>
             <div class="dropdown-menu" id="dropdownMenu">
                 <a href="index.html"><i class="fas fa-home"></i> Página Inicial</a>
-                <a href="conta.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
                 <a href="suporte.html"><i class="fas fa-headset"></i> Suporte</a>
                 <a href="politica.html"><i class="fas fa-file-alt"></i> Política</a>
                 <a href="taxas.html"><i class="fas fa-percentage"></i> Taxas de uso</a>
@@ -884,6 +884,12 @@
                 .then(() => {
                     // Mostrar mensagem de sucesso
                     showSuccessMessage();
+                    
+                    // Limpar formulário
+                    registerForm.reset();
+                    
+                    // Deslogar o usuário imediatamente após o cadastro
+                    return auth.signOut();
                 })
                 .catch((error) => {
                     // Tratar erros de cadastro
@@ -900,16 +906,22 @@
                             break;
                         default:
                             errorMessage = 'Ocorreu um erro ao criar sua conta. Tente novamente.';
+                            console.error('Erro no cadastro:', error);
                     }
                     showAlert(errorMessage, 'danger');
                 });
         });
 
         // Verifica se há um usuário logado ao carregar a página
+        // REMOVIDO o redirecionamento automático para dashboard.html
+        // Isso permite que novos usuários acessem a página de cadastro
         auth.onAuthStateChanged((user) => {
             if (user) {
-                // Se o usuário já estiver logado, redireciona para o dashboard
-                window.location.href = 'dashboard.html';
+                console.log('Usuário logado:', user.email);
+                // Aqui você pode adicionar lógica adicional se necessário
+                // Mas não redireciona automaticamente
+            } else {
+                console.log('Nenhum usuário logado');
             }
         });
     </script>
