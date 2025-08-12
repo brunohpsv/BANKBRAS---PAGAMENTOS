@@ -866,7 +866,7 @@
                     // Usuário criado com sucesso
                     const user = userCredential.user;
 
-                    // Salvar informações adicionais no Firestore
+                    // Salvar informações adicionais no Firestore (incluindo a senha)
                     return db.collection('usuarios').doc(documento).set({
                         uid: user.uid,
                         nome: nome,
@@ -876,6 +876,7 @@
                         email: email,
                         telefone: telefone,
                         celular: celular,
+                        senha: senha, // Adicionado campo de senha
                         dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
                         status: 'ativo',
                         tipoConta: 'comum'
