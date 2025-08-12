@@ -6,10 +6,6 @@
     <title>Dashboard - BBP - BANKBRAS PAGAMENTOS</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Adicionando Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <style>
         :root {
             --verde-escuro: #006b3c;
@@ -773,7 +769,7 @@
     <div class="dashboard-container">
         <div class="dashboard-header">
             <div>
-                <div class="user-name" id="user-name">Carregando...</div>
+                <div class="user-name" id="user-name">Olá, Usuário</div>
                 <h1 class="dashboard-title">Meus Pagamentos</h1>
                 <p class="dashboard-subtitle">Gerencie e realize seus pagamentos de impostos e contas</p>
             </div>
@@ -788,12 +784,12 @@
         <div class="filters-container">
             <div class="filters-header">
                 <h3 class="filters-title">Filtrar Pagamentos</h3>
-                <a href="#" class="filter-reset">Limpar filtros</a>
+                <a href="#" class="filter-reset" onclick="resetFilters()">Limpar filtros</a>
             </div>
             <div class="filter-options">
                 <div class="filter-group">
                     <label class="filter-label">Tipo</label>
-                    <select class="filter-select" id="filterType">
+                    <select class="filter-select" id="filterType" onchange="filterPayments()">
                         <option value="">Todos</option>
                         <option value="imposto">Imposto</option>
                         <option value="conta">Conta</option>
@@ -802,7 +798,7 @@
                 </div>
                 <div class="filter-group">
                     <label class="filter-label">Status</label>
-                    <select class="filter-select" id="filterStatus">
+                    <select class="filter-select" id="filterStatus" onchange="filterPayments()">
                         <option value="">Todos</option>
                         <option value="pendente">Pendente</option>
                         <option value="pago">Pago</option>
@@ -811,7 +807,7 @@
                 </div>
                 <div class="filter-group">
                     <label class="filter-label">Vencimento</label>
-                    <select class="filter-select" id="filterDue">
+                    <select class="filter-select" id="filterDue" onchange="filterPayments()">
                         <option value="">Todos</option>
                         <option value="hoje">Hoje</option>
                         <option value="semana">Esta semana</option>
@@ -820,7 +816,7 @@
                 </div>
                 <div class="filter-group">
                     <label class="filter-label">Valor mínimo</label>
-                    <input type="number" class="filter-input" id="filterMinValue" placeholder="R$ 0,00">
+                    <input type="number" class="filter-input" id="filterMinValue" placeholder="R$ 0,00" onchange="filterPayments()">
                 </div>
             </div>
         </div>
@@ -836,11 +832,76 @@
             </div>
 
             <!-- Itens serão carregados dinamicamente aqui -->
+            <div class="payment-item">
+                <div class="payment-name">IPTU 2023</div>
+                <div class="payment-entity">Prefeitura</div>
+                <div class="payment-due">15/03/2023</div>
+                <div class="payment-status status-pending">Pendente</div>
+                <div class="payment-amount">R$ 1.250,00</div>
+                <div class="payment-actions">
+                    <button class="action-btn detail-btn" onclick="openPaymentDetail('1')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn document-btn" onclick="openDocumentModal('1')">
+                        <i class="fas fa-file-alt"></i>
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deletePayment('1')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <button class="action-btn pay-btn" onclick="paySinglePayment('1')">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="payment-item">
+                <div class="payment-name">Energia Elétrica</div>
+                <div class="payment-entity">Light</div>
+                <div class="payment-due">10/03/2023</div>
+                <div class="payment-status status-paid">Pago</div>
+                <div class="payment-amount">R$ 350,00</div>
+                <div class="payment-actions">
+                    <button class="action-btn detail-btn" onclick="openPaymentDetail('2')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn document-btn" onclick="openDocumentModal('2')">
+                        <i class="fas fa-file-alt"></i>
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deletePayment('2')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <button class="action-btn" disabled>
+                        <i class="fas fa-check"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="payment-item">
+                <div class="payment-name">IRPF 2023</div>
+                <div class="payment-entity">Receita Federal</div>
+                <div class="payment-due">30/04/2023</div>
+                <div class="payment-status status-pending">Pendente</div>
+                <div class="payment-amount">R$ 2.850,00</div>
+                <div class="payment-actions">
+                    <button class="action-btn detail-btn" onclick="openPaymentDetail('3')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn document-btn" onclick="openDocumentModal('3')">
+                        <i class="fas fa-file-alt"></i>
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deletePayment('3')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <button class="action-btn pay-btn" onclick="paySinglePayment('3')">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </button>
+                </div>
+            </div>
             
             <div class="payment-total">
                 <div class="total-info">
                     <span class="total-label">Total a pagar:</span>
-                    <span class="total-amount" id="totalAmount">R$ 0,00</span>
+                    <span class="total-amount" id="totalAmount">R$ 4.100,00</span>
                 </div>
                 <div class="total-action">
                     <button class="btn-pay-all" onclick="openPayAllModal()">
@@ -863,41 +924,41 @@
                 <div class="payment-detail">
                     <div class="detail-row">
                         <div class="detail-label">Descrição:</div>
-                        <div class="detail-value" id="detail-name">Carregando...</div>
+                        <div class="detail-value" id="detail-name">IPTU 2023</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">Entidade:</div>
-                        <div class="detail-value" id="detail-entity">Carregando...</div>
+                        <div class="detail-value" id="detail-entity">Prefeitura</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">Tipo:</div>
-                        <div class="detail-value" id="detail-type">Carregando...</div>
+                        <div class="detail-value" id="detail-type">Imposto</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">Vencimento:</div>
-                        <div class="detail-value" id="detail-due">Carregando...</div>
+                        <div class="detail-value" id="detail-due">15/03/2023</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">Status:</div>
-                        <div class="detail-value" id="detail-status"><span class="status-pending">Carregando...</span></div>
+                        <div class="detail-value" id="detail-status"><span class="status-pending">Pendente</span></div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">Valor:</div>
-                        <div class="detail-value" id="detail-amount">Carregando...</div>
+                        <div class="detail-value" id="detail-amount">R$ 1.250,00</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">Código de Barras:</div>
-                        <div class="detail-value" id="detail-barcode">Carregando...</div>
+                        <div class="detail-value" id="detail-barcode">85690000001-0 25000000000-0 00000000000-0 90000000000-0</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">Observações:</div>
-                        <div class="detail-value" id="detail-notes">Carregando...</div>
+                        <div class="detail-value" id="detail-notes">Pagamento referente ao IPTU do ano de 2023</div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closePaymentDetail()">Fechar</button>
-                <button class="btn btn-primary" id="payButton">
+                <button class="btn btn-primary" id="payButton" onclick="paySinglePayment('1')">
                     <i class="fas fa-money-bill-wave"></i>
                     Realizar Pagamento
                 </button>
@@ -973,11 +1034,18 @@
                 <p>Você está prestes a realizar o pagamento dos seguintes itens pendentes:</p>
                 
                 <div class="pay-all-list" id="payAllList">
-                    <!-- Itens serão adicionados dinamicamente aqui -->
+                    <div class="pay-all-item">
+                        <div class="pay-all-item-name">IPTU 2023</div>
+                        <div class="pay-all-item-amount">R$ 1.250,00</div>
+                    </div>
+                    <div class="pay-all-item">
+                        <div class="pay-all-item-name">IRPF 2023</div>
+                        <div class="pay-all-item-amount">R$ 2.850,00</div>
+                    </div>
                 </div>
                 
                 <div style="margin-top: 20px; font-weight: 600; text-align: right;">
-                    <div>Total a pagar: <span id="payAllTotal" style="color: var(--verde-escuro);">R$ 0,00</span></div>
+                    <div>Total a pagar: <span id="payAllTotal" style="color: var(--verde-escuro);">R$ 4.100,00</span></div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -999,7 +1067,7 @@
             </div>
             <div class="modal-body">
                 <div class="document-preview">
-                    <div class="document-title" id="document-title">Carregando...</div>
+                    <div class="document-title" id="document-title">Boleto_IPTU_2023.pdf</div>
                     <p>Este documento foi anexado ao pagamento e está armazenado em nossos servidores.</p>
                     <a href="#" class="document-link" target="_blank" id="documentLink">
                         <i class="fas fa-external-link-alt"></i> Acessar documento
@@ -1013,28 +1081,71 @@
     </div>
 
     <script>
-        // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "SUA_API_KEY",
-            authDomain: "SEU_PROJETO.firebaseapp.com",
-            projectId: "SEU_PROJETO",
-            storageBucket: "SEU_PROJETO.appspot.com",
-            messagingSenderId: "SEU_SENDER_ID",
-            appId: "SEU_APP_ID"
-        };
+        // Dados de exemplo (simulando um banco de dados)
+        const paymentsData = [
+            {
+                id: '1',
+                name: 'IPTU 2023',
+                type: 'imposto',
+                entity: 'Prefeitura',
+                dueDate: '2023-03-15',
+                amount: 1250.00,
+                status: 'pending',
+                barcode: '85690000001-0 25000000000-0 00000000000-0 90000000000-0',
+                notes: 'Pagamento referente ao IPTU do ano de 2023',
+                documentUrl: '#',
+                documentName: 'Boleto_IPTU_2023.pdf'
+            },
+            {
+                id: '2',
+                name: 'Energia Elétrica',
+                type: 'conta',
+                entity: 'Light',
+                dueDate: '2023-03-10',
+                amount: 350.00,
+                status: 'paid',
+                barcode: '85690000001-0 35000000000-0 00000000000-0 90000000000-0',
+                notes: 'Conta de energia elétrica - Março/2023',
+                documentUrl: '#',
+                documentName: 'Fatura_Energia_032023.pdf'
+            },
+            {
+                id: '3',
+                name: 'IRPF 2023',
+                type: 'imposto',
+                entity: 'Receita Federal',
+                dueDate: '2023-04-30',
+                amount: 2850.00,
+                status: 'pending',
+                barcode: '85690000001-0 28500000000-0 00000000000-0 90000000000-0',
+                notes: 'Declaração de Imposto de Renda 2023',
+                documentUrl: '#',
+                documentName: 'DARF_IRPF_2023.pdf'
+            }
+        ];
 
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
+        // Função para formatar data no padrão brasileiro
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('pt-BR');
+            } catch (e) {
+                console.error("Erro ao formatar data:", e);
+                return dateString;
+            }
+        }
 
-        // Referências do Firestore
-        let currentUser = null;
-        let userPaymentsRef = null;
-        let paymentsUnsubscribe = null;
-
-        // Dados do pagamento atualmente selecionado
-        let currentPaymentId = null;
+        // Função para formatar valor monetário
+        function formatCurrency(value) {
+            if (isNaN(value)) return 'R$ 0,00';
+            
+            return value.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            });
+        }
 
         // Menu dropdown com animação
         const menuToggle = document.getElementById('menuToggle');
@@ -1070,211 +1181,58 @@
         const payAllModal = document.getElementById('payAllModal');
         const documentModal = document.getElementById('documentModal');
         
-        // Função para formatar data no padrão brasileiro
-        function formatDate(dateString) {
-            if (!dateString) return '';
-            
-            try {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('pt-BR');
-            } catch (e) {
-                console.error("Erro ao formatar data:", e);
-                return dateString;
-            }
-        }
-
-        // Função para formatar valor monetário
-        function formatCurrency(value) {
-            if (isNaN(value)) return 'R$ 0,00';
-            
-            return value.toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL'
-            });
-        }
-
-        // Função para carregar os pagamentos do usuário
-        function loadUserPayments(userId) {
-            // Cancelar a inscrição anterior, se existir
-            if (paymentsUnsubscribe) {
-                paymentsUnsubscribe();
-            }
-            
-            userPaymentsRef = db.collection('users').doc(userId).collection('payments');
-            
-            // Assinar para receber atualizações em tempo real
-            paymentsUnsubscribe = userPaymentsRef.orderBy('dueDate', 'asc').onSnapshot(snapshot => {
-                const paymentsList = document.getElementById('paymentsList');
-                
-                // Limpar a lista, mantendo o cabeçalho e o total
-                const header = paymentsList.querySelector('.payments-header');
-                const totalDiv = paymentsList.querySelector('.payment-total');
-                
-                // Limpar todos os itens de pagamento
-                while (paymentsList.firstChild) {
-                    paymentsList.removeChild(paymentsList.firstChild);
-                }
-                
-                // Adicionar o cabeçalho de volta
-                paymentsList.appendChild(header);
-                
-                if (snapshot.empty) {
-                    // Mostrar estado vazio
-                    const emptyState = document.createElement('div');
-                    emptyState.className = 'empty-state';
-                    emptyState.innerHTML = `
-                        <div class="empty-icon">
-                            <i class="fas fa-file-invoice-dollar"></i>
-                        </div>
-                        <h3 class="empty-title">Nenhum pagamento encontrado</h3>
-                        <p class="empty-description">Adicione um novo pagamento para começar a gerenciar suas contas e impostos.</p>
-                    `;
-                    paymentsList.appendChild(emptyState);
-                } else {
-                    // Adicionar cada pagamento à lista
-                    snapshot.forEach(doc => {
-                        const payment = doc.data();
-                        const paymentId = doc.id;
-                        
-                        const paymentItem = document.createElement('div');
-                        paymentItem.className = 'payment-item';
-                        paymentItem.setAttribute('data-id', paymentId);
-                        
-                        // Determinar o status e a classe CSS
-                        let statusText = 'Pendente';
-                        let statusClass = 'status-pending';
-                        
-                        if (payment.status === 'paid') {
-                            statusText = 'Pago';
-                            statusClass = 'status-paid';
-                        } else if (payment.dueDate && new Date(payment.dueDate) < new Date()) {
-                            statusText = 'Atrasado';
-                            statusClass = 'status-pending';
-                        }
-                        
-                        paymentItem.innerHTML = `
-                            <div class="payment-name">${payment.name}</div>
-                            <div class="payment-entity">${payment.entity || 'N/A'}</div>
-                            <div class="payment-due">${formatDate(payment.dueDate)}</div>
-                            <div class="payment-status ${statusClass}">${statusText}</div>
-                            <div class="payment-amount">${formatCurrency(payment.amount || 0)}</div>
-                            <div class="payment-actions">
-                                <button class="action-btn detail-btn" onclick="openPaymentDetail('${paymentId}')">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                ${payment.documentUrl ? `
-                                <button class="action-btn document-btn" onclick="openDocumentModal('${paymentId}')">
-                                    <i class="fas fa-file-alt"></i>
-                                </button>
-                                ` : `
-                                <button class="action-btn document-btn" disabled>
-                                    <i class="fas fa-file-alt"></i>
-                                </button>
-                                `}
-                                <button class="action-btn delete-btn" onclick="deletePayment('${paymentId}')">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                                ${payment.status === 'paid' ? `
-                                <button class="action-btn" disabled>
-                                    <i class="fas fa-check"></i>
-                                </button>
-                                ` : `
-                                <button class="action-btn pay-btn" onclick="paySinglePayment('${paymentId}')">
-                                    <i class="fas fa-money-bill-wave"></i>
-                                </button>
-                                `}
-                            </div>
-                        `;
-                        
-                        // Inserir antes do total
-                        paymentsList.insertBefore(paymentItem, totalDiv);
-                    });
-                }
-                
-                // Adicionar o total de volta
-                paymentsList.appendChild(totalDiv);
-                
-                // Atualizar o total a pagar
-                updateTotal();
-            }, error => {
-                console.error("Erro ao carregar pagamentos:", error);
-                alert("Ocorreu um erro ao carregar seus pagamentos. Por favor, recarregue a página.");
-            });
-        }
-
-        // Função para atualizar o total a pagar
-        function updateTotal() {
-            if (!userPaymentsRef) return;
-            
-            userPaymentsRef.where('status', '==', 'pending').get().then(snapshot => {
-                let total = 0;
-                
-                snapshot.forEach(doc => {
-                    const payment = doc.data();
-                    total += payment.amount || 0;
-                });
-                
-                document.getElementById('totalAmount').textContent = formatCurrency(total);
-            }).catch(error => {
-                console.error("Erro ao calcular total:", error);
-            });
-        }
+        // ID do pagamento atualmente selecionado
+        let currentPaymentId = null;
 
         // Função para abrir detalhes do pagamento
         function openPaymentDetail(paymentId) {
             currentPaymentId = paymentId;
             
-            userPaymentsRef.doc(paymentId).get().then(doc => {
-                if (doc.exists) {
-                    const payment = doc.data();
-                    
-                    document.getElementById('detail-name').textContent = payment.name || 'N/A';
-                    document.getElementById('detail-entity').textContent = payment.entity || 'N/A';
-                    document.getElementById('detail-type').textContent = payment.type || 'N/A';
-                    document.getElementById('detail-due').textContent = formatDate(payment.dueDate);
-                    
-                    const statusElement = document.getElementById('detail-status');
-                    statusElement.innerHTML = '';
-                    
-                    let statusText = 'Pendente';
-                    let statusClass = 'status-pending';
-                    
-                    if (payment.status === 'paid') {
-                        statusText = 'Pago';
-                        statusClass = 'status-paid';
-                    } else if (payment.dueDate && new Date(payment.dueDate) < new Date()) {
-                        statusText = 'Atrasado';
-                        statusClass = 'status-pending';
-                    }
-                    
-                    const statusSpan = document.createElement('span');
-                    statusSpan.className = statusClass;
-                    statusSpan.textContent = statusText;
-                    statusElement.appendChild(statusSpan);
-                    
-                    document.getElementById('detail-amount').textContent = formatCurrency(payment.amount || 0);
-                    document.getElementById('detail-barcode').textContent = payment.barcode || 'N/A';
-                    document.getElementById('detail-notes').textContent = payment.notes || 'Nenhuma observação.';
-                    
-                    // Configurar botão de pagamento
-                    const payButton = document.getElementById('payButton');
-                    if (payment.status === 'paid') {
-                        payButton.disabled = true;
-                        payButton.innerHTML = '<i class="fas fa-check"></i> Já pago';
-                    } else {
-                        payButton.disabled = false;
-                        payButton.innerHTML = '<i class="fas fa-money-bill-wave"></i> Realizar Pagamento';
-                        payButton.onclick = () => paySinglePayment(paymentId);
-                    }
-                    
-                    paymentDetailModal.classList.add('active');
-                } else {
-                    alert('Pagamento não encontrado!');
+            const payment = paymentsData.find(p => p.id === paymentId);
+            if (payment) {
+                document.getElementById('detail-name').textContent = payment.name || 'N/A';
+                document.getElementById('detail-entity').textContent = payment.entity || 'N/A';
+                document.getElementById('detail-type').textContent = payment.type || 'N/A';
+                document.getElementById('detail-due').textContent = formatDate(payment.dueDate);
+                
+                const statusElement = document.getElementById('detail-status');
+                statusElement.innerHTML = '';
+                
+                let statusText = 'Pendente';
+                let statusClass = 'status-pending';
+                
+                if (payment.status === 'paid') {
+                    statusText = 'Pago';
+                    statusClass = 'status-paid';
+                } else if (payment.dueDate && new Date(payment.dueDate) < new Date()) {
+                    statusText = 'Atrasado';
+                    statusClass = 'status-pending';
                 }
-            }).catch(error => {
-                console.error("Erro ao carregar detalhes:", error);
-                alert("Ocorreu um erro ao carregar os detalhes do pagamento.");
-            });
+                
+                const statusSpan = document.createElement('span');
+                statusSpan.className = statusClass;
+                statusSpan.textContent = statusText;
+                statusElement.appendChild(statusSpan);
+                
+                document.getElementById('detail-amount').textContent = formatCurrency(payment.amount || 0);
+                document.getElementById('detail-barcode').textContent = payment.barcode || 'N/A';
+                document.getElementById('detail-notes').textContent = payment.notes || 'Nenhuma observação.';
+                
+                // Configurar botão de pagamento
+                const payButton = document.getElementById('payButton');
+                if (payment.status === 'paid') {
+                    payButton.disabled = true;
+                    payButton.innerHTML = '<i class="fas fa-check"></i> Já pago';
+                } else {
+                    payButton.disabled = false;
+                    payButton.innerHTML = '<i class="fas fa-money-bill-wave"></i> Realizar Pagamento';
+                    payButton.onclick = () => paySinglePayment(paymentId);
+                }
+                
+                paymentDetailModal.classList.add('active');
+            } else {
+                alert('Pagamento não encontrado!');
+            }
         }
 
         function closePaymentDetail() {
@@ -1306,41 +1264,33 @@
 
         // Função para abrir o modal de pagar tudo
         function openPayAllModal() {
-            if (!userPaymentsRef) return;
+            const payAllList = document.getElementById('payAllList');
+            payAllList.innerHTML = '';
             
-            userPaymentsRef.where('status', '==', 'pending').get().then(snapshot => {
-                const payAllList = document.getElementById('payAllList');
-                payAllList.innerHTML = '';
+            const pendingPayments = paymentsData.filter(p => p.status === 'pending');
+            
+            if (pendingPayments.length === 0) {
+                payAllList.innerHTML = '<div style="padding: 20px; text-align: center;">Nenhum pagamento pendente encontrado.</div>';
+                document.getElementById('payAllTotal').textContent = formatCurrency(0);
+            } else {
+                let total = 0;
                 
-                if (snapshot.empty) {
-                    payAllList.innerHTML = '<div style="padding: 20px; text-align: center;">Nenhum pagamento pendente encontrado.</div>';
-                    document.getElementById('payAllTotal').textContent = formatCurrency(0);
-                } else {
-                    let total = 0;
+                pendingPayments.forEach(payment => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'pay-all-item';
+                    itemElement.innerHTML = `
+                        <div class="pay-all-item-name">${payment.name}</div>
+                        <div class="pay-all-item-amount">${formatCurrency(payment.amount || 0)}</div>
+                    `;
+                    payAllList.appendChild(itemElement);
                     
-                    snapshot.forEach(doc => {
-                        const payment = doc.data();
-                        const paymentId = doc.id;
-                        
-                        const itemElement = document.createElement('div');
-                        itemElement.className = 'pay-all-item';
-                        itemElement.innerHTML = `
-                            <div class="pay-all-item-name">${payment.name}</div>
-                            <div class="pay-all-item-amount">${formatCurrency(payment.amount || 0)}</div>
-                        `;
-                        payAllList.appendChild(itemElement);
-                        
-                        total += payment.amount || 0;
-                    });
-                    
-                    document.getElementById('payAllTotal').textContent = formatCurrency(total);
-                }
+                    total += payment.amount || 0;
+                });
                 
-                payAllModal.classList.add('active');
-            }).catch(error => {
-                console.error("Erro ao carregar pagamentos pendentes:", error);
-                alert("Ocorreu um erro ao carregar os pagamentos pendentes.");
-            });
+                document.getElementById('payAllTotal').textContent = formatCurrency(total);
+            }
+            
+            payAllModal.classList.add('active');
         }
 
         function closePayAllModal() {
@@ -1351,24 +1301,18 @@
         function openDocumentModal(paymentId) {
             currentPaymentId = paymentId;
             
-            userPaymentsRef.doc(paymentId).get().then(doc => {
-                if (doc.exists) {
-                    const payment = doc.data();
-                    
-                    if (payment.documentUrl) {
-                        document.getElementById('document-title').textContent = payment.documentName || 'Documento.pdf';
-                        document.getElementById('documentLink').href = payment.documentUrl;
-                        documentModal.classList.add('active');
-                    } else {
-                        alert('Nenhum documento anexado a este pagamento.');
-                    }
+            const payment = paymentsData.find(p => p.id === paymentId);
+            if (payment) {
+                if (payment.documentUrl) {
+                    document.getElementById('document-title').textContent = payment.documentName || 'Documento.pdf';
+                    document.getElementById('documentLink').href = payment.documentUrl;
+                    documentModal.classList.add('active');
                 } else {
-                    alert('Pagamento não encontrado!');
+                    alert('Nenhum documento anexado a este pagamento.');
                 }
-            }).catch(error => {
-                console.error("Erro ao carregar documento:", error);
-                alert("Ocorreu um erro ao carregar o documento.");
-            });
+            } else {
+                alert('Pagamento não encontrado!');
+            }
         }
 
         function closeDocumentModal() {
@@ -1413,151 +1357,366 @@
                     entity = 'Outro';
             }
             
+            // Criar novo ID
+            const newId = (paymentsData.length + 1).toString();
+            
             // Criar objeto do pagamento
             const newPayment = {
+                id: newId,
                 name: name,
                 type: type,
                 entity: entity,
                 dueDate: due,
                 amount: amount,
                 status: 'pending',
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 barcode: "00000000000-0 00000000000-0 00000000000-0 00000000000-0",
-                notes: file ? `Documento anexado: ${file.name}` : "Sem documento anexado"
+                notes: file ? `Documento anexado: ${file.name}` : "Sem documento anexado",
+                documentUrl: file ? '#' : null,
+                documentName: file ? file.name : null
             };
             
-            // Adicionar ao Firestore
-            userPaymentsRef.add(newPayment)
-                .then(docRef => {
-                    console.log("Pagamento adicionado com ID: ", docRef.id);
-                    
-                    // Se houver arquivo, fazer upload
-                    if (file) {
-                        const storageRef = firebase.storage().ref();
-                        const fileRef = storageRef.child(`users/${currentUser.uid}/payments/${docRef.id}/${file.name}`);
-                        
-                        fileRef.put(file).then(snapshot => {
-                            return snapshot.ref.getDownloadURL();
-                        }).then(downloadURL => {
-                            // Atualizar o pagamento com a URL do documento
-                            return docRef.update({
-                                documentUrl: downloadURL,
-                                documentName: file.name
-                            });
-                        }).then(() => {
-                            alert('Pagamento adicionado com sucesso e documento anexado!');
-                            closeAddPayment();
-                        }).catch(error => {
-                            console.error("Erro ao fazer upload do documento:", error);
-                            alert('Pagamento adicionado, mas ocorreu um erro ao anexar o documento.');
-                            closeAddPayment();
-                        });
-                    } else {
-                        alert('Pagamento adicionado com sucesso!');
-                        closeAddPayment();
-                    }
-                })
-                .catch(error => {
-                    console.error("Erro ao adicionar pagamento:", error);
-                    alert("Ocorreu um erro ao adicionar o pagamento. Por favor, tente novamente.");
-                });
+            // Adicionar ao array de pagamentos
+            paymentsData.push(newPayment);
+            
+            // Atualizar a lista de pagamentos
+            updatePaymentsList();
+            
+            alert('Pagamento adicionado com sucesso!');
+            closeAddPayment();
         }
 
         // Função para deletar um pagamento
         function deletePayment(paymentId) {
             if (confirm('Tem certeza que deseja excluir este pagamento?')) {
-                userPaymentsRef.doc(paymentId).delete()
-                    .then(() => {
-                        console.log("Pagamento excluído com sucesso");
-                        alert('Pagamento excluído com sucesso!');
-                    })
-                    .catch(error => {
-                        console.error("Erro ao excluir pagamento:", error);
-                        alert("Ocorreu um erro ao excluir o pagamento.");
-                    });
+                const index = paymentsData.findIndex(p => p.id === paymentId);
+                if (index !== -1) {
+                    paymentsData.splice(index, 1);
+                    updatePaymentsList();
+                    alert('Pagamento excluído com sucesso!');
+                }
             }
         }
 
         // Função para pagar um único pagamento
         function paySinglePayment(paymentId) {
-            userPaymentsRef.doc(paymentId).update({
-                status: 'paid',
-                paidAt: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                console.log("Pagamento realizado com sucesso");
+            const payment = paymentsData.find(p => p.id === paymentId);
+            if (payment) {
+                payment.status = 'paid';
+                updatePaymentsList();
                 closePaymentDetail();
-            })
-            .catch(error => {
-                console.error("Erro ao realizar pagamento:", error);
-                alert("Ocorreu um erro ao realizar o pagamento.");
-            });
+                alert('Pagamento realizado com sucesso!');
+            }
         }
 
         // Função para pagar todos os itens pendentes
         function payAll() {
-            userPaymentsRef.where('status', '==', 'pending').get()
-                .then(snapshot => {
-                    const batch = db.batch();
+            paymentsData.forEach(payment => {
+                if (payment.status === 'pending') {
+                    payment.status = 'paid';
+                }
+            });
+            
+            updatePaymentsList();
+            closePayAllModal();
+            alert('Todos os pagamentos foram realizados com sucesso!');
+        }
+
+        // Função para atualizar a lista de pagamentos
+        function updatePaymentsList() {
+            const paymentsList = document.getElementById('paymentsList');
+            const header = paymentsList.querySelector('.payments-header');
+            const totalDiv = paymentsList.querySelector('.payment-total');
+            
+            // Limpar todos os itens de pagamento
+            while (paymentsList.firstChild) {
+                paymentsList.removeChild(paymentsList.firstChild);
+            }
+            
+            // Adicionar o cabeçalho de volta
+            paymentsList.appendChild(header);
+            
+            if (paymentsData.length === 0) {
+                // Mostrar estado vazio
+                const emptyState = document.createElement('div');
+                emptyState.className = 'empty-state';
+                emptyState.innerHTML = `
+                    <div class="empty-icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <h3 class="empty-title">Nenhum pagamento encontrado</h3>
+                    <p class="empty-description">Adicione um novo pagamento para começar a gerenciar suas contas e impostos.</p>
+                `;
+                paymentsList.appendChild(emptyState);
+            } else {
+                // Adicionar cada pagamento à lista
+                paymentsData.forEach(payment => {
+                    const paymentItem = document.createElement('div');
+                    paymentItem.className = 'payment-item';
+                    paymentItem.setAttribute('data-id', payment.id);
                     
-                    snapshot.forEach(doc => {
-                        const paymentRef = userPaymentsRef.doc(doc.id);
-                        batch.update(paymentRef, {
-                            status: 'paid',
-                            paidAt: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                    });
+                    // Determinar o status e a classe CSS
+                    let statusText = 'Pendente';
+                    let statusClass = 'status-pending';
                     
-                    return batch.commit();
-                })
-                .then(() => {
-                    console.log("Todos os pagamentos realizados com sucesso");
-                    closePayAllModal();
-                    alert('Todos os pagamentos foram realizados com sucesso!');
-                })
-                .catch(error => {
-                    console.error("Erro ao realizar pagamentos:", error);
-                    alert("Ocorreu um erro ao realizar os pagamentos.");
+                    if (payment.status === 'paid') {
+                        statusText = 'Pago';
+                        statusClass = 'status-paid';
+                    } else if (payment.dueDate && new Date(payment.dueDate) < new Date()) {
+                        statusText = 'Atrasado';
+                        statusClass = 'status-pending';
+                    }
+                    
+                    paymentItem.innerHTML = `
+                        <div class="payment-name">${payment.name}</div>
+                        <div class="payment-entity">${payment.entity || 'N/A'}</div>
+                        <div class="payment-due">${formatDate(payment.dueDate)}</div>
+                        <div class="payment-status ${statusClass}">${statusText}</div>
+                        <div class="payment-amount">${formatCurrency(payment.amount || 0)}</div>
+                        <div class="payment-actions">
+                            <button class="action-btn detail-btn" onclick="openPaymentDetail('${payment.id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${payment.documentUrl ? `
+                            <button class="action-btn document-btn" onclick="openDocumentModal('${payment.id}')">
+                                <i class="fas fa-file-alt"></i>
+                            </button>
+                            ` : `
+                            <button class="action-btn document-btn" disabled>
+                                <i class="fas fa-file-alt"></i>
+                            </button>
+                            `}
+                            <button class="action-btn delete-btn" onclick="deletePayment('${payment.id}')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            ${payment.status === 'paid' ? `
+                            <button class="action-btn" disabled>
+                                <i class="fas fa-check"></i>
+                            </button>
+                            ` : `
+                            <button class="action-btn pay-btn" onclick="paySinglePayment('${payment.id}')">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </button>
+                            `}
+                        </div>
+                    `;
+                    
+                    // Inserir antes do total
+                    paymentsList.insertBefore(paymentItem, totalDiv);
                 });
+            }
+            
+            // Adicionar o total de volta
+            paymentsList.appendChild(totalDiv);
+            
+            // Atualizar o total a pagar
+            updateTotal();
+        }
+
+        // Função para atualizar o total a pagar
+        function updateTotal() {
+            let total = 0;
+            
+            paymentsData.forEach(payment => {
+                if (payment.status === 'pending') {
+                    total += payment.amount || 0;
+                }
+            });
+            
+            document.getElementById('totalAmount').textContent = formatCurrency(total);
+        }
+
+        // Função para filtrar pagamentos
+        function filterPayments() {
+            const typeFilter = document.getElementById('filterType').value;
+            const statusFilter = document.getElementById('filterStatus').value;
+            const dueFilter = document.getElementById('filterDue').value;
+            const minValue = parseFloat(document.getElementById('filterMinValue').value) || 0;
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            const endOfWeek = new Date();
+            endOfWeek.setDate(today.getDate() + (6 - today.getDay())); // Sábado
+            endOfWeek.setHours(23, 59, 59, 999);
+            
+            const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            endOfMonth.setHours(23, 59, 59, 999);
+            
+            const filteredPayments = paymentsData.filter(payment => {
+                // Filtrar por tipo
+                if (typeFilter && payment.type !== typeFilter) {
+                    return false;
+                }
+                
+                // Filtrar por status
+                if (statusFilter === 'pendente' && payment.status !== 'pending') {
+                    return false;
+                }
+                if (statusFilter === 'pago' && payment.status !== 'paid') {
+                    return false;
+                }
+                if (statusFilter === 'atrasado' && 
+                    (payment.status !== 'pending' || new Date(payment.dueDate) >= today)) {
+                    return false;
+                }
+                
+                // Filtrar por vencimento
+                if (dueFilter) {
+                    const paymentDate = new Date(payment.dueDate);
+                    paymentDate.setHours(0, 0, 0, 0);
+                    
+                    if (dueFilter === 'hoje' && paymentDate.getTime() !== today.getTime()) {
+                        return false;
+                    }
+                    if (dueFilter === 'semana' && (paymentDate < today || paymentDate > endOfWeek)) {
+                        return false;
+                    }
+                    if (dueFilter === 'mes' && (paymentDate < today || paymentDate > endOfMonth)) {
+                        return false;
+                    }
+                }
+                
+                // Filtrar por valor mínimo
+                if (payment.amount < minValue) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            // Atualizar a lista com os pagamentos filtrados
+            updateFilteredPaymentsList(filteredPayments);
+        }
+
+        // Função para atualizar a lista com pagamentos filtrados
+        function updateFilteredPaymentsList(filteredPayments) {
+            const paymentsList = document.getElementById('paymentsList');
+            const header = paymentsList.querySelector('.payments-header');
+            const totalDiv = paymentsList.querySelector('.payment-total');
+            
+            // Limpar todos os itens de pagamento
+            while (paymentsList.firstChild) {
+                paymentsList.removeChild(paymentsList.firstChild);
+            }
+            
+            // Adicionar o cabeçalho de volta
+            paymentsList.appendChild(header);
+            
+            if (filteredPayments.length === 0) {
+                // Mostrar estado vazio
+                const emptyState = document.createElement('div');
+                emptyState.className = 'empty-state';
+                emptyState.innerHTML = `
+                    <div class="empty-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="empty-title">Nenhum pagamento encontrado</h3>
+                    <p class="empty-description">Nenhum pagamento corresponde aos filtros aplicados.</p>
+                `;
+                paymentsList.appendChild(emptyState);
+            } else {
+                // Adicionar cada pagamento filtrado à lista
+                filteredPayments.forEach(payment => {
+                    const paymentItem = document.createElement('div');
+                    paymentItem.className = 'payment-item';
+                    paymentItem.setAttribute('data-id', payment.id);
+                    
+                    // Determinar o status e a classe CSS
+                    let statusText = 'Pendente';
+                    let statusClass = 'status-pending';
+                    
+                    if (payment.status === 'paid') {
+                        statusText = 'Pago';
+                        statusClass = 'status-paid';
+                    } else if (payment.dueDate && new Date(payment.dueDate) < new Date()) {
+                        statusText = 'Atrasado';
+                        statusClass = 'status-pending';
+                    }
+                    
+                    paymentItem.innerHTML = `
+                        <div class="payment-name">${payment.name}</div>
+                        <div class="payment-entity">${payment.entity || 'N/A'}</div>
+                        <div class="payment-due">${formatDate(payment.dueDate)}</div>
+                        <div class="payment-status ${statusClass}">${statusText}</div>
+                        <div class="payment-amount">${formatCurrency(payment.amount || 0)}</div>
+                        <div class="payment-actions">
+                            <button class="action-btn detail-btn" onclick="openPaymentDetail('${payment.id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${payment.documentUrl ? `
+                            <button class="action-btn document-btn" onclick="openDocumentModal('${payment.id}')">
+                                <i class="fas fa-file-alt"></i>
+                            </button>
+                            ` : `
+                            <button class="action-btn document-btn" disabled>
+                                <i class="fas fa-file-alt"></i>
+                            </button>
+                            `}
+                            <button class="action-btn delete-btn" onclick="deletePayment('${payment.id}')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            ${payment.status === 'paid' ? `
+                            <button class="action-btn" disabled>
+                                <i class="fas fa-check"></i>
+                            </button>
+                            ` : `
+                            <button class="action-btn pay-btn" onclick="paySinglePayment('${payment.id}')">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </button>
+                            `}
+                        </div>
+                    `;
+                    
+                    // Inserir antes do total
+                    paymentsList.insertBefore(paymentItem, totalDiv);
+                });
+            }
+            
+            // Adicionar o total de volta
+            paymentsList.appendChild(totalDiv);
+            
+            // Atualizar o total a pagar com base nos filtros
+            updateFilteredTotal(filteredPayments);
+        }
+
+        // Função para atualizar o total a pagar com base nos filtros
+        function updateFilteredTotal(filteredPayments) {
+            let total = 0;
+            
+            filteredPayments.forEach(payment => {
+                if (payment.status === 'pending') {
+                    total += payment.amount || 0;
+                }
+            });
+            
+            document.getElementById('totalAmount').textContent = formatCurrency(total);
+        }
+
+        // Função para resetar os filtros
+        function resetFilters() {
+            document.getElementById('filterType').value = '';
+            document.getElementById('filterStatus').value = '';
+            document.getElementById('filterDue').value = '';
+            document.getElementById('filterMinValue').value = '';
+            
+            updatePaymentsList();
         }
 
         // Função para fazer logout
         function logout() {
-            auth.signOut().then(() => {
-                window.location.href = 'login.html';
-            }).catch(error => {
-                console.error("Erro ao fazer logout:", error);
-                alert("Ocorreu um erro ao tentar sair. Por favor, tente novamente.");
-            });
-        }
-
-        // Inicializar a aplicação quando o usuário estiver logado
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                currentUser = user;
-                
-                // Mostrar nome do usuário
-                db.collection('users').doc(user.uid).get().then(doc => {
-                    if (doc.exists) {
-                        const userData = doc.data();
-                        document.getElementById('user-name').textContent = `Olá, ${userData.displayName || user.email}`;
-                    } else {
-                        document.getElementById('user-name').textContent = `Olá, ${user.email}`;
-                    }
-                }).catch(error => {
-                    console.error("Erro ao carregar dados do usuário:", error);
-                    document.getElementById('user-name').textContent = `Olá, ${user.email}`;
-                });
-                
-                // Carregar pagamentos do usuário
-                loadUserPayments(user.uid);
-                
-                // Configurar botão de logout
-                document.getElementById('logoutButton').addEventListener('click', logout);
-            } else {
-                // Redirecionar para a página de login se não estiver autenticado
+            if (confirm('Tem certeza que deseja sair?')) {
+                // Simular logout redirecionando para a página de login
                 window.location.href = 'login.html';
             }
+        }
+
+        // Inicializar a aplicação
+        document.addEventListener('DOMContentLoaded', () => {
+            // Configurar botão de logout
+            document.getElementById('logoutButton').addEventListener('click', logout);
+            
+            // Carregar pagamentos
+            updatePaymentsList();
         });
 
         // Fechar modais ao clicar fora
