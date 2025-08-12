@@ -661,17 +661,12 @@
     const newPaymentBtn = document.getElementById('newPaymentBtn');
     const payAllBtn = document.getElementById('payAllBtn');
     const filterBtn = document.getElementById('filterBtn');
-    const resetFilterBtn = document.getElementById('resetFilterBtn');
     const paymentModal = document.getElementById('paymentModal');
     const boletoModal = document.getElementById('boletoModal');
     const cancelPayment = document.getElementById('cancelPayment');
     const confirmPayment = document.getElementById('confirmPayment');
     const closeBoleto = document.getElementById('closeBoleto');
     const boletoContent = document.getElementById('boletoContent');
-    const confirmPayAllBtn = document.getElementById('confirmPayAllBtn');
-    const payAllModal = document.getElementById('payAllModal');
-    const payAllContent = document.getElementById('payAllContent');
-    const closePayAll = document.getElementById('closePayAll');
 
     // Dados de exemplo
     let taxesData = [
@@ -856,35 +851,37 @@
     function showPaymentDetails(tax) {
         boletoContent.innerHTML = `
             <h3>${tax.name}</h3>
-            <div class="boleto-details">
-                <div class="detail-row">
-                    <span class="detail-label">Órgão Cobrador:</span>
+            <div class="boleto-details" style="margin-bottom: 20px;">
+                <div class="detail-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span class="detail-label" style="font-weight: 600;">Órgão Cobrador:</span>
                     <span class="detail-value">${tax.collector}</span>
                 </div>
-                <div class="detail-row">
-                    <span class="detail-label">Vencimento:</span>
+                <div class="detail-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span class="detail-label" style="font-weight: 600;">Vencimento:</span>
                     <span class="detail-value">${formatDate(tax.dueDate)}</span>
                 </div>
-                <div class="detail-row">
-                    <span class="detail-label">Valor:</span>
+                <div class="detail-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span class="detail-label" style="font-weight: 600;">Valor:</span>
                     <span class="detail-value">${formatCurrency(tax.amount)}</span>
                 </div>
-                <div class="detail-row">
-                    <span class="detail-label">Status:</span>
+                <div class="detail-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span class="detail-label" style="font-weight: 600;">Status:</span>
                     <span class="detail-value tax-status ${getStatusClass(tax.status)}">${getStatusText(tax.status)}</span>
                 </div>
-                <div class="detail-row">
-                    <span class="detail-label">Código de Barras:</span>
-                    <span class="detail-value">12345.67890 12345.678901 12345.678901 1 12345678901234</span>
+                <div class="detail-row" style="margin-top: 15px;">
+                    <span class="detail-label" style="font-weight: 600; display: block; margin-bottom: 5px;">Código de Barras:</span>
+                    <div style="background: #f5f5f5; padding: 10px; border-radius: 4px; font-family: monospace; text-align: center;">
+                        12345.67890 12345.678901 12345.678901 1 12345678901234
+                    </div>
                 </div>
             </div>
-            <div class="payment-actions">
+            <div class="payment-actions" style="display: flex; flex-direction: column; gap: 10px;">
                 ${tax.status !== 'paid' ? `
-                <button id="confirmSinglePayment" class="btn btn-primary" data-tax-id="${tax.id}">
+                <button id="confirmSinglePayment" class="btn btn-primary" data-tax-id="${tax.id}" style="width: 100%;">
                     <i class="fas fa-check-circle"></i> Confirmar Dados e Efetuar Pagamento
                 </button>
                 ` : ''}
-                <button class="btn btn-outline" onclick="alert('Comprovante de pagamento gerado para ${tax.name}')">
+                <button class="btn btn-outline" onclick="alert('Comprovante de pagamento gerado para ${tax.name}')" style="width: 100%;">
                     <i class="fas fa-file-pdf"></i> Gerar Comprovante
                 </button>
             </div>
@@ -904,30 +901,57 @@
         
         const totalAmount = unpaidTaxes.reduce((sum, tax) => sum + tax.amount, 0);
         
-        payAllContent.innerHTML = `
-            <h3>Pagamento em Lote</h3>
-            <p>Você está prestes a pagar ${unpaidTaxes.length} impostos no valor total de <strong>${formatCurrency(totalAmount)}</strong>.</p>
-            
-            <div class="payall-list">
-                <h4>Impostos incluídos:</h4>
-                <ul>
-                    ${unpaidTaxes.map(tax => `
-                        <li>
-                            <span>${tax.name} - ${tax.collector}</span>
-                            <span>${formatCurrency(tax.amount)}</span>
-                        </li>
-                    `).join('')}
-                </ul>
-            </div>
-            
-            <div class="payment-actions">
-                <button id="confirmPayAllBtn" class="btn btn-primary">
-                    <i class="fas fa-check-circle"></i> Confirmar Dados e Efetuar Pagamento
-                </button>
+        // Criar modal dinamicamente
+        const payAllModal = document.createElement('div');
+        payAllModal.className = 'modal';
+        payAllModal.style.display = 'flex';
+        payAllModal.innerHTML = `
+            <div class="modal-content">
+                <h2 style="margin-bottom: 15px; color: var(--verde-escuro);">Pagamento em Lote</h2>
+                
+                <div style="margin-bottom: 15px;">
+                    <p>Você está prestes a pagar <strong>${unpaidTaxes.length} impostos</strong> no valor total de <strong>${formatCurrency(totalAmount)}</strong>.</p>
+                </div>
+                
+                <div style="margin-bottom: 20px; max-height: 300px; overflow-y: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: var(--cinza-claro);">
+                                <th style="padding: 8px; text-align: left;">Imposto</th>
+                                <th style="padding: 8px; text-align: left;">Valor</th>
+                                <th style="padding: 8px; text-align: left;">Vencimento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${unpaidTaxes.map(tax => `
+                                <tr style="border-bottom: 1px solid var(--cinza-medio);">
+                                    <td style="padding: 8px;">${tax.name}</td>
+                                    <td style="padding: 8px;">${formatCurrency(tax.amount)}</td>
+                                    <td style="padding: 8px;">${formatDate(tax.dueDate)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button id="closePayAll" class="btn btn-outline">Cancelar</button>
+                    <button id="confirmPayAllBtn" class="btn btn-primary">Confirmar Dados e Efetuar Pagamento</button>
+                </div>
             </div>
         `;
         
-        payAllModal.style.display = 'flex';
+        document.body.appendChild(payAllModal);
+        
+        // Event listeners para os botões do modal
+        payAllModal.querySelector('#closePayAll').addEventListener('click', () => {
+            payAllModal.remove();
+        });
+        
+        payAllModal.querySelector('#confirmPayAllBtn').addEventListener('click', () => {
+            payAllTaxes();
+            payAllModal.remove();
+        });
     }
 
     // Função para pagar todos os impostos
@@ -941,7 +965,6 @@
         
         renderTaxesTable(taxesData);
         updateSummaryCards(taxesData);
-        payAllModal.style.display = 'none';
         alert('Pagamento de todos os impostos realizado com sucesso!');
     }
 
@@ -988,20 +1011,8 @@
         boletoModal.style.display = 'none';
     });
 
-    // Fechar modal de pagar todos
-    closePayAll.addEventListener('click', () => {
-        payAllModal.style.display = 'none';
-    });
-
     // Pagar tudo - abre o modal de confirmação
     payAllBtn.addEventListener('click', showPayAllModal);
-
-    // Confirmar pagamento de todos os impostos
-    payAllModal.addEventListener('click', (e) => {
-        if (e.target.closest('#confirmPayAllBtn')) {
-            payAllTaxes();
-        }
-    });
 
     // Event listener para deletar imposto
     document.addEventListener('click', (e) => {
@@ -1044,11 +1055,13 @@
 
     // Filtrar
     filterBtn.addEventListener('click', () => {
-        const status = prompt('Filtrar por status (digite: pendentes, vencidos ou pagos):');
+        const status = prompt('Filtrar por status (digite: pendentes, vencidos ou pagos) ou deixe em branco para mostrar todos:');
         
-        if (status) {
-            let filteredTaxes = [...taxesData];
-            
+        if (status === null) return;
+        
+        let filteredTaxes = [...taxesData];
+        
+        if (status.trim() !== '') {
             switch (status.toLowerCase()) {
                 case 'pendentes':
                     filteredTaxes = taxesData.filter(tax => tax.status === 'pending');
@@ -1063,14 +1076,9 @@
                     alert('Opção inválida. Use: pendentes, vencidos ou pagos.');
                     return;
             }
-            
-            renderTaxesTable(filteredTaxes);
         }
-    });
-
-    // Resetar filtro
-    resetFilterBtn.addEventListener('click', () => {
-        renderTaxesTable(taxesData);
+        
+        renderTaxesTable(filteredTaxes);
     });
 
     // Logout
