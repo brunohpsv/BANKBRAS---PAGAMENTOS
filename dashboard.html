@@ -438,6 +438,28 @@
                 padding: 5px 8px;
                 font-size: 0.7rem;
             }
+
+	    .delete-btn {
+    background: #f8d7da !important;
+    color: #721c24 !important;
+}
+
+.delete-btn:hover {
+    background: #f1b0b7 !important;
+}
+
+.pay-btn {
+    margin-right: 5px;
+}
+
+#payAllTableBody tr {
+    border-bottom: 1px solid var(--cinza-medio);
+}
+
+#payAllTableBody td {
+    padding: 10px;
+}
+
         }
     </style>
 </head>
@@ -588,9 +610,9 @@
             </div>
             
             <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Anexar Documento</label>
-                <input type="file" id="documentFile" style="width: 100%;">
-            </div>
+    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Tipo de Imposto</label>
+    <input type="text" id="taxType" style="width: 100%; padding: 8px; border: 1px solid var(--cinza-medio); border-radius: 4px; text-transform: uppercase;" oninput="this.value = this.value.toUpperCase()">
+</div>
             
             <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
                 <button id="cancelPayment" class="btn btn-outline">Cancelar</button>
@@ -692,6 +714,42 @@
             }
         });
 
+	<!-- Modal Pagar Tudo -->
+<div id="payAllModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <h2 style="margin-bottom: 15px; color: var(--verde-escuro);">Confirmar Pagamento de Todos os Impostos</h2>
+        
+        <div style="max-height: 400px; overflow-y: auto; margin-bottom: 20px;">
+            <table class="taxes-table">
+                <thead>
+                    <tr>
+                        <th>Imposto</th>
+                        <th>Órgão Cobrador</th>
+                        <th>Vencimento</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="payAllTableBody">
+                    <!-- Dados serão inseridos via JavaScript -->
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="3">Total</td>
+                        <td id="payAllTotalAmount">R$ 0,00</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button id="cancelPayAll" class="btn btn-outline">Cancelar</button>
+            <button id="confirmPayAll" class="btn btn-primary">Confirmar lista e efetuar o pagamento</button>
+        </div>
+    </div>
+</div>
+
         // Carrega dados do usuário
         function loadUserData(user) {
             const displayName = user.displayName || user.email.split('@')[0];
@@ -722,12 +780,15 @@
                         </span>
                     </td>
                     <td>
-                        <div class="tax-actions">
-                            <button class="btn btn-outline" data-tax-id="${tax.id}" style="padding: 3px 8px; font-size: 0.7rem;">
-                                <i class="fas fa-money-bill-wave"></i> PAGAR/DETALHES
-                            </button>
-                        </div>
-                    </td>
+    <div class="tax-actions">
+        <button class="btn btn-outline pay-btn" data-tax-id="${tax.id}" style="padding: 3px 8px; font-size: 0.7rem;">
+            <i class="fas fa-money-bill-wave"></i> PAGAR/DETALHES
+        </button>
+        <button class="action-btn delete-btn" data-tax-id="${tax.id}" style="background: #f8d7da; color: #721c24;">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+</td>
                 </tr>
             `).join('');
         }
@@ -891,6 +952,128 @@
                 renderTaxesTable(filteredTaxes);
             }
         });
+
+	// Adicionar após as outras variáveis
+const payAllModal = document.getElementById('payAllModal');
+const payAllTableBody = document.getElementById('payAllTableBody');
+const payAllTotalAmount = document.getElementById('payAllTotalAmount');
+const confirmPayAll = document.getElementById('confirmPayAll');
+const cancelPayAll = document.getElementById('cancelPayAll');
+
+// Função para marcar imposto como pago
+function markTaxAsPaid(taxId) {
+    taxesData = taxesData.map(tax => {
+        if (tax.id === taxId) {
+            return { ...tax, status: 'paid' };
+        }
+        return tax;
+    });
+    renderTaxesTable(taxesData);
+    updateSummaryCards(taxesData);
+}
+
+// Event listener para pagar tudo (substituir o existente)
+payAllBtn.addEventListener('click', () => {
+    const unpaidTaxes = taxesData.filter(tax => tax.status !== 'paid');
+    
+    if (unpaidTaxes.length === 0) {
+        alert('Não há impostos para pagar!');
+        return;
+    }
+    
+    payAllTableBody.innerHTML = unpaidTaxes.map(tax => `
+        <tr>
+            <td class="tax-name">${tax.name}</td>
+            <td>${tax.collector}</td>
+            <td>${formatDate(tax.dueDate)}</td>
+            <td class="tax-amount">${formatCurrency(tax.amount)}</td>
+            <td>
+                <span class="tax-status ${getStatusClass(tax.status)}">
+                    ${getStatusText(tax.status)}
+                </span>
+            </td>
+        </tr>
+    `).join('');
+    
+    payAllTotalAmount.textContent = formatCurrency(
+        unpaidTaxes.reduce((sum, tax) => sum + tax.amount, 0)
+    );
+    
+    payAllModal.style.display = 'flex';
+});
+
+// Confirmar pagamento de tudo
+confirmPayAll.addEventListener('click', () => {
+    taxesData = taxesData.map(tax => {
+        if (tax.status !== 'paid') {
+            return { ...tax, status: 'paid' };
+        }
+        return tax;
+    });
+    
+    renderTaxesTable(taxesData);
+    updateSummaryCards(taxesData);
+    payAllModal.style.display = 'none';
+    alert('Pagamento de todos os impostos realizado com sucesso!');
+});
+
+// Cancelar pagamento de tudo
+cancelPayAll.addEventListener('click', () => {
+    payAllModal.style.display = 'none';
+});
+
+// Event listener para deletar imposto
+document.addEventListener('click', (e) => {
+    if (e.target.closest('.delete-btn')) {
+        const btn = e.target.closest('.delete-btn');
+        const taxId = btn.getAttribute('data-tax-id');
+        
+        if (confirm('Deseja realmente excluir este imposto?')) {
+            taxesData = taxesData.filter(tax => tax.id !== taxId);
+            renderTaxesTable(taxesData);
+            updateSummaryCards(taxesData);
+        }
+    }
+    
+    // Atualizar o listener para pagar imposto individual
+    if (e.target.closest('.pay-btn')) {
+        const btn = e.target.closest('.pay-btn');
+        const taxId = btn.getAttribute('data-tax-id');
+        
+        if (confirm('Deseja marcar este imposto como pago?')) {
+            markTaxAsPaid(taxId);
+        }
+    }
+});
+
+// Atualizar a função de filtro para incluir "todos"
+filterBtn.addEventListener('click', () => {
+    const status = prompt('Filtrar por status (digite: todos, pendentes, vencidos ou pagos):');
+    
+    if (status) {
+        let filteredTaxes = [...taxesData];
+        
+        switch (status.toLowerCase()) {
+            case 'pendentes':
+                filteredTaxes = taxesData.filter(tax => tax.status === 'pending');
+                break;
+            case 'vencidos':
+                filteredTaxes = taxesData.filter(tax => tax.status === 'overdue');
+                break;
+            case 'pagos':
+                filteredTaxes = taxesData.filter(tax => tax.status === 'paid');
+                break;
+            case 'todos':
+                // Mostra todos sem filtrar
+                break;
+            default:
+                alert('Opção inválida. Mostrando todos os impostos.');
+                break;
+        }
+        
+        renderTaxesTable(filteredTaxes);
+    }
+});
 
         // Visualizar boleto/detalhes
         document.addEventListener('click', (e) => {
