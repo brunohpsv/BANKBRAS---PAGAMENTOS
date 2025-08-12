@@ -381,12 +381,9 @@
         .payment-name {
             font-weight: 600;
             color: var(--cinza-escuro);
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
-            .payment-entity {
+        .payment-entity {
             color: var(--cinza-escuro);
             font-size: 0.9rem;
         }
@@ -755,7 +752,6 @@
 
             <div class="payment-item">
                 <div class="payment-name">
-            </div>
                     IRPF - Imposto de Renda
                 </div>
                 <div class="payment-entity">Receita Federal</div>
@@ -773,8 +769,7 @@
             </div>
 
             <div class="payment-item">
-                <div class="payment-name">      
-             </div>
+                <div class="payment-name">
                     Conta de Luz
                 </div>
                 <div class="payment-entity">Enel</div>
@@ -793,8 +788,6 @@
 
             <div class="payment-item">
                 <div class="payment-name">
-                    
-                    </div>
                     Conta de Água
                 </div>
                 <div class="payment-entity">Sabesp</div>
@@ -813,7 +806,6 @@
 
             <div class="payment-item">
                 <div class="payment-name">
-             </div>
                     Telefone Celular
                 </div>
                 <div class="payment-entity">Vivo</div>
@@ -832,7 +824,6 @@
 
             <div class="payment-item">
                 <div class="payment-name">
-            </div>
                     Condomínio
                 </div>
                 <div class="payment-entity">Edifício Solar</div>
@@ -951,6 +942,12 @@
                         </div>
                     </div>
                     <div class="detail-row">
+                        <div class="detail-label">Valor:</div>
+                        <div class="detail-value">
+                            <input type="number" step="0.01" id="payment-value" class="filter-input" placeholder="R$ 0,00">
+                        </div>
+                    </div>
+                    <div class="detail-row">
                         <div class="detail-label">Anexar Documento:</div>
                         <div class="detail-value">
                             <input type="file" id="payment-file" class="filter-input">
@@ -969,357 +966,300 @@
     </div>
 
     <script>
-    // Menu dropdown com animação
-    const menuToggle = document.getElementById('menuToggle');
-    const dropdownMenu = document.getElementById('dropdownMenu');
+        // Menu dropdown com animação
+        const menuToggle = document.getElementById('menuToggle');
+        const dropdownMenu = document.getElementById('dropdownMenu');
 
-    menuToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        menuToggle.classList.toggle('active');
-        dropdownMenu.classList.toggle('show');
-    });
-
-    // Fechar menu quando clicar fora
-    document.addEventListener('click', (e) => {
-        if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
-            menuToggle.classList.remove('active');
-            dropdownMenu.classList.remove('show');
-        }
-    });
-
-    // Animação ao rolar
-    window.addEventListener('scroll', () => {
-        const header = document.querySelector('header');
-        if (window.scrollY > 10) {
-            header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
-        } else {
-            header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
-        }
-    });
-
-    // Modal de detalhes
-    const paymentDetailModal = document.getElementById('paymentDetailModal');
-    const addPaymentModal = document.getElementById('addPaymentModal');
-    
-    // Dados de exemplo para os pagamentos
-    const paymentDetails = {
-        1: {
-            name: "IRPF - Imposto de Renda",
-            entity: "Receita Federal",
-            type: "Imposto Federal",
-            due: "15/08/2023",
-            status: "Pendente",
-            amount: "R$ 1.250,00",
-            barcode: "85690000001-0 25000000012-5 00000000000-0 00000000000-0",
-            notes: "Dedução de R$ 1.500,00 por dependentes declarados."
-        },
-        2: {
-            name: "Conta de Luz",
-            entity: "Enel",
-            type: "Conta de Consumo",
-            due: "10/08/2023",
-            status: "Pendente",
-            amount: "R$ 320,50",
-            barcode: "84610000002-0 32050000012-5 00000000000-0 00000000000-0",
-            notes: "Consumo de 320 kWh no mês de julho."
-        },
-        3: {
-            name: "Conta de Água",
-            entity: "Sabesp",
-            type: "Conta de Consumo",
-            due: "05/08/2023",
-            status: "Pago",
-            amount: "R$ 180,75",
-            barcode: "83620000003-0 18075000012-5 00000000000-0 00000000000-0",
-            notes: "Pagamento realizado em 03/08/2023."
-        },
-        4: {
-            name: "Telefone Celular",
-            entity: "Vivo",
-            type: "Serviço de Telecomunicação",
-            due: "12/08/2023",
-            status: "Pendente",
-            amount: "R$ 89,90",
-            barcode: "82630000004-0 08990000012-5 00000000000-0 00000000000-0",
-            notes: "Plano pós-pago com 10GB de internet."
-        },
-        5: {
-            name: "Condomínio",
-            entity: "Edifício Solar",
-            type: "Taxa Condominial",
-            due: "05/08/2023",
-            status: "Pago",
-            amount: "R$ 650,00",
-            barcode: "81640000005-0 65000000012-5 00000000000-0 00000000000-0",
-            notes: "Inclui taxa de reserva de R$ 50,00."
-        }
-    };
-
-    function openPaymentDetail(paymentId) {
-        const detail = paymentDetails[paymentId];
-        if (detail) {
-            document.getElementById('detail-name').textContent = detail.name;
-            document.getElementById('detail-entity').textContent = detail.entity;
-            document.getElementById('detail-type').textContent = detail.type;
-            document.getElementById('detail-due').textContent = detail.due;
-            
-            const statusElement = document.getElementById('detail-status');
-            statusElement.innerHTML = '';
-            const statusSpan = document.createElement('span');
-            statusSpan.className = detail.status === 'Pago' ? 'status-paid' : 'status-pending';
-            statusSpan.textContent = detail.status;
-            statusElement.appendChild(statusSpan);
-            
-            document.getElementById('detail-amount').textContent = detail.amount;
-            document.getElementById('detail-barcode').textContent = detail.barcode;
-            document.getElementById('detail-notes').textContent = detail.notes;
-            
-            paymentDetailModal.classList.add('active');
-        }
-    }
-
-    function closePaymentDetail() {
-        paymentDetailModal.classList.remove('active');
-    }
-
-    function openAddPayment() {
-        // Resetar o formulário ao abrir
-        document.getElementById('payment-type').value = '';
-        document.getElementById('payment-name').value = '';
-        document.getElementById('payment-due').value = '';
-        document.getElementById('payment-value').value = '';
-        document.getElementById('payment-file').value = '';
-        
-        addPaymentModal.classList.add('active');
-    }
-
-    function closeAddPayment() {
-        addPaymentModal.classList.remove('active');
-    }
-
-    function addNewPayment() {
-        const type = document.getElementById('payment-type').value;
-        const name = document.getElementById('payment-name').value;
-        const due = document.getElementById('payment-due').value;
-        let value = document.getElementById('payment-value').value;
-        const file = document.getElementById('payment-file').files[0];
-        
-        // Validação dos campos obrigatórios
-        if (!type || !name || !due) {
-            alert('Por favor, preencha todos os campos obrigatórios');
-            return;
-        }
-        
-        // Tratamento do valor
-        if (!value || isNaN(value.replace(',', '.'))) {
-            value = '0';
-        }
-        
-        // Formatar valor para o padrão brasileiro
-        const formattedValue = parseFloat(value.replace(',', '.')).toLocaleString('pt-BR', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menuToggle.classList.toggle('active');
+            dropdownMenu.classList.toggle('show');
         });
-        
-        // Formatando a data para exibição
-        const dueDate = new Date(due);
-        const formattedDue = dueDate.toLocaleDateString('pt-BR');
-        
-        // Criar novo ID para o pagamento
-        const newId = Object.keys(paymentDetails).length + 1;
-        
-        // Adicionar aos detalhes do pagamento
-        paymentDetails[newId] = {
-            name: name,
-            entity: type === 'imposto' ? 'Receita Federal' : 
-                   type === 'conta' ? 'Fornecedor' : 
-                   type === 'taxa' ? 'Órgão Público' : 'Outro',
-            type: type === 'imposto' ? 'Imposto Federal' : 
-                  type === 'conta' ? 'Conta' : 
-                  type === 'taxa' ? 'Taxa' : 'Outro',
-            due: formattedDue,
-            status: "Pendente",
-            amount: `R$ ${formattedValue}`,
-            barcode: "00000000000-0 00000000000-0 00000000000-0 00000000000-0",
-            notes: file ? `Documento anexado: ${file.name}` : "Sem documento anexado"
-        };
-        
-        // Criar o novo elemento na lista
-        const paymentsList = document.querySelector('.payments-list');
-        const paymentItem = document.createElement('div');
-        paymentItem.className = 'payment-item';
-        paymentItem.innerHTML = `
-            <div class="payment-name">${name}</div>
-            <div class="payment-entity">${paymentDetails[newId].entity}</div>
-            <div class="payment-due">${formattedDue}</div>
-            <div class="payment-status status-pending">Pendente</div>
-            <div class="payment-amount">R$ ${formattedValue}</div>
-            <div class="payment-actions">
-                <button class="action-btn detail-btn" onclick="openPaymentDetail(${newId})">
-                    <i class="fas fa-eye"></i>
-                </button>
-                <button class="action-btn pay-btn">
-                    <i class="fas fa-money-bill-wave"></i>
-                </button>
-            </div>
-        `;
-        
-        // Inserir antes do total
-        const totalDiv = document.querySelector('.payment-total');
-        paymentsList.insertBefore(paymentItem, totalDiv);
-        
-        // Fechar o modal após adicionar
-        closeAddPayment();
-        alert('Pagamento adicionado com sucesso!');
-        
-        // Atualizar o total
-        updateTotal();
-    }
 
-    // Função para deletar um pagamento
-    function deletePayment(paymentId) {
-        if (confirm('Tem certeza que deseja excluir este pagamento?')) {
-            const paymentItem = document.querySelector(`.payment-item[data-id="${paymentId}"]`);
-            if (paymentItem) {
-                paymentItem.remove();
-                updateTotal();
-                alert('Pagamento excluído com sucesso!');
+        // Fechar menu quando clicar fora
+        document.addEventListener('click', (e) => {
+            if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                menuToggle.classList.remove('active');
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        // Animação ao rolar
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
+            }
+        });
+
+        // Modal de detalhes
+        const paymentDetailModal = document.getElementById('paymentDetailModal');
+        const addPaymentModal = document.getElementById('addPaymentModal');
+        
+        // Dados de exemplo para os pagamentos
+        const paymentDetails = {
+            1: {
+                name: "IRPF - Imposto de Renda",
+                entity: "Receita Federal",
+                type: "Imposto Federal",
+                due: "15/08/2023",
+                status: "Pendente",
+                amount: "R$ 1.250,00",
+                barcode: "85690000001-0 25000000012-5 00000000000-0 00000000000-0",
+                notes: "Dedução de R$ 1.500,00 por dependentes declarados."
+            },
+            2: {
+                name: "Conta de Luz",
+                entity: "Enel",
+                type: "Conta de Consumo",
+                due: "10/08/2023",
+                status: "Pendente",
+                amount: "R$ 320,50",
+                barcode: "84610000002-0 32050000012-5 00000000000-0 00000000000-0",
+                notes: "Consumo de 320 kWh no mês de julho."
+            },
+            3: {
+                name: "Conta de Água",
+                entity: "Sabesp",
+                type: "Conta de Consumo",
+                due: "05/08/2023",
+                status: "Pago",
+                amount: "R$ 180,75",
+                barcode: "83620000003-0 18075000012-5 00000000000-0 00000000000-0",
+                notes: "Pagamento realizado em 03/08/2023."
+            },
+            4: {
+                name: "Telefone Celular",
+                entity: "Vivo",
+                type: "Serviço de Telecomunicação",
+                due: "12/08/2023",
+                status: "Pendente",
+                amount: "R$ 89,90",
+                barcode: "82630000004-0 08990000012-5 00000000000-0 00000000000-0",
+                notes: "Plano pós-pago com 10GB de internet."
+            },
+            5: {
+                name: "Condomínio",
+                entity: "Edifício Solar",
+                type: "Taxa Condominial",
+                due: "05/08/2023",
+                status: "Pago",
+                amount: "R$ 650,00",
+                barcode: "81640000005-0 65000000012-5 00000000000-0 00000000000-0",
+                notes: "Inclui taxa de reserva de R$ 50,00."
+            }
+        };
+
+        function openPaymentDetail(paymentId) {
+            const detail = paymentDetails[paymentId];
+            if (detail) {
+                document.getElementById('detail-name').textContent = detail.name;
+                document.getElementById('detail-entity').textContent = detail.entity;
+                document.getElementById('detail-type').textContent = detail.type;
+                document.getElementById('detail-due').textContent = detail.due;
+                
+                const statusElement = document.getElementById('detail-status');
+                statusElement.innerHTML = '';
+                const statusSpan = document.createElement('span');
+                statusSpan.className = detail.status === 'Pago' ? 'status-paid' : 'status-pending';
+                statusSpan.textContent = detail.status;
+                statusElement.appendChild(statusSpan);
+                
+                document.getElementById('detail-amount').textContent = detail.amount;
+                document.getElementById('detail-barcode').textContent = detail.barcode;
+                document.getElementById('detail-notes').textContent = detail.notes;
+                
+                paymentDetailModal.classList.add('active');
             }
         }
-    }
 
-    // Função para pagar todos os itens pendentes
-    function payAll() {
-        const pendingItems = document.querySelectorAll('.payment-status.status-pending');
-        if (pendingItems.length === 0) {
-            alert('Não há pagamentos pendentes para realizar!');
-            return;
+        function closePaymentDetail() {
+            paymentDetailModal.classList.remove('active');
         }
 
-        if (confirm(`Deseja realmente pagar todos os ${pendingItems.length} itens pendentes?`)) {
-            pendingItems.forEach(item => {
-                item.textContent = 'Pago';
-                item.classList.remove('status-pending');
-                item.classList.add('status-paid');
+        function openAddPayment() {
+            // Resetar o formulário ao abrir
+            document.getElementById('payment-type').value = '';
+            document.getElementById('payment-name').value = '';
+            document.getElementById('payment-due').value = '';
+            document.getElementById('payment-value').value = '';
+            document.getElementById('payment-file').value = '';
+            
+            addPaymentModal.classList.add('active');
+        }
+
+        function closeAddPayment() {
+            addPaymentModal.classList.remove('active');
+        }
+
+        function addNewPayment() {
+            const type = document.getElementById('payment-type').value;
+            const name = document.getElementById('payment-name').value;
+            const due = document.getElementById('payment-due').value;
+            let value = document.getElementById('payment-value').value;
+            const file = document.getElementById('payment-file').files[0];
+            
+            // Validação dos campos obrigatórios
+            if (!type || !name || !due) {
+                alert('Por favor, preencha todos os campos obrigatórios');
+                return;
+            }
+            
+            // Tratamento do valor
+            if (!value || isNaN(value.replace(',', '.'))) {
+                value = '0';
+            }
+            
+            // Formatar valor para o padrão brasileiro
+            const formattedValue = parseFloat(value.replace(',', '.')).toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            
+            // Formatando a data para exibição
+            const dueDate = new Date(due);
+            const formattedDue = dueDate.toLocaleDateString('pt-BR');
+            
+            // Criar novo ID para o pagamento
+            const newId = Object.keys(paymentDetails).length + 1;
+            
+            // Adicionar aos detalhes do pagamento
+            paymentDetails[newId] = {
+                name: name,
+                entity: type === 'imposto' ? 'Receita Federal' : 
+                       type === 'conta' ? 'Fornecedor' : 
+                       type === 'taxa' ? 'Órgão Público' : 'Outro',
+                type: type === 'imposto' ? 'Imposto Federal' : 
+                      type === 'conta' ? 'Conta' : 
+                      type === 'taxa' ? 'Taxa' : 'Outro',
+                due: formattedDue,
+                status: "Pendente",
+                amount: `R$ ${formattedValue}`,
+                barcode: "00000000000-0 00000000000-0 00000000000-0 00000000000-0",
+                notes: file ? `Documento anexado: ${file.name}` : "Sem documento anexado"
+            };
+            
+            // Criar o novo elemento na lista
+            const paymentsList = document.querySelector('.payments-list');
+            const paymentItem = document.createElement('div');
+            paymentItem.className = 'payment-item';
+            paymentItem.innerHTML = `
+                <div class="payment-name">${name}</div>
+                <div class="payment-entity">${paymentDetails[newId].entity}</div>
+                <div class="payment-due">${formattedDue}</div>
+                <div class="payment-status status-pending">Pendente</div>
+                <div class="payment-amount">R$ ${formattedValue}</div>
+                <div class="payment-actions">
+                    <button class="action-btn detail-btn" onclick="openPaymentDetail(${newId})">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn pay-btn">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </button>
+                </div>
+            `;
+            
+            // Inserir antes do total
+            const totalDiv = document.querySelector('.payment-total');
+            paymentsList.insertBefore(paymentItem, totalDiv);
+            
+            // Fechar o modal após adicionar
+            closeAddPayment();
+            alert('Pagamento adicionado com sucesso!');
+            
+            // Atualizar o total
+            updateTotal();
+        }
+
+        // Função para deletar um pagamento
+        function deletePayment(paymentId) {
+            if (confirm('Tem certeza que deseja excluir este pagamento?')) {
+                const paymentItem = document.querySelector(`.payment-item[data-id="${paymentId}"]`);
+                if (paymentItem) {
+                    paymentItem.remove();
+                    updateTotal();
+                    alert('Pagamento excluído com sucesso!');
+                }
+            }
+        }
+
+        // Função para pagar todos os itens pendentes
+        function payAll() {
+            const pendingItems = document.querySelectorAll('.payment-status.status-pending');
+            if (pendingItems.length === 0) {
+                alert('Não há pagamentos pendentes para realizar!');
+                return;
+            }
+
+            if (confirm(`Deseja realmente pagar todos os ${pendingItems.length} itens pendentes?`)) {
+                pendingItems.forEach(item => {
+                    item.textContent = 'Pago';
+                    item.classList.remove('status-pending');
+                    item.classList.add('status-paid');
+                    
+                    // Desabilitar botão de pagar
+                    const paymentItem = item.closest('.payment-item');
+                    const payButton = paymentItem.querySelector('.action-btn.pay-btn');
+                    if (payButton) {
+                        payButton.innerHTML = '<i class="fas fa-check"></i>';
+                        payButton.classList.remove('pay-btn');
+                        payButton.disabled = true;
+                    }
+                });
                 
-                // Desabilitar botão de pagar
-                const paymentItem = item.closest('.payment-item');
-                const payButton = paymentItem.querySelector('.action-btn.pay-btn');
-                if (payButton) {
-                    payButton.innerHTML = '<i class="fas fa-check"></i>';
-                    payButton.classList.remove('pay-btn');
-                    payButton.disabled = true;
+                updateTotal();
+                alert('Todos os pagamentos foram realizados com sucesso!');
+            }
+        }
+
+        // Função para atualizar o total a pagar
+        function updateTotal() {
+            let total = 0;
+            document.querySelectorAll('.payment-item').forEach(item => {
+                const status = item.querySelector('.payment-status');
+                const amountText = item.querySelector('.payment-amount').textContent;
+                
+                if (status && status.classList.contains('status-pending')) {
+                    const amount = parseFloat(amountText.replace('R$ ', '').replace('.', '').replace(',', '.'));
+                    total += amount;
                 }
             });
             
-            updateTotal();
-            alert('Todos os pagamentos foram realizados com sucesso!');
+            const totalElement = document.querySelector('.total-amount');
+            if (totalElement) {
+                totalElement.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            }
         }
-    }
 
-    // Função para atualizar o total a pagar
-    function updateTotal() {
-        let total = 0;
-        document.querySelectorAll('.payment-item').forEach(item => {
-            const status = item.querySelector('.payment-status');
-            const amountText = item.querySelector('.payment-amount').textContent;
+        // Inicializar eventos
+        document.addEventListener('DOMContentLoaded', function() {
+            // Adicionar evento ao botão de pagar tudo
+            const payAllButton = document.querySelector('.btn-pay-all');
+            if (payAllButton) {
+                payAllButton.addEventListener('click', payAll);
+            }
             
-            if (status && status.classList.contains('status-pending')) {
-                const amount = parseFloat(amountText.replace('R$ ', '').replace('.', '').replace(',', '.'));
-                total += amount;
+            // Atualizar total inicial
+            updateTotal();
+        });
+
+        // Fechar modais ao clicar fora
+        paymentDetailModal.addEventListener('click', (e) => {
+            if (e.target === paymentDetailModal) {
+                closePaymentDetail();
             }
         });
-        
-        const totalElement = document.querySelector('.total-amount');
-        if (totalElement) {
-            totalElement.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
-        }
-    }
 
-    // Inicializar eventos
-    document.addEventListener('DOMContentLoaded', function() {
-        // Adicionar evento ao botão de pagar tudo
-        const payAllButton = document.querySelector('.btn-pay-all');
-        if (payAllButton) {
-            payAllButton.addEventListener('click', payAll);
-        }
-        
-        // Atualizar total inicial
-        updateTotal();
-    });
+        addPaymentModal.addEventListener('click', (e) => {
+            if (e.target === addPaymentModal) {
+                closeAddPayment();
+            }
+        });
 
-    // Fechar modais ao clicar fora
-    paymentDetailModal.addEventListener('click', (e) => {
-        if (e.target === paymentDetailModal) {
-            closePaymentDetail();
-        }
-    });
-
-    addPaymentModal.addEventListener('click', (e) => {
-        if (e.target === addPaymentModal) {
-            closeAddPayment();
-        }
-    });
-
-    // Adicionar evento ao botão de adicionar
-    document.querySelector('.btn-primary').addEventListener('click', openAddPayment);
-</script>
-
-<!-- Modal de Adicionar Pagamento -->
-<div class="modal-overlay" id="addPaymentModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3 class="modal-title">Adicionar Novo Pagamento</h3>
-            <button class="modal-close" onclick="closeAddPayment()">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="payment-detail">
-                <div class="detail-row">
-                    <div class="detail-label">Tipo de Débito:</div>
-                    <div class="detail-value">
-                        <select id="payment-type" class="filter-select" style="width: 100%">
-                            <option value="">Selecione</option>
-                            <option value="imposto">Imposto</option>
-                            <option value="conta">Conta</option>
-                            <option value="fatura">Fatura</option>
-                            <option value="taxa">Taxa</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Nome:</div>
-                    <div class="detail-value">
-                        <input type="text" id="payment-name" class="filter-input" placeholder="Nome do provedor ou entidade">
-                    </div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Data de Vencimento:</div>
-                    <div class="detail-value">
-                        <input type="date" id="payment-due" class="filter-input">
-                    </div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Valor:</div>
-                    <div class="detail-value">
-                        <input type="number" step="0.01" id="payment-value" class="filter-input" placeholder="R$ 0,00">
-                    </div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Anexar Documento:</div>
-                    <div class="detail-value">
-                        <input type="file" id="payment-file" class="filter-input">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" onclick="closeAddPayment()">Cancelar</button>
-            <button class="btn btn-primary" onclick="addNewPayment()">
-                <i class="fas fa-plus"></i>
-                Adicionar
-            </button>
-        </div>
-    </div>
-</div>
+        // Adicionar evento ao botão de adicionar
+        document.querySelector('.btn-primary').addEventListener('click', openAddPayment);
+    </script>
 </body>
 </html>
