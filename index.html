@@ -90,6 +90,18 @@
             color: var(--dark);
         }
         
+        .btn-dark {
+            background-color: var(--dark);
+            color: var(--light);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-dark:hover {
+            background-color: var(--primary);
+            color: var(--dark);
+            transform: translateY(-3px);
+        }
+        
         /* Header Sofisticado */
         header {
             position: fixed;
@@ -125,6 +137,11 @@
         .logo-icon {
             font-size: 2rem;
             color: var(--primary);
+            transition: var(--transition);
+        }
+        
+        .logo:hover .logo-icon {
+            transform: rotate(15deg) scale(1.1);
         }
         
         .logo-text h1 {
@@ -145,6 +162,7 @@
             display: flex;
             list-style: none;
             gap: 2rem;
+            align-items: center;
         }
         
         .nav-links a {
@@ -171,6 +189,25 @@
         
         .nav-links a:hover {
             color: var(--primary);
+        }
+        
+        .auth-btn {
+            margin-left: 1.5rem;
+            padding: 0.8rem 1.8rem;
+            font-size: 0.95rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(212, 175, 55, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+            }
         }
         
         .mobile-menu-btn {
@@ -203,6 +240,19 @@
             height: 200%;
             background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0) 70%);
             z-index: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(2deg);
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
         }
         
         .hero-content {
@@ -216,10 +266,25 @@
             margin-bottom: 1.5rem;
             line-height: 1.2;
             color: var(--dark);
+            animation: fadeInUp 1s ease-out;
         }
         
         .hero-content h1 span {
             color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero-content h1 span::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: rgba(212, 175, 55, 0.3);
+            z-index: -1;
+            border-radius: 4px;
         }
         
         .hero-content p {
@@ -227,11 +292,24 @@
             margin-bottom: 2.5rem;
             color: var(--dark);
             opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.2s both;
         }
         
         .hero-buttons {
             display: flex;
             gap: 1rem;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         /* Sections */
@@ -286,6 +364,7 @@
             text-align: center;
             border: 1px solid rgba(212, 175, 55, 0.1);
             transition: var(--transition);
+            transform: translateY(0);
         }
         
         .feature-card:hover {
@@ -305,6 +384,13 @@
             justify-content: center;
             border-radius: 50%;
             margin: 0 auto 1.5rem;
+            transition: var(--transition);
+        }
+        
+        .feature-card:hover .feature-icon {
+            background: var(--primary);
+            color: var(--light);
+            transform: rotateY(180deg);
         }
         
         .feature-card h3 {
@@ -330,6 +416,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             transition: var(--transition);
             border: 1px solid rgba(0, 0, 0, 0.05);
+            transform: translateY(0);
         }
         
         .service-card:hover {
@@ -345,6 +432,40 @@
             justify-content: center;
             color: var(--light);
             font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-img i {
+            position: relative;
+            z-index: 2;
+            transition: var(--transition);
+        }
+        
+        .service-card:hover .service-img i {
+            transform: scale(1.2);
+        }
+        
+        .service-img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.1) 50%, transparent 75%);
+            background-size: 400% 400%;
+            animation: shine 3s infinite;
+            z-index: 1;
+        }
+        
+        @keyframes shine {
+            0% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
         
         .service-content {
@@ -379,9 +500,9 @@
         }
         
         .how-it-works .section-title p {
-    color: var(--light) !important;
-    opacity: 0.9;
-}
+            color: var(--light) !important;
+            opacity: 0.9;
+        }
         
         .steps {
             display: grid;
@@ -397,6 +518,7 @@
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: var(--transition);
+            transform: translateY(0);
         }
         
         .step:hover {
@@ -417,6 +539,12 @@
             font-weight: 700;
             font-size: 1.5rem;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .step:hover .step-number {
+            transform: rotate(360deg);
+            background: var(--light);
         }
         
         .step h3 {
@@ -438,6 +566,19 @@
         
         .stat-item {
             padding: 2rem;
+            position: relative;
+        }
+        
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), transparent);
+            border-radius: 8px;
+            z-index: 0;
         }
         
         .stat-number {
@@ -445,12 +586,16 @@
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
         }
         
         .stat-label {
             font-size: 1.1rem;
             color: var(--gray);
             font-weight: 600;
+            position: relative;
+            z-index: 1;
         }
         
         /* CTA */
@@ -459,6 +604,25 @@
             color: var(--dark);
             text-align: center;
             padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+            animation: float 6s ease-in-out infinite reverse;
+        }
+        
+        .cta .container {
+            position: relative;
+            z-index: 1;
         }
         
         .cta h2 {
@@ -472,75 +636,78 @@
             font-size: 1.2rem;
         }
         
-        /* Footer */
+        /* Footer Simplificado */
         footer {
             background: var(--dark);
             color: var(--light);
-            padding: 6rem 0 2rem;
+            padding: 4rem 0 2rem;
+            position: relative;
         }
         
         .footer-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-bottom: 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 3rem;
         }
         
-        .footer-col h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-logo-icon {
+            font-size: 2.5rem;
             color: var(--primary);
-            position: relative;
-            padding-bottom: 0.8rem;
         }
         
-        .footer-col h3::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            height: 3px;
-            background: var(--primary);
-            border-radius: 2px;
+        .footer-logo-text h2 {
+            font-size: 2rem;
+            color: var(--light);
+            font-weight: 700;
         }
         
-        .footer-col p {
-            opacity: 0.8;
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
+        .footer-logo-text span {
+            display: block;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: var(--gray);
+            font-weight: 600;
         }
         
         .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
             list-style: none;
-        }
-        
-        .footer-links li {
-            margin-bottom: 0.8rem;
         }
         
         .footer-links a {
             color: var(--light);
             opacity: 0.8;
             transition: var(--transition);
-            display: inline-block;
+            font-weight: 600;
         }
         
         .footer-links a:hover {
             opacity: 1;
             color: var(--primary);
-            transform: translateX(5px);
         }
         
         .social-links {
             display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
         
         .social-links a {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             display: flex;
@@ -548,6 +715,7 @@
             justify-content: center;
             color: var(--light);
             transition: var(--transition);
+            font-size: 1.2rem;
         }
         
         .social-links a:hover {
@@ -556,12 +724,34 @@
             transform: translateY(-5px);
         }
         
+        .footer-contact {
+            margin-bottom: 2rem;
+        }
+        
+        .footer-contact p {
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+        
+        .footer-contact a {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
         .footer-bottom {
             text-align: center;
-            padding-top: 3rem;
+            padding-top: 2rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             opacity: 0.7;
             font-size: 0.9rem;
+        }
+        
+        /* Efeito de partículas no footer */
+        .particle {
+            position: absolute;
+            background: rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
         }
         
         /* Responsivo */
@@ -609,6 +799,10 @@
                 border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             }
             
+            .auth-btn {
+                display: none;
+            }
+            
             .hero-content {
                 text-align: center;
             }
@@ -624,6 +818,11 @@
             
             .section-title h2 {
                 font-size: 2rem;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
             }
         }
         
@@ -664,6 +863,7 @@
                     <li><a href="#services">Serviços</a></li>
                     <li><a href="#how-it-works">Como Funciona</a></li>
                     <li><a href="#contact">Contato</a></li>
+                    <li><a href="#" class="btn btn-primary auth-btn">Cadastre-se</a></li>
                 </ul>
                 
                 <button class="mobile-menu-btn">
@@ -856,65 +1056,43 @@
         <div class="container">
             <h2>Pronto para transformar sua relação com o crédito e investimentos?</h2>
             <p>Cadastre-se agora e descubra como nossa plataforma pode conectar você às melhores oportunidades do mercado.</p>
-            <a href="#" class="btn btn-primary">Comece Agora</a>
+            <a href="#" class="btn btn-dark">Comece Agora</a>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Footer Simplificado -->
     <footer id="contact">
         <div class="container">
             <div class="footer-container">
-                <div class="footer-col">
-                    <h3>BANKBRAS</h3>
-                    <p>Plataforma líder em conexão direta entre empresas e investidores no Brasil, oferecendo soluções inovadoras e transparentes.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
+                <div class="footer-logo">
+                    <div class="footer-logo-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="footer-logo-text">
+                        <h2>BANKBRAS</h2>
+                        <span>Investimentos Diretos</span>
                     </div>
                 </div>
                 
-                <div class="footer-col">
-                    <h3>Links Rápidos</h3>
-                    <ul class="footer-links">
-                        <li><a href="#home">Início</a></li>
-                        <li><a href="#features">Vantagens</a></li>
-                        <li><a href="#services">Serviços</a></li>
-                        <li><a href="#how-it-works">Como Funciona</a></li>
-                        <li><a href="#">Termos de Uso</a></li>
-                        <li><a href="#">Política de Privacidade</a></li>
-                    </ul>
+                <ul class="footer-links">
+                    <li><a href="#home">Início</a></li>
+                    <li><a href="#features">Vantagens</a></li>
+                    <li><a href="#services">Serviços</a></li>
+                    <li><a href="#how-it-works">Como Funciona</a></li>
+                    <li><a href="#contact">Contato</a></li>
+                </ul>
+                
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
                 </div>
                 
-                <div class="footer-col">
-                    <h3>Para Empresas</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Solicitar Crédito</a></li>
-                        <li><a href="#">Taxas e Prazos</a></li>
-                        <li><a href="#">Requisitos</a></li>
-                        <li><a href="#">Cases de Sucesso</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-col">
-                    <h3>Para Investidores</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Cadastro</a></li>
-                        <li><a href="#">Oportunidades</a></li>
-                        <li><a href="#">Rentabilidade</a></li>
-                        <li><a href="#">Riscos e Garantias</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-col">
-                    <h3>Contato</h3>
-                    <ul class="footer-links">
-                        <li><i class="fas fa-envelope"></i> <a href="mailto:contato@bankbras.com.br">contato@bankbras.com.br</a></li>
-                        <li><i class="fas fa-phone"></i> <a href="tel:+551140044004">(11) 4004-4004</a></li>
-                        <li><i class="fas fa-map-marker-alt"></i> Av. Paulista, 1000 - São Paulo/SP</li>
-                        <li><i class="fas fa-clock"></i> Seg-Sex: 9h-18h</li>
-                    </ul>
+                <div class="footer-contact">
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:contato@bankbras.com.br">contato@bankbras.com.br</a></p>
+                    <p><i class="fas fa-phone"></i> <a href="tel:+551140044004">(11) 4004-4004</a></p>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Paulista, 1000 - São Paulo/SP</p>
                 </div>
             </div>
             
@@ -962,6 +1140,67 @@
                 header.classList.remove('scrolled');
             }
         });
+        
+        // Efeito de partículas no footer
+        function createParticles() {
+            const footer = document.querySelector('footer');
+            const particleCount = 15;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Tamanho aleatório entre 2px e 6px
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Posição aleatória no footer
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Opacidade aleatória
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                // Animação
+                const duration = Math.random() * 10 + 5;
+                particle.style.animation = `float ${duration}s infinite ease-in-out`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                footer.appendChild(particle);
+            }
+        }
+        
+        // Criar partículas quando a página carregar
+        window.addEventListener('load', createParticles);
+        
+        // Animação ao rolar a página
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.feature-card, .service-card, .step');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+        
+        // Inicializar elementos com opacidade 0 para animação
+        document.querySelectorAll('.feature-card, .service-card, .step').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+        });
+        
+        // Adicionar evento de scroll
+        window.addEventListener('scroll', animateOnScroll);
+        
+        // Executar uma vez no carregamento para verificar elementos já visíveis
+        window.addEventListener('load', animateOnScroll);
     </script>
 </body>
 </html>
