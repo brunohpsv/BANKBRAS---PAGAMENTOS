@@ -131,11 +131,16 @@
             box-shadow: var(--shadow-md);
         }
         
-        
+        .btn-login {
+            background-color: transparent;
+            color: var(--dark);
+            border: 2px solid transparent;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+        }
         
         .btn-login:hover {
-            background-color: var(--primary);
-            color: var(--dark);
+            color: var(--primary);
         }
         
         .btn-group {
@@ -209,7 +214,7 @@
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 1.5rem;
             align-items: center;
         }
         
@@ -237,25 +242,6 @@
         
         .nav-links a:hover {
             color: var(--primary);
-        }
-        
-        .auth-btn {
-            margin-left: 1.5rem;
-            padding: 0.8rem 1.8rem;
-            font-size: 0.95rem;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(212, 175, 55, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
-            }
         }
         
         .mobile-menu-btn {
@@ -1022,12 +1008,21 @@
                 border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             }
             
-            .auth-btn {
+            .btn-group {
                 display: none;
             }
             
-            .btn-group {
-                display: none;
+            .mobile-auth-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+                margin-top: 2rem;
+            }
+            
+            .mobile-auth-buttons .btn {
+                width: 100%;
+                text-align: center;
             }
             
             .hero-content {
@@ -1090,10 +1085,10 @@
                     <li><a href="#services">Serviços</a></li>
                     <li><a href="#how-it-works">Como Funciona</a></li>
                     <li><a href="#contact">Contato</a></li>
-                    <div class="btn-group">
-    <a href="#" class="btn btn-outline">Login</a>
-    <a href="#" class="btn btn-primary">Cadastre-se</a>
-</div>
+                    <li class="btn-group">
+                        <a href="#" class="btn btn-login">Login</a>
+                        <a href="#" class="btn btn-primary">Cadastre-se</a>
+                    </li>
                 </ul>
                 
                 <button class="mobile-menu-btn">
@@ -1349,6 +1344,13 @@
             menuBtn.innerHTML = navLinks.classList.contains('active') 
                 ? '<i class="fas fa-times"></i>' 
                 : '<i class="fas fa-bars"></i>';
+            
+            // Adiciona ou remove a classe de overflow no body
+            if (navLinks.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
         });
         
         // Smooth Scrolling
@@ -1359,12 +1361,27 @@
                 if (navLinks.classList.contains('active')) {
                     navLinks.classList.remove('active');
                     menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    document.body.style.overflow = '';
                 }
                 
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Adiciona destaque temporário na seção
+                    if (targetId !== '#home') {
+                        targetElement.style.boxShadow = '0 0 0 4px rgba(212, 175, 55, 0.3)';
+                        targetElement.style.transition = 'box-shadow 0.3s ease';
+                        setTimeout(() => {
+                            targetElement.style.boxShadow = 'none';
+                        }, 1000);
+                    }
+                }
             });
         });
         
@@ -1401,6 +1418,12 @@
                 const delay = Math.random() * 15;
                 
                 coin.style.animation = `float-coin ${duration}s linear ${delay}s infinite`;
+                
+                // Efeito de brilho aleatório
+                if (Math.random() > 0.7) {
+                    coin.style.filter = 'drop-shadow(0 0 8px rgba(212, 175, 55, 0.8))';
+                    coin.style.animation += ', pulse-glow 2s ease-in-out infinite';
+                }
                 
                 container.appendChild(coin);
             }
@@ -1461,13 +1484,8 @@
         // Adicionar evento de scroll
         window.addEventListener('scroll', animateOnScroll);
         
-        // Executar funções quando a página carregar
-        window.addEventListener('load', () => {
-            createFloatingCoins();
-            createParticles();
-            animateOnScroll();
-            
-            // Adicionar hover effect aos botões
+        // Efeito hover nos botões
+        const setupButtonHover = () => {
             const buttons = document.querySelectorAll('.btn');
             buttons.forEach(button => {
                 button.addEventListener('mouseenter', () => {
@@ -1476,11 +1494,46 @@
                 });
                 
                 button.addEventListener('mouseleave', () => {
-                    button.style.transform = 'translateY(0)';
-                    button.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+                    if (!button.classList.contains('btn-primary') || !button.classList.contains('btn-dark')) {
+                        button.style.transform = 'translateY(0)';
+                    }
+                    button.style.boxShadow = button.classList.contains('btn-outline') 
+                        ? 'none' 
+                        : '0 4px 6px rgba(0, 0, 0, 0.1)';
                 });
             });
+        };
+        
+        // Executar funções quando a página carregar
+        window.addEventListener('load', () => {
+            createFloatingCoins();
+            createParticles();
+            animateOnScroll();
+            setupButtonHover();
+            
+            // Adicionar botões de autenticação no menu mobile
+            const mobileAuthButtons = document.createElement('div');
+            mobileAuthButtons.className = 'mobile-auth-buttons';
+            mobileAuthButtons.innerHTML = `
+                <a href="#" class="btn btn-login">Login</a>
+                <a href="#" class="btn btn-primary">Cadastre-se</a>
+            `;
+            document.querySelector('.nav-links').appendChild(mobileAuthButtons);
         });
+        
+        // Adicionar animação de pulso para moedas brilhantes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse-glow {
+                0%, 100% {
+                    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.8));
+                }
+                50% {
+                    filter: drop-shadow(0 0 12px rgba(212, 175, 55, 1));
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
