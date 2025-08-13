@@ -3,35 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BANKBRAS | Conexão Direta entre Empresas e Investidores</title>
+    <title>BANKBRAS | Conexão Direta Empresas-Investidores</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-       :root {
-    --primary: #FFD700;           /* Dourado - agora como cor principal */
-    --primary-dark: #e6c800;      /* Dourado escuro */
-    --secondary: #4169E1;         /* Azul Royal */
-    --accent: #003366;            /* Azul escuro - agora como destaque */
-    --accent-dark: #002244;       /* Azul escuro mais intenso */
-    --dark: #121212;              /* Preto mais escuro */
-    --light: #f8f9fa;
-    --gray: #6c757d;
-    --white: #ffffff;
-    --success: #2E8B57;           /* Verde mar médio */
-    --info: #1E90FF;             /* Azul Dodge */
-    --warning: #FFA500;          /* Laranja */
-    --danger: #B22222;           /* Vermelho firebrick */
-    
-    /* Novas cores adicionadas */
-    --blue-light: #87CEFA;       /* Azul céu claro */
-    --blue-medium: #4682B4;      /* Azul aço */
-    --gold-light: #FFF8DC;       /* Dourado claro (corno) */
-    --gold-medium: #DAA520;      /* Dourado médio (goldenrod) */
-    --green-dark: #006400;       /* Verde escuro */
-    --green-light: #90EE90;      /* Verde claro */
-}
+        :root {
+            --primary: #D4AF37;           /* Dourado principal */
+            --primary-light: #FFD700;     /* Dourado claro */
+            --primary-dark: #996515;      /* Dourado escuro */
+            --secondary: #006400;        /* Verde escuro */
+            --secondary-light: #008000;   /* Verde mais claro */
+            --dark: #121212;             /* Preto */
+            --light: #ffffff;            /* Branco */
+            --gray: #6c757d;            /* Cinza */
+            --light-gray: #f8f9fa;       /* Cinza claro */
+            --transition: all 0.3s ease;
+        }
         
         * {
             margin: 0;
@@ -47,21 +36,20 @@
             overflow-x: hidden;
         }
         
-        h1, h2, h3, h4, h5, h6 {
+        h1, h2, h3, h4 {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            line-height: 1.2;
         }
         
         a {
             text-decoration: none;
             color: inherit;
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
         
         .container {
             width: 100%;
-            max-width: 1320px;
+            max-width: 1200px;
             padding: 0 1.5rem;
             margin: 0 auto;
         }
@@ -71,47 +59,195 @@
             padding: 0.8rem 2rem;
             border-radius: 50px;
             font-weight: 600;
-            text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             border: none;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .btn-primary {
-            background-color: var(--accent);
+            background-color: var(--primary);
             color: var(--dark);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
         }
         
         .btn-primary:hover {
-            background-color: var(--accent-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(254, 221, 0, 0.3);
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
         }
         
         .btn-outline {
-            background-color: transparent;
-            border: 2px solid var(--white);
-            color: var(--white);
-        }
-        
-        .btn-outline:hover {
-            background-color: var(--white);
+            background: transparent;
+            border: 2px solid var(--primary);
             color: var(--primary);
         }
         
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+        
+        /* Header Sofisticado */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            backdrop-filter: blur(5px);
+            transition: var(--transition);
+        }
+        
+        header.scrolled {
+            padding: 0.5rem 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+            transition: var(--transition);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        
+        .logo-text h1 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+        
+        .logo-text span {
+            display: block;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            color: var(--gray);
+            font-weight: 600;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            font-weight: 600;
+            position: relative;
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, var(--light-gray), var(--light));
+            padding-top: 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0) 70%);
+            z-index: 0;
+        }
+        
+        .hero-content {
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-content h1 {
+            font-size: 3.2rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            color: var(--dark);
+        }
+        
+        .hero-content h1 span {
+            color: var(--primary);
+        }
+        
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            color: var(--dark);
+            opacity: 0.9;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        /* Sections */
         .section {
-            padding: 5rem 0;
+            padding: 6rem 0;
+            position: relative;
         }
         
         .section-title {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
         }
         
         .section-title h2 {
             font-size: 2.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             position: relative;
             display: inline-block;
         }
@@ -124,184 +260,32 @@
             transform: translateX(-50%);
             width: 80px;
             height: 4px;
-            background-color: var(--accent);
+            background: var(--primary);
             border-radius: 2px;
         }
         
         .section-title p {
-            color: var(--gray);
-            font-size: 1.1rem;
             max-width: 700px;
             margin: 0 auto;
+            font-size: 1.1rem;
+            color: var(--gray);
         }
         
-        /* Header */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            transition: all 0.3s ease;
-            padding: 1rem 0;
-            background-color: rgba(0, 99, 65, 0.95);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        header.scrolled {
-            padding: 0.5rem 0;
-            background-color: rgba(0, 99, 65, 0.98);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-        }
-        
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo h1 {
-            font-size: 2rem;
-            color: var(--white);
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-        
-        .logo span {
-            font-size: 0.8rem;
-            color: var(--accent);
-            display: block;
-            font-weight: 500;
-            letter-spacing: 1px;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 2rem;
-            position: relative;
-        }
-        
-        .nav-links a {
-            color: var(--white);
-            font-weight: 600;
-            font-size: 0.95rem;
-            padding: 0.5rem 0;
-            position: relative;
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--accent);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        .nav-links a:hover {
-            color: var(--accent);
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--white);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            min-height: 700px;
-            display: flex;
-            align-items: center;
-            position: relative;
-            background: linear-gradient(135deg, rgba(0, 99, 65, 0.9), rgba(0, 155, 58, 0.8)), url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
-            color: var(--white);
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 600px;
-            animation: fadeInUp 1s ease;
-        }
-        
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-        }
-        
-        .hero-content p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-        
-        .hero-btns {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .scroll-down {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--white);
-            font-size: 1.5rem;
-            animation: bounce 2s infinite;
-            cursor: pointer;
-        }
-        
-        /* Features Section */
-        .features {
-            background-color: var(--white);
-        }
-        
+        /* Features */
         .features-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);  /* Força 4 colunas */
-    gap: 1rem;  /* Reduzi o gap */
-}
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
         
         .feature-card {
-            background-color: var(--white);
-            border-radius: 10px;
-            padding: 1.5rem 1rem;
+            background: var(--light);
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             text-align: center;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: var(--transition);
         }
         
         .feature-card:hover {
@@ -310,41 +294,42 @@
         }
         
         .feature-icon {
-            width: 60px;
-            height: 60px;
-            background-color: rgba(0, 155, 58, 0.1);
-            border-radius: 50%;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            background: rgba(212, 175, 55, 0.1);
+            width: 80px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 50%;
             margin: 0 auto 1.5rem;
-            color: var(--primary);
-            font-size: 1.5rem;
         }
         
         .feature-card h3 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             margin-bottom: 1rem;
-            color: var(--primary);
         }
         
-        /* Services Section */
-        .services {
-            background-color: var(--light);
+        .feature-card p {
+            color: var(--gray);
         }
         
+        /* Services */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
+            gap: 2.5rem;
         }
         
         .service-card {
-            background-color: var(--white);
-            border-radius: 10px;
+            background: var(--light);
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .service-card:hover {
@@ -354,18 +339,12 @@
         
         .service-img {
             height: 200px;
-            overflow: hidden;
-        }
-        
-        .service-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        
-        .service-card:hover .service-img img {
-            transform: scale(1.1);
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light);
+            font-size: 3rem;
         }
         
         .service-content {
@@ -375,7 +354,7 @@
         .service-content h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: var(--primary);
+            color: var(--dark);
         }
         
         .service-content p {
@@ -383,72 +362,62 @@
             margin-bottom: 1.5rem;
         }
         
-        .service-meta {
-            display: flex;
-            justify-content: space-between;
+        .service-content a {
+            color: var(--primary);
+            font-weight: 600;
+            display: inline-flex;
             align-items: center;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            gap: 0.5rem;
         }
         
-        .price {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 1.2rem;
+        .service-content a i {
+            transition: var(--transition);
+        }
+        
+        .service-content a:hover i {
+            transform: translateX(5px);
         }
         
         /* How It Works */
         .how-it-works {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--white);
-        }
-        
-        .how-it-works .section-title h2 {
-            color: var(--white);
-        }
-        
-        .how-it-works .section-title h2::after {
-            background-color: var(--accent);
-        }
-        
-        .how-it-works .section-title p {
-            color: rgba(255, 255, 255, 0.8);
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-light));
+            color: var(--light);
         }
         
         .steps {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
-            margin-top: 3rem;
         }
         
         .step {
-            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
             padding: 2.5rem 2rem;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            border-radius: 12px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
         }
         
         .step:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-5px);
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
         }
         
         .step-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
             width: 60px;
             height: 60px;
-            background-color: var(--accent);
+            background: var(--primary);
             color: var(--dark);
             border-radius: 50%;
-            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
         .step h3 {
@@ -456,127 +425,41 @@
             margin-bottom: 1rem;
         }
         
-        .step p {
-            opacity: 0.9;
-            font-size: 0.95rem;
-        }
-        
-        /* Stats Section */
+        /* Stats */
         .stats {
-            background-color: var(--primary);
-            color: var(--white);
-            padding: 4rem 0;
+            background: var(--light-gray);
         }
         
-        .stats-grid {
+        .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
             text-align: center;
         }
         
-        .stat-item h3 {
+        .stat-item {
+            padding: 2rem;
+        }
+        
+        .stat-number {
             font-size: 3rem;
-            margin-bottom: 0.5rem;
-            color: var(--accent);
-        }
-        
-        .stat-item p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        
-        /* Testimonials */
-        .testimonials {
-            background-color: var(--white);
-        }
-        
-        .testimonials-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .testimonial {
-            background-color: var(--light);
-            padding: 2.5rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
-            margin: 1rem;
-            position: relative;
-        }
-        
-        .testimonial::before {
-            content: '\201C';
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 5rem;
-            color: rgba(0, 99, 65, 0.1);
-            font-family: serif;
-            line-height: 1;
-        }
-        
-        .testimonial-content {
-            position: relative;
-            z-index: 1;
-            margin-bottom: 1.5rem;
-            font-style: italic;
-            color: var(--gray);
-        }
-        
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-        }
-        
-        .author-img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-right: 1rem;
-        }
-        
-        .author-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .author-info h4 {
-            font-size: 1.1rem;
-            margin-bottom: 0.2rem;
+            font-weight: 700;
             color: var(--primary);
+            margin-bottom: 0.5rem;
         }
         
-        .author-info p {
-            font-size: 0.9rem;
+        .stat-label {
+            font-size: 1.1rem;
             color: var(--gray);
+            font-weight: 600;
         }
         
-        /* CTA Section */
+        /* CTA */
         .cta {
-            background: linear-gradient(135deg, rgba(0, 99, 65, 0.9), rgba(0, 155, 58, 0.8)), url('https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
-            color: var(--white);
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: var(--dark);
             text-align: center;
-            position: relative;
-        }
-        
-        .cta::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-        }
-        
-        .cta-content {
-            position: relative;
-            z-index: 1;
-            max-width: 800px;
-            margin: 0 auto;
+            padding: 4rem 0;
         }
         
         .cta h2 {
@@ -585,117 +468,29 @@
         }
         
         .cta p {
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
             font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-        
-        /* Contact Section */
-        .contact {
-            background-color: var(--white);
-        }
-        
-        .contact-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-        }
-        
-        .contact-info {
-            margin-bottom: 2rem;
-        }
-        
-        .contact-info h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-        }
-        
-        .contact-info-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 1.5rem;
-        }
-        
-        .contact-info-icon {
-            width: 50px;
-            height: 50px;
-            background-color: rgba(0, 99, 65, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 1.2rem;
-            margin-right: 1rem;
-            flex-shrink: 0;
-        }
-        
-        .contact-info-content h4 {
-            font-size: 1.1rem;
-            margin-bottom: 0.3rem;
-        }
-        
-        .contact-info-content p, .contact-info-content a {
-            color: var(--gray);
-            font-size: 0.95rem;
-        }
-        
-        .contact-info-content a:hover {
-            color: var(--primary);
-        }
-        
-        .contact-form .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .contact-form label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--dark);
-        }
-        
-        .contact-form input,
-        .contact-form textarea {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-family: 'Open Sans', sans-serif;
-            transition: all 0.3s ease;
-        }
-        
-        .contact-form input:focus,
-        .contact-form textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 99, 65, 0.1);
-        }
-        
-        .contact-form textarea {
-            min-height: 150px;
-            resize: vertical;
         }
         
         /* Footer */
         footer {
-            background-color: var(--dark);
-            color: var(--white);
-            padding: 5rem 0 2rem;
+            background: var(--dark);
+            color: var(--light);
+            padding: 6rem 0 2rem;
         }
         
         .footer-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 3rem;
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
         }
         
         .footer-col h3 {
             font-size: 1.3rem;
             margin-bottom: 1.5rem;
-            color: var(--accent);
+            color: var(--primary);
             position: relative;
             padding-bottom: 0.8rem;
         }
@@ -706,14 +501,15 @@
             bottom: 0;
             left: 0;
             width: 50px;
-            height: 2px;
-            background-color: var(--accent);
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
         }
         
         .footer-col p {
-            margin-bottom: 1.5rem;
             opacity: 0.8;
-            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
         }
         
         .footer-links {
@@ -725,16 +521,15 @@
         }
         
         .footer-links a {
-            color: var(--white);
+            color: var(--light);
             opacity: 0.8;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             display: inline-block;
         }
         
         .footer-links a:hover {
             opacity: 1;
-            color: var(--accent);
+            color: var(--primary);
             transform: translateX(5px);
         }
         
@@ -745,66 +540,39 @@
         }
         
         .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            color: var(--white);
-            transition: all 0.3s ease;
+            color: var(--light);
+            transition: var(--transition);
         }
         
         .social-links a:hover {
-            background-color: var(--accent);
+            background: var(--primary);
             color: var(--dark);
-            transform: translateY(-3px);
+            transform: translateY(-5px);
         }
         
         .footer-bottom {
             text-align: center;
-            padding-top: 2rem;
+            padding-top: 3rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .footer-bottom p {
             opacity: 0.7;
             font-size: 0.9rem;
         }
         
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0) translateX(-50%);
-            }
-            40% {
-                transform: translateY(-20px) translateX(-50%);
-            }
-            60% {
-                transform: translateY(-10px) translateX(-50%);
-            }
-        }
-        
-        /* Responsive */
+        /* Responsivo */
         @media (max-width: 992px) {
-            .section {
-                padding: 4rem 0;
+            .hero-content h1 {
+                font-size: 2.8rem;
             }
             
-            .hero-content h1 {
-                font-size: 3rem;
+            .section {
+                padding: 4rem 0;
             }
         }
         
@@ -815,16 +583,17 @@
             
             .nav-links {
                 position: fixed;
-                top: 80px;
+                top: 0;
                 left: -100%;
-                width: 100%;
-                height: calc(100vh - 80px);
-                background-color: var(--primary-dark);
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: var(--light);
                 flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.5s ease;
-                padding: 2rem 0;
+                align-items: flex-start;
+                padding: 6rem 2rem 2rem;
+                transition: var(--transition);
+                box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
             }
             
             .nav-links.active {
@@ -832,57 +601,62 @@
             }
             
             .nav-links li {
-                margin: 1rem 0;
+                width: 100%;
+            }
+            
+            .nav-links a {
+                display: block;
+                padding: 1rem 0;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             }
             
             .hero-content {
                 text-align: center;
             }
             
-            .hero-btns {
-                justify-content: center;
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem;
             }
             
             .section-title h2 {
                 font-size: 2rem;
             }
-            
-            .cta h2 {
-                font-size: 2rem;
-            }
         }
         
         @media (max-width: 576px) {
-            .section {
-                padding: 3rem 0;
-            }
-            
             .hero-content h1 {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
             
             .hero-content p {
                 font-size: 1rem;
             }
             
-            .hero-btns {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .btn {
-                width: 100%;
+            .services-grid,
+            .features-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
+    <!-- Header Sofisticado -->
     <header id="header">
         <div class="container">
             <nav class="navbar">
                 <div class="logo">
-                    <h1>BANKBRAS <span>INVESTIMENTOS DIRETOS</span></h1>
+                    <div class="logo-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>BANKBRAS</h1>
+                        <span>Investimentos Diretos</span>
+                    </div>
                 </div>
                 
                 <ul class="nav-links">
@@ -904,25 +678,22 @@
     <section class="hero" id="home">
         <div class="container">
             <div class="hero-content">
-                <h1>Conexão direta entre empresas e investidores</h1>
-                <p>A plataforma inovadora que une empresas que precisam de crédito a investidores buscando oportunidades com retornos atrativos, tudo com transparência e segurança.</p>
-                <div class="hero-btns">
+                <h1>Conexão direta entre <span>empresas</span> e <span>investidores</span></h1>
+                <p>Plataforma inovadora que conecta empresas que precisam de crédito a investidores buscando oportunidades com retornos atrativos, sem intermediários e com total transparência.</p>
+                <div class="hero-buttons">
                     <a href="#services" class="btn btn-primary">Conheça nossos serviços</a>
-                    <a href="#contact" class="btn btn-outline">Fale conosco</a>
+                    <a href="#how-it-works" class="btn btn-outline">Como funciona</a>
                 </div>
             </div>
-        </div>
-        <div class="scroll-down">
-            <i class="fas fa-chevron-down"></i>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section class="section features" id="features">
+    <section class="section" id="features">
         <div class="container">
             <div class="section-title">
-                <h2>Por que escolher o BANKBRAS?</h2>
-                <p>Oferecemos uma solução completa para conectar empresas e investidores de forma eficiente e segura.</p>
+                <h2>Vantagens Exclusivas</h2>
+                <p>Por que escolher nossa plataforma para seus investimentos ou captação de recursos</p>
             </div>
             
             <div class="features-grid">
@@ -931,81 +702,91 @@
                         <i class="fas fa-handshake"></i>
                     </div>
                     <h3>Conexão Direta</h3>
-                    <p>Eliminamos intermediários, conectando empresas e investidores diretamente para negociações mais transparentes.</p>
+                    <p>Sem intermediários, negociação transparente entre as partes com condições personalizadas para cada operação.</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
-                    <h3>Retorno Atrativo</h3>
-                    <p>Investidores encontram oportunidades com retornos superiores ao mercado financeiro tradicional.</p>
+                    <h3>Retorno Superior</h3>
+                    <p>Oportunidades com retornos acima do mercado tradicional, com perfis de risco variados para todos os investidores.</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-lock"></i>
                     </div>
-                    <h3>Segurança Garantida</h3>
-                    <p>Todas as operações são registradas e monitoradas, garantindo segurança para ambas as partes.</p>
+                    <h3>Segurança Jurídica</h3>
+                    <p>Todas as operações são registradas e monitoradas, com contratos digitais e acompanhamento especializado.</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-dollar-sign"></i>
+                        <i class="fas fa-bolt"></i>
                     </div>
-                    <h3>Custos Reduzidos</h3>
-                    <p>Taxa fixa de apenas R$ 30 por transação, sem custos ocultos ou complicações.</p>
+                    <h3>Agilidade</h3>
+                    <p>Processo rápido desde o cadastro até a liberação de recursos, com análise ágil e desburocratizada.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <h3>Flexibilidade</h3>
+                    <p>Termos negociáveis diretamente entre as partes, com prazos e valores que se adaptam às necessidades de cada negócio.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>Suporte Dedicado</h3>
+                    <p>Equipe especializada para auxiliar em todas as etapas do processo, desde o cadastro até a finalização da operação.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Services Section -->
-    <section class="section services" id="services">
+    <section class="section" id="services">
         <div class="container">
             <div class="section-title">
                 <h2>Nossos Serviços</h2>
-                <p>Oferecemos soluções personalizadas para atender às necessidades de empresas e investidores.</p>
+                <p>Soluções personalizadas para empresas e investidores de todos os portes</p>
             </div>
             
             <div class="services-grid">
                 <div class="service-card">
                     <div class="service-img">
-                        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Empréstimos Empresariais">
+                        <i class="fas fa-business-time"></i>
                     </div>
                     <div class="service-content">
                         <h3>Empréstimos Empresariais</h3>
-                        <p>Para CNPJs que buscam capital para expansão, capital de giro ou investimentos em infraestrutura com condições negociáveis diretamente com os investidores.</p>
-                        <div class="service-meta">
-                            
-                        </div>
+                        <p>Capital para expansão, giro ou investimentos com condições negociáveis diretamente com os investidores.</p>
+                        <a href="#">Saiba mais <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 
                 <div class="service-card">
                     <div class="service-img">
-                        <img src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Oportunidades de Investimento">
+                        <i class="fas fa-piggy-bank"></i>
                     </div>
                     <div class="service-content">
                         <h3>Oportunidades de Investimento</h3>
-                        <p>Para investidores (PFs e CNPJs) que desejam aplicar seu capital em empresas com potencial, com retornos personalizados e acompanhamento direto.</p>
-                        <div class="service-meta">
-                            
-                        </div>
+                        <p>Diversas opções de investimento com retornos personalizados e acompanhamento direto das operações.</p>
+                        <a href="#">Saiba mais <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 
                 <div class="service-card">
                     <div class="service-img">
-                        <img src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Intermediação Digital">
+                        <i class="fas fa-network-wired"></i>
                     </div>
                     <div class="service-content">
                         <h3>Intermediação Digital</h3>
-                        <p>Plataforma segura e transparente que facilita todo o processo de conexão, negociação e formalização das operações.</p>
-                        <div class="service-meta">
-                            
-                        </div>
+                        <p>Plataforma segura para todo o processo de conexão, negociação e formalização dos contratos.</p>
+                        <a href="#">Saiba mais <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -1013,24 +794,24 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="stats">
+    <section class="section stats">
         <div class="container">
-            <div class="stats-grid">
+            <div class="stats-container">
                 <div class="stat-item">
-                    <h3>+500</h3>
-                    <p>Empresas Cadastradas</p>
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Empresas Cadastradas</div>
                 </div>
                 <div class="stat-item">
-                    <h3>+1.2k</h3>
-                    <p>Investidores Ativos</p>
+                    <div class="stat-number">R$ 120M</div>
+                    <div class="stat-label">Em Operações</div>
                 </div>
                 <div class="stat-item">
-                    <h3>R$50M+</h3>
-                    <p>Em Operações</p>
+                    <div class="stat-number">1.2K</div>
+                    <div class="stat-label">Investidores Ativos</div>
                 </div>
                 <div class="stat-item">
-                    <h3>99%</h3>
-                    <p>Satisfação dos Clientes</p>
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Satisfação</div>
                 </div>
             </div>
         </div>
@@ -1041,74 +822,32 @@
         <div class="container">
             <div class="section-title">
                 <h2>Como Funciona</h2>
-                <p>Um processo simples em 4 passos para conectar empresas e investidores.</p>
+                <p>Processo simples e transparente em 4 passos para conexão direta</p>
             </div>
             
             <div class="steps">
                 <div class="step">
                     <div class="step-number">1</div>
                     <h3>Cadastro</h3>
-                    <p>Empresas e investidores se cadastram na plataforma informando seus dados básicos e preferências de operação.</p>
+                    <p>Informe seus dados básicos e preferências de investimento ou captação.</p>
                 </div>
                 
                 <div class="step">
                     <div class="step-number">2</div>
                     <h3>Análise</h3>
-                    <p>Nossa equipe realiza uma análise rápida dos cadastros para garantir a qualidade e segurança das operações.</p>
+                    <p>Nossa equipe verifica a qualidade das informações e documentação.</p>
                 </div>
                 
                 <div class="step">
                     <div class="step-number">3</div>
                     <h3>Conexão</h3>
-                    <p>Nossa inteligência conecta automaticamente tomadores e investidores com perfis e necessidades compatíveis.</p>
+                    <p>Conectamos automaticamente perfis compatíveis com seus critérios.</p>
                 </div>
                 
                 <div class="step">
                     <div class="step-number">4</div>
                     <h3>Negociação</h3>
-                    <p>As partes negociam diretamente os termos do empréstimo ou investimento através da nossa plataforma segura.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="section testimonials">
-        <div class="container">
-            <div class="section-title">
-                <h2>O que dizem sobre nós</h2>
-                <p>Depoimentos de empresas e investidores que já utilizam nossa plataforma.</p>
-            </div>
-            
-            <div class="testimonials-container">
-                <div class="testimonial">
-                    <div class="testimonial-content">
-                        <p>"O BANKBRAS revolucionou a forma como conseguimos capital para nossa empresa. Em poucos dias conseguimos conectar com investidores interessados em nosso negócio e fechamos um ótimo acordo com condições muito melhores que o mercado tradicional."</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-img">
-                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Carlos Silva">
-                        </div>
-                        <div class="author-info">
-                            <h4>Carlos Silva</h4>
-                            <p>CEO - TechSolutions</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="testimonial">
-                    <div class="testimonial-content">
-                        <p>"Como investidor, sempre busquei alternativas ao mercado tradicional que oferecessem melhores retornos. No BANKBRAS encontrei diversas oportunidades de investir em empresas promissoras, com taxas muito atrativas e a segurança de uma plataforma profissional."</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="author-img">
-                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Ana Oliveira">
-                        </div>
-                        <div class="author-info">
-                            <h4>Ana Oliveira</h4>
-                            <p>Investidora</p>
-                        </div>
-                    </div>
+                    <p>As partes negociam diretamente os termos e formalizam a operação.</p>
                 </div>
             </div>
         </div>
@@ -1117,113 +856,24 @@
     <!-- CTA Section -->
     <section class="section cta">
         <div class="container">
-            <div class="cta-content">
-                <h2>Pronto para transformar sua jornada financeira?</h2>
-                <p>Junte-se à plataforma que está revolucionando o mercado de empréstimos e investimentos no Brasil.</p>
-                <a href="#contact" class="btn btn-primary">Comece Agora</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="section contact" id="contact">
-        <div class="container">
-            <div class="section-title">
-                <h2>Fale Conosco</h2>
-                                <p>Tem dúvidas ou precisa de mais informações? Entre em contato com nossa equipe.</p>
-            </div>
-            
-            <div class="contact-container">
-                <div class="contact-info">
-                    <h3>Informações de Contato</h3>
-                    
-                    <div class="contact-info-item">
-                        <div class="contact-info-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="contact-info-content">
-                            <h4>Endereço</h4>
-                            <p>Av. Paulista, 1000 - São Paulo/SP</p>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-info-item">
-                        <div class="contact-info-icon">
-                            <i class="fas fa-phone-alt"></i>
-                        </div>
-                        <div class="contact-info-content">
-                            <h4>Telefone</h4>
-                            <p>(11) 4004-4004</p>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-info-item">
-                        <div class="contact-info-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="contact-info-content">
-                            <h4>Email</h4>
-                            <a href="mailto:contato@bankbras.com.br">contato@bankbras.com.br</a>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-info-item">
-                        <div class="contact-info-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="contact-info-content">
-                            <h4>Horário de Atendimento</h4>
-                            <p>Segunda a Sexta: 9h às 18h</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="contact-form">
-                    <form>
-                        <div class="form-group">
-                            <label for="name">Nome Completo</label>
-                            <input type="text" id="name" placeholder="Digite seu nome" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" placeholder="Digite seu email" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone">Telefone</label>
-                            <input type="tel" id="phone" placeholder="Digite seu telefone">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="subject">Assunto</label>
-                            <input type="text" id="subject" placeholder="Digite o assunto">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="message">Mensagem</label>
-                            <textarea id="message" placeholder="Digite sua mensagem" required></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
-                    </form>
-                </div>
-            </div>
+            <h2>Pronto para transformar sua relação com o crédito e investimentos?</h2>
+            <p>Cadastre-se agora e descubra como nossa plataforma pode conectar você às melhores oportunidades do mercado.</p>
+            <a href="#" class="btn btn-primary">Comece Agora</a>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
+    <footer id="contact">
         <div class="container">
             <div class="footer-container">
                 <div class="footer-col">
-                    <h3>Sobre Nós</h3>
-                    <p>O BANKBRAS é a plataforma líder em conexão direta entre empresas e investidores no Brasil, oferecendo soluções inovadoras para o mercado financeiro.</p>
+                    <h3>BANKBRAS</h3>
+                    <p>Plataforma líder em conexão direta entre empresas e investidores no Brasil, oferecendo soluções inovadoras e transparentes.</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
                     </div>
                 </div>
                 
@@ -1234,85 +884,85 @@
                         <li><a href="#features">Vantagens</a></li>
                         <li><a href="#services">Serviços</a></li>
                         <li><a href="#how-it-works">Como Funciona</a></li>
-                        <li><a href="#contact">Contato</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-col">
-                    <h3>Serviços</h3>
+                    <h3>Para Empresas</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Empréstimos Empresariais</a></li>
-                        <li><a href="#">Oportunidades de Investimento</a></li>
-                        <li><a href="#">Intermediação Digital</a></li>
-                        <li><a href="#">Consultoria Financeira</a></li>
+                        <li><a href="#">Solicitar Crédito</a></li>
+                        <li><a href="#">Taxas e Prazos</a></li>
+                        <li><a href="#">Requisitos</a></li>
+                        <li><a href="#">Cases de Sucesso</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-col">
-                    <h3>Newsletter</h3>
-                    <p>Assine nossa newsletter para receber atualizações e oportunidades exclusivas.</p>
-                    <form class="newsletter-form">
-                        <input type="email" placeholder="Digite seu email" required>
-                        <button type="submit" class="btn btn-primary">Assinar</button>
-                    </form>
+                    <h3>Para Investidores</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Cadastro</a></li>
+                        <li><a href="#">Oportunidades</a></li>
+                        <li><a href="#">Rentabilidade</a></li>
+                        <li><a href="#">Riscos e Garantias</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contato</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:contato@bankbras.com.br">contato@bankbras.com.br</a></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+551140044004">(11) 4004-4004</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Av. Paulista, 1000 - São Paulo/SP</li>
+                        <li><i class="fas fa-clock"></i> Seg-Sex: 9h-18h</li>
+                    </ul>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2023 BANKBRAS Investimentos Diretos. Todos os direitos reservados.</p>
+                <p>&copy; 2023 BANKBRAS. Todos os direitos reservados. CNPJ: 12.345.678/0001-99</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        // Mobile Menu
+        const menuBtn = document.querySelector('.mobile-menu-btn');
         const navLinks = document.querySelector('.nav-links');
         
-        mobileMenuBtn.addEventListener('click', () => {
+        menuBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
-            mobileMenuBtn.innerHTML = navLinks.classList.contains('active') 
+            menuBtn.innerHTML = navLinks.classList.contains('active') 
                 ? '<i class="fas fa-times"></i>' 
                 : '<i class="fas fa-bars"></i>';
         });
         
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-            });
-        });
-        
-        // Header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            header.classList.toggle('scrolled', window.scrollY > 50);
-        });
-        
-        // Smooth scrolling for anchor links
+        // Smooth Scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
                 }
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             });
         });
         
-        // Scroll down button
-        document.querySelector('.scroll-down').addEventListener('click', () => {
-            window.scrollTo({
-                top: document.getElementById('features').offsetTop - 80,
-                behavior: 'smooth'
-            });
+        // Header Scroll Effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         });
     </script>
 </body>
