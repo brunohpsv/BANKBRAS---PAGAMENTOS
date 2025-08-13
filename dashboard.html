@@ -18,6 +18,8 @@
             --cinza-escuro: #333333;
             --cinza-medio: #e0e0e0;
             --vermelho: #e74c3c;
+            --verde-escuro-hover: #005a32;
+            --azul-hover: #001f5e;
         }
         
         * {
@@ -31,17 +33,20 @@
             background-color: var(--cinza-claro);
             color: var(--cinza-escuro);
             line-height: 1.6;
+            min-height: 100vh;
         }
 
         /* Cabeçalho Premium */
         header {
             background: var(--branco);
-            padding: 0 40px;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            position: relative;
+            position: sticky;
+            top: 0;
+            z-index: 100;
             height: 80px;
             border-bottom: 4px solid transparent;
             background-image: linear-gradient(to right, 
@@ -59,6 +64,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            text-decoration: none;
         }
 
         .logo-icon {
@@ -76,7 +82,7 @@
 
         .logo-text {
             color: var(--preto);
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             letter-spacing: 0.5px;
         }
@@ -88,7 +94,7 @@
         .nav-container {
             display: flex;
             align-items: center;
-            gap: 30px;
+            gap: 20px;
         }
 
         .menu-toggle {
@@ -103,6 +109,8 @@
             transition: all 0.3s ease;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             position: relative;
+            border: none;
+            outline: none;
         }
 
         .menu-toggle:hover {
@@ -160,7 +168,7 @@
         .dropdown-menu {
             display: none;
             position: absolute;
-            right: 40px;
+            right: 20px;
             top: 80px;
             background-color: var(--branco);
             border-radius: 12px;
@@ -185,7 +193,7 @@
             display: flex;
             align-items: center;
             padding: 14px 20px;
-            color: #333;
+            color: var(--cinza-escuro);
             text-decoration: none;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
@@ -207,6 +215,7 @@
             margin-right: 10px;
             width: 20px;
             text-align: center;
+            color: var(--verde-escuro);
         }
 
         /* Estilos do Dashboard */
@@ -218,15 +227,18 @@
 
         .dashboard-header {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
+            gap: 20px;
         }
 
         .dashboard-title {
             color: var(--verde-escuro);
             font-size: 1.8rem;
             font-weight: 700;
+            margin-bottom: 5px;
         }
 
         .user-name {
@@ -239,6 +251,7 @@
             color: var(--cinza-escuro);
             font-size: 1rem;
             margin-top: 5px;
+            opacity: 0.8;
         }
 
         .dashboard-actions {
@@ -247,7 +260,9 @@
         }
 
         .btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             padding: 10px 20px;
             border-radius: 6px;
             text-decoration: none;
@@ -256,6 +271,8 @@
             transition: all 0.3s ease;
             border: none;
             cursor: pointer;
+            gap: 8px;
+            white-space: nowrap;
         }
 
         .btn-primary {
@@ -264,7 +281,7 @@
         }
 
         .btn-primary:hover {
-            background: var(--verde-claro);
+            background: var(--verde-escuro-hover);
         }
 
         .btn-secondary {
@@ -274,16 +291,6 @@
 
         .btn-secondary:hover {
             background: #d0d0d0;
-        }
-
-        .btn-icon {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-icon i {
-            font-size: 0.9rem;
         }
 
         .filters-container {
@@ -312,6 +319,7 @@
             font-size: 0.9rem;
             text-decoration: none;
             font-weight: 500;
+            cursor: pointer;
         }
 
         .filter-reset:hover {
@@ -338,16 +346,18 @@
 
         .filter-select, .filter-input {
             width: 100%;
-            padding: 8px 12px;
+            padding: 10px 12px;
             border: 1px solid var(--cinza-medio);
             border-radius: 6px;
             font-size: 0.9rem;
             background-color: var(--branco);
+            transition: border-color 0.3s ease;
         }
 
         .filter-select:focus, .filter-input:focus {
             outline: none;
             border-color: var(--verde-claro);
+            box-shadow: 0 0 0 2px rgba(0, 150, 57, 0.1);
         }
 
         .payments-list {
@@ -742,20 +752,20 @@
 </head>
 <body>
     <header>
-        <div class="logo">
+        <a href="#" class="logo">
             <div class="logo-icon">BBP</div>
             <div class="logo-text">BANK<span>BRAS</span> PAGAMENTOS</div>
-        </div>
+        </a>
         
         <div class="nav-container">
-            <div class="menu-toggle" id="menuToggle">
+            <button class="menu-toggle" id="menuToggle" aria-label="Menu">
                 <div class="hamburger">
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
                 <div class="bbp-logo">BBP</div>
-            </div>
+            </button>
             <div class="dropdown-menu" id="dropdownMenu">
                 <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
                 <a href="perfil.html"><i class="fas fa-user-circle"></i> Meu Perfil</a>
@@ -774,7 +784,7 @@
                 <p class="dashboard-subtitle">Gerencie e realize seus pagamentos de impostos e contas</p>
             </div>
             <div class="dashboard-actions">
-                <button class="btn btn-primary btn-icon" onclick="openAddPayment()">
+                <button class="btn btn-primary" onclick="openAddPayment()">
                     <i class="fas fa-plus"></i>
                     Adicionar
                 </button>
@@ -1094,7 +1104,8 @@
                 barcode: '85690000001-0 25000000000-0 00000000000-0 90000000000-0',
                 notes: 'Pagamento referente ao IPTU do ano de 2023',
                 documentUrl: '#',
-                documentName: 'Boleto_IPTU_2023.pdf'
+                documentName: 'Boleto_IPTU_2023.pdf',
+                documentData: null
             },
             {
                 id: '2',
@@ -1107,7 +1118,8 @@
                 barcode: '85690000001-0 35000000000-0 00000000000-0 90000000000-0',
                 notes: 'Conta de energia elétrica - Março/2023',
                 documentUrl: '#',
-                documentName: 'Fatura_Energia_032023.pdf'
+                documentName: 'Fatura_Energia_032023.pdf',
+                documentData: null
             },
             {
                 id: '3',
@@ -1120,9 +1132,24 @@
                 barcode: '85690000001-0 28500000000-0 00000000000-0 90000000000-0',
                 notes: 'Declaração de Imposto de Renda 2023',
                 documentUrl: '#',
-                documentName: 'DARF_IRPF_2023.pdf'
+                documentName: 'DARF_IRPF_2023.pdf',
+                documentData: null
             }
         ];
+
+        // Carregar dados do localStorage se existirem
+        function loadFromLocalStorage() {
+            const savedPayments = localStorage.getItem('bbpPayments');
+            if (savedPayments) {
+                return JSON.parse(savedPayments);
+            }
+            return null;
+        }
+
+        // Salvar dados no localStorage
+        function saveToLocalStorage() {
+            localStorage.setItem('bbpPayments', JSON.stringify(paymentsData));
+        }
 
         // Função para formatar data no padrão brasileiro
         function formatDate(dateString) {
@@ -1183,6 +1210,16 @@
         
         // ID do pagamento atualmente selecionado
         let currentPaymentId = null;
+
+        // Função para ler arquivo como base64
+        function readFileAsBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
 
         // Função para abrir detalhes do pagamento
         function openPaymentDetail(paymentId) {
@@ -1298,14 +1335,25 @@
         }
 
         // Função para abrir o modal de documento
-        function openDocumentModal(paymentId) {
+        async function openDocumentModal(paymentId) {
             currentPaymentId = paymentId;
             
             const payment = paymentsData.find(p => p.id === paymentId);
             if (payment) {
-                if (payment.documentUrl) {
+                if (payment.documentUrl || payment.documentData) {
                     document.getElementById('document-title').textContent = payment.documentName || 'Documento.pdf';
-                    document.getElementById('documentLink').href = payment.documentUrl;
+                    
+                    // Se tiver dados no localStorage, criar URL temporária
+                    if (payment.documentData) {
+                        const link = document.getElementById('documentLink');
+                        link.href = payment.documentData;
+                        link.setAttribute('download', payment.documentName || 'documento.pdf');
+                        link.innerHTML = '<i class="fas fa-download"></i> Baixar documento';
+                    } else {
+                        document.getElementById('documentLink').href = payment.documentUrl;
+                        document.getElementById('documentLink').innerHTML = '<i class="fas fa-external-link-alt"></i> Acessar documento';
+                    }
+                    
                     documentModal.classList.add('active');
                 } else {
                     alert('Nenhum documento anexado a este pagamento.');
@@ -1321,7 +1369,7 @@
         }
 
         // Função para adicionar um novo pagamento
-        function addNewPayment() {
+        async function addNewPayment() {
             const type = document.getElementById('payment-type').value;
             const name = document.getElementById('payment-name').value;
             const due = document.getElementById('payment-due').value;
@@ -1360,6 +1408,18 @@
             // Criar novo ID
             const newId = (paymentsData.length + 1).toString();
             
+            // Processar arquivo se existir
+            let documentData = null;
+            if (file) {
+                try {
+                    documentData = await readFileAsBase64(file);
+                } catch (error) {
+                    console.error('Erro ao ler arquivo:', error);
+                    alert('Erro ao processar o arquivo. Por favor, tente novamente.');
+                    return;
+                }
+            }
+            
             // Criar objeto do pagamento
             const newPayment = {
                 id: newId,
@@ -1372,11 +1432,15 @@
                 barcode: "00000000000-0 00000000000-0 00000000000-0 00000000000-0",
                 notes: file ? `Documento anexado: ${file.name}` : "Sem documento anexado",
                 documentUrl: file ? '#' : null,
-                documentName: file ? file.name : null
+                documentName: file ? file.name : null,
+                documentData: documentData
             };
             
             // Adicionar ao array de pagamentos
             paymentsData.push(newPayment);
+            
+            // Salvar no localStorage
+            saveToLocalStorage();
             
             // Atualizar a lista de pagamentos
             updatePaymentsList();
@@ -1391,6 +1455,7 @@
                 const index = paymentsData.findIndex(p => p.id === paymentId);
                 if (index !== -1) {
                     paymentsData.splice(index, 1);
+                    saveToLocalStorage();
                     updatePaymentsList();
                     alert('Pagamento excluído com sucesso!');
                 }
@@ -1402,6 +1467,7 @@
             const payment = paymentsData.find(p => p.id === paymentId);
             if (payment) {
                 payment.status = 'paid';
+                saveToLocalStorage();
                 updatePaymentsList();
                 closePaymentDetail();
                 alert('Pagamento realizado com sucesso!');
@@ -1416,6 +1482,7 @@
                 }
             });
             
+            saveToLocalStorage();
             updatePaymentsList();
             closePayAllModal();
             alert('Todos os pagamentos foram realizados com sucesso!');
@@ -1476,7 +1543,7 @@
                             <button class="action-btn detail-btn" onclick="openPaymentDetail('${payment.id}')">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            ${payment.documentUrl ? `
+                            ${(payment.documentUrl || payment.documentData) ? `
                             <button class="action-btn document-btn" onclick="openDocumentModal('${payment.id}')">
                                 <i class="fas fa-file-alt"></i>
                             </button>
@@ -1643,7 +1710,7 @@
                             <button class="action-btn detail-btn" onclick="openPaymentDetail('${payment.id}')">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            ${payment.documentUrl ? `
+                            ${(payment.documentUrl || payment.documentData) ? `
                             <button class="action-btn document-btn" onclick="openDocumentModal('${payment.id}')">
                                 <i class="fas fa-file-alt"></i>
                             </button>
@@ -1712,6 +1779,13 @@
 
         // Inicializar a aplicação
         document.addEventListener('DOMContentLoaded', () => {
+            // Carregar dados do localStorage se existirem
+            const savedPayments = loadFromLocalStorage();
+            if (savedPayments) {
+                paymentsData.length = 0; // Limpar array existente
+                savedPayments.forEach(p => paymentsData.push(p));
+            }
+            
             // Configurar botão de logout
             document.getElementById('logoutButton').addEventListener('click', logout);
             
