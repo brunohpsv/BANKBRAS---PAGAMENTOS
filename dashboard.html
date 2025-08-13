@@ -830,39 +830,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="payments-list" id="paymentsList">
-            <div class="payments-header">
-                <div>Descrição</div>
-                <div>Entidade</div>
-                <div>Vencimento</div>
-                <div>Status</div>
-                <div>Valor</div>
-                <div>Ações</div>
-            </div>
-
-            <!-- Itens serão carregados dinamicamente aqui -->
-            <div class="payment-item">
-                <div class="payment-name">IPTU 2023</div>
-                <div class="payment-entity">Prefeitura</div>
-                <div class="payment-due">15/03/2023</div>
-                <div class="payment-status status-pending">Pendente</div>
-                <div class="payment-amount">R$ 1.250,00</div>
-                <div class="payment-actions">
-                    <button class="action-btn detail-btn" onclick="openPaymentDetail('1')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="action-btn document-btn" onclick="openDocumentModal('1')">
-                        <i class="fas fa-file-alt"></i>
-                    </button>
-                    <button class="action-btn delete-btn" onclick="deletePayment('1')">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <button class="action-btn pay-btn" onclick="paySinglePayment('1')">
-                        <i class="fas fa-money-bill-wave"></i>
-                    </button>
-                </div>
-            </div>
             
             <div class="payment-item">
                 <div class="payment-name">Energia Elétrica</div>
@@ -1092,59 +1059,16 @@
 
     <script>
         // Dados de exemplo (simulando um banco de dados)
-        const paymentsData = [
-            {
-                id: '1',
-                name: 'IPTU 2023',
-                type: 'imposto',
-                entity: 'Prefeitura',
-                dueDate: '2023-03-15',
-                amount: 1250.00,
-                status: 'pending',
-                barcode: '85690000001-0 25000000000-0 00000000000-0 90000000000-0',
-                notes: 'Pagamento referente ao IPTU do ano de 2023',
-                documentUrl: '#',
-                documentName: 'Boleto_IPTU_2023.pdf',
-                documentData: null
-            },
-            {
-                id: '2',
-                name: 'Energia Elétrica',
-                type: 'conta',
-                entity: 'Light',
-                dueDate: '2023-03-10',
-                amount: 350.00,
-                status: 'paid',
-                barcode: '85690000001-0 35000000000-0 00000000000-0 90000000000-0',
-                notes: 'Conta de energia elétrica - Março/2023',
-                documentUrl: '#',
-                documentName: 'Fatura_Energia_032023.pdf',
-                documentData: null
-            },
-            {
-                id: '3',
-                name: 'IRPF 2023',
-                type: 'imposto',
-                entity: 'Receita Federal',
-                dueDate: '2023-04-30',
-                amount: 2850.00,
-                status: 'pending',
-                barcode: '85690000001-0 28500000000-0 00000000000-0 90000000000-0',
-                notes: 'Declaração de Imposto de Renda 2023',
-                documentUrl: '#',
-                documentName: 'DARF_IRPF_2023.pdf',
-                documentData: null
-            }
-        ];
+        const paymentsData = [];
 
         // Carregar dados do localStorage se existirem
         function loadFromLocalStorage() {
-            const savedPayments = localStorage.getItem('bbpPayments');
-            if (savedPayments) {
-                return JSON.parse(savedPayments);
-            }
-            return null;
-        }
+    const savedPayments = localStorage.getItem('bbpPayments');
+    if (savedPayments) {
+        return JSON.parse(savedPayments);
+    }
+    return []; // Retorna array vazio se não houver dados salvos
+}
 
         // Salvar dados no localStorage
         function saveToLocalStorage() {
