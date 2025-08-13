@@ -1058,107 +1058,477 @@
     </div>
 
     <script>
-        // Dados de exemplo (simulando um banco de dados)
-        const paymentsData = [];
-
-        // Carregar dados do localStorage se existirem
-        function loadFromLocalStorage() {
-    const savedPayments = localStorage.getItem('bbpPayments');
-    if (savedPayments) {
-        return JSON.parse(savedPayments);
-    }
-    return []; // Retorna array vazio se não houver dados salvos
-}
-
-        // Salvar dados no localStorage
-        function saveToLocalStorage() {
-            localStorage.setItem('bbpPayments', JSON.stringify(paymentsData));
+    // Dados de exemplo (simulando um banco de dados)
+    let paymentsData = [
+        {
+            id: "1",
+            name: "IPTU 2023",
+            type: "imposto",
+            entity: "Prefeitura",
+            dueDate: "2023-03-15",
+            amount: 1250.00,
+            status: "pending",
+            barcode: "85690000001-0 25000000000-0 00000000000-0 90000000000-0",
+            notes: "Pagamento referente ao IPTU do ano de 2023"
+        },
+        {
+            id: "2",
+            name: "Energia Elétrica",
+            type: "conta",
+            entity: "Light",
+            dueDate: "2023-03-10",
+            amount: 350.00,
+            status: "paid",
+            barcode: "84610000003-5 00000000000-0 00000000000-0 50000000000-0",
+            notes: "Conta de energia elétrica - março/2023"
+        },
+        {
+            id: "3",
+            name: "IRPF 2023",
+            type: "imposto",
+            entity: "Receita Federal",
+            dueDate: "2023-04-30",
+            amount: 2850.00,
+            status: "pending",
+            barcode: "85890000002-8 50000000000-0 00000000000-0 80000000000-0",
+            notes: "Declaração anual de imposto de renda"
         }
+    ];
 
-        // Função para formatar data no padrão brasileiro
-        function formatDate(dateString) {
-            if (!dateString) return '';
-            
+    // Carregar dados do localStorage se existirem
+    function loadFromLocalStorage() {
+        const savedPayments = localStorage.getItem('bbpPayments');
+        if (savedPayments) {
             try {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('pt-BR');
+                const parsed = JSON.parse(savedPayments);
+                if (Array.isArray(parsed)) {
+                    return parsed;
+                }
             } catch (e) {
-                console.error("Erro ao formatar data:", e);
-                return dateString;
+                console.error("Erro ao analisar dados do localStorage:", e);
             }
         }
+        return paymentsData; // Retorna dados padrão se não houver dados salvos
+    }
 
-        // Função para formatar valor monetário
-        function formatCurrency(value) {
-            if (isNaN(value)) return 'R$ 0,00';
-            
-            return value.toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL'
-            });
-        }
+    // Salvar dados no localStorage
+    function saveToLocalStorage() {
+        localStorage.setItem('bbpPayments', JSON.stringify(paymentsData));
+    }
 
-        // Menu dropdown com animação
-        const menuToggle = document.getElementById('menuToggle');
-        const dropdownMenu = document.getElementById('dropdownMenu');
-
-        menuToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            menuToggle.classList.toggle('active');
-            dropdownMenu.classList.toggle('show');
-        });
-
-        // Fechar menu quando clicar fora
-        document.addEventListener('click', (e) => {
-            if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                menuToggle.classList.remove('active');
-                dropdownMenu.classList.remove('show');
-            }
-        });
-
-        // Animação ao rolar
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 10) {
-                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
-            }
-        });
-
-        // Modal de detalhes
-        const paymentDetailModal = document.getElementById('paymentDetailModal');
-        const addPaymentModal = document.getElementById('addPaymentModal');
-        const payAllModal = document.getElementById('payAllModal');
-        const documentModal = document.getElementById('documentModal');
+    // Função para formatar data no padrão brasileiro
+    function formatDate(dateString) {
+        if (!dateString) return 'N/A';
         
-        // ID do pagamento atualmente selecionado
-        let currentPaymentId = null;
-
-        // Função para ler arquivo como base64
-        function readFileAsBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-                reader.readAsDataURL(file);
-            });
+        try {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                return 'Data inválida';
+            }
+            return date.toLocaleDateString('pt-BR');
+        } catch (e) {
+            console.error("Erro ao formatar data:", e);
+            return dateString;
         }
+    }
 
-        // Função para abrir detalhes do pagamento
-        function openPaymentDetail(paymentId) {
-            currentPaymentId = paymentId;
+    // Função para formatar valor monetário
+    function formatCurrency(value) {
+        if (isNaN(value)) return 'R$ 0,00';
+        
+        return value.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+    }
+
+    // Menu dropdown com animação
+    const menuToggle = document.getElementById('menuToggle');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menuToggle.classList.toggle('active');
+        dropdownMenu.classList.toggle('show');
+    });
+
+    // Fechar menu quando clicar fora
+    document.addEventListener('click', (e) => {
+        if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            menuToggle.classList.remove('active');
+            dropdownMenu.classList.remove('show');
+        }
+    });
+
+    // Animação ao rolar
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('header');
+        if (window.scrollY > 10) {
+            header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+        } else {
+            header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
+        }
+    });
+
+    // Modal de detalhes
+    const paymentDetailModal = document.getElementById('paymentDetailModal');
+    const addPaymentModal = document.getElementById('addPaymentModal');
+    const payAllModal = document.getElementById('payAllModal');
+    const documentModal = document.getElementById('documentModal');
+    
+    // ID do pagamento atualmente selecionado
+    let currentPaymentId = null;
+
+    // Função para ler arquivo como base64
+    function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Função para abrir detalhes do pagamento
+    function openPaymentDetail(paymentId) {
+        currentPaymentId = paymentId;
+        
+        const payment = paymentsData.find(p => p.id === paymentId);
+        if (payment) {
+            document.getElementById('detail-name').textContent = payment.name || 'N/A';
+            document.getElementById('detail-entity').textContent = payment.entity || 'N/A';
+            document.getElementById('detail-type').textContent = payment.type || 'N/A';
+            document.getElementById('detail-due').textContent = formatDate(payment.dueDate);
             
-            const payment = paymentsData.find(p => p.id === paymentId);
-            if (payment) {
-                document.getElementById('detail-name').textContent = payment.name || 'N/A';
-                document.getElementById('detail-entity').textContent = payment.entity || 'N/A';
-                document.getElementById('detail-type').textContent = payment.type || 'N/A';
-                document.getElementById('detail-due').textContent = formatDate(payment.dueDate);
+            const statusElement = document.getElementById('detail-status');
+            statusElement.innerHTML = '';
+            
+            let statusText = 'Pendente';
+            let statusClass = 'status-pending';
+            
+            if (payment.status === 'paid') {
+                statusText = 'Pago';
+                statusClass = 'status-paid';
+            } else if (payment.dueDate && new Date(payment.dueDate) < new Date()) {
+                statusText = 'Atrasado';
+                statusClass = 'status-pending';
+            }
+            
+            const statusSpan = document.createElement('span');
+            statusSpan.className = statusClass;
+            statusSpan.textContent = statusText;
+            statusElement.appendChild(statusSpan);
+            
+            document.getElementById('detail-amount').textContent = formatCurrency(payment.amount || 0);
+            document.getElementById('detail-barcode').textContent = payment.barcode || 'N/A';
+            document.getElementById('detail-notes').textContent = payment.notes || 'Nenhuma observação.';
+            
+            // Configurar botão de pagamento
+            const payButton = document.getElementById('payButton');
+            if (payment.status === 'paid') {
+                payButton.disabled = true;
+                payButton.innerHTML = '<i class="fas fa-check"></i> Já pago';
+            } else {
+                payButton.disabled = false;
+                payButton.innerHTML = '<i class="fas fa-money-bill-wave"></i> Realizar Pagamento';
+                payButton.onclick = () => paySinglePayment(paymentId);
+            }
+            
+            paymentDetailModal.classList.add('active');
+        } else {
+            alert('Pagamento não encontrado!');
+        }
+    }
+
+    function closePaymentDetail() {
+        currentPaymentId = null;
+        paymentDetailModal.classList.remove('active');
+    }
+
+    function openAddPayment() {
+        // Resetar o formulário ao abrir
+        document.getElementById('payment-type').value = '';
+        document.getElementById('payment-name').value = '';
+        
+        // Definir data padrão para 7 dias no futuro
+        const today = new Date();
+        const nextWeek = new Date(today);
+        nextWeek.setDate(today.getDate() + 7);
+        const formattedDate = nextWeek.toISOString().split('T')[0];
+        
+        document.getElementById('payment-due').value = formattedDate;
+        document.getElementById('payment-value').value = '';
+        document.getElementById('payment-file').value = '';
+        
+        addPaymentModal.classList.add('active');
+    }
+
+    function closeAddPayment() {
+        addPaymentModal.classList.remove('active');
+    }
+
+    // Função para abrir o modal de pagar tudo
+    function openPayAllModal() {
+        const payAllList = document.getElementById('payAllList');
+        payAllList.innerHTML = '';
+        
+        const pendingPayments = paymentsData.filter(p => p.status === 'pending');
+        
+        if (pendingPayments.length === 0) {
+            payAllList.innerHTML = '<div style="padding: 20px; text-align: center;">Nenhum pagamento pendente encontrado.</div>';
+            document.getElementById('payAllTotal').textContent = formatCurrency(0);
+        } else {
+            let total = 0;
+            
+            pendingPayments.forEach(payment => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'pay-all-item';
+                itemElement.innerHTML = `
+                    <div class="pay-all-item-name">${payment.name}</div>
+                    <div class="pay-all-item-amount">${formatCurrency(payment.amount || 0)}</div>
+                `;
+                payAllList.appendChild(itemElement);
                 
-                const statusElement = document.getElementById('detail-status');
-                statusElement.innerHTML = '';
+                total += payment.amount || 0;
+            });
+            
+            document.getElementById('payAllTotal').textContent = formatCurrency(total);
+        }
+        
+        payAllModal.classList.add('active');
+    }
+
+    function closePayAllModal() {
+        payAllModal.classList.remove('active');
+    }
+
+    // Função para abrir o modal de documento
+    async function openDocumentModal(paymentId) {
+        currentPaymentId = paymentId;
+        
+        const payment = paymentsData.find(p => p.id === paymentId);
+        if (payment) {
+            if (payment.documentUrl || payment.documentData) {
+                document.getElementById('document-title').textContent = payment.documentName || 'Documento.pdf';
                 
+                // Se tiver dados no localStorage, criar URL temporária
+                if (payment.documentData) {
+                    const link = document.getElementById('documentLink');
+                    link.href = payment.documentData;
+                    link.setAttribute('download', payment.documentName || 'documento.pdf');
+                    link.innerHTML = '<i class="fas fa-download"></i> Baixar documento';
+                } else {
+                    document.getElementById('documentLink').href = payment.documentUrl || '#';
+                    document.getElementById('documentLink').innerHTML = '<i class="fas fa-external-link-alt"></i> Acessar documento';
+                }
+                
+                documentModal.classList.add('active');
+            } else {
+                alert('Nenhum documento anexado a este pagamento.');
+            }
+        } else {
+            alert('Pagamento não encontrado!');
+        }
+    }
+
+    function closeDocumentModal() {
+        currentPaymentId = null;
+        documentModal.classList.remove('active');
+    }
+
+    // Função para adicionar um novo pagamento
+    async function addNewPayment() {
+        const type = document.getElementById('payment-type').value;
+        const name = document.getElementById('payment-name').value.trim();
+        const due = document.getElementById('payment-due').value;
+        let value = document.getElementById('payment-value').value.trim();
+        const file = document.getElementById('payment-file').files[0];
+        
+        // Validação dos campos obrigatórios
+        if (!type) {
+            alert('Por favor, selecione o tipo de débito');
+            return;
+        }
+        
+        if (!name) {
+            alert('Por favor, informe o nome do pagamento');
+            return;
+        }
+        
+        if (!due) {
+            alert('Por favor, informe a data de vencimento');
+            return;
+        }
+        
+        // Tratamento do valor
+        if (!value) {
+            value = '0';
+        }
+        
+        // Substituir vírgula por ponto para parseFloat
+        value = value.replace(',', '.');
+        
+        if (isNaN(value)) {
+            alert('Por favor, informe um valor válido');
+            return;
+        }
+        
+        const amount = parseFloat(value);
+        
+        if (amount < 0) {
+            alert('O valor não pode ser negativo');
+            return;
+        }
+        
+        // Determinar a entidade com base no tipo
+        let entity = '';
+        switch (type) {
+            case 'imposto':
+                entity = 'Receita Federal';
+                break;
+            case 'conta':
+                entity = 'Fornecedor';
+                break;
+            case 'taxa':
+                entity = 'Órgão Público';
+                break;
+            case 'fatura':
+                entity = 'Cartão de Crédito';
+                break;
+            default:
+                entity = 'Outro';
+        }
+        
+        // Criar novo ID (garantir que seja único)
+        const newId = Date.now().toString();
+        
+        // Processar arquivo se existir
+        let documentData = null;
+        let documentName = null;
+        if (file) {
+            try {
+                documentData = await readFileAsBase64(file);
+                documentName = file.name;
+            } catch (error) {
+                console.error('Erro ao ler arquivo:', error);
+                alert('Erro ao processar o arquivo. Por favor, tente novamente.');
+                return;
+            }
+        }
+        
+        // Criar objeto do pagamento
+        const newPayment = {
+            id: newId,
+            name: name,
+            type: type,
+            entity: entity,
+            dueDate: due,
+            amount: amount,
+            status: 'pending',
+            barcode: "00000000000-0 00000000000-0 00000000000-0 00000000000-0",
+            notes: file ? `Documento anexado: ${file.name}` : "Sem documento anexado",
+            documentUrl: file ? '#' : null,
+            documentName: documentName,
+            documentData: documentData
+        };
+        
+        // Adicionar ao array de pagamentos
+        paymentsData.push(newPayment);
+        
+        // Salvar no localStorage
+        saveToLocalStorage();
+        
+        // Atualizar a lista de pagamentos
+        updatePaymentsList();
+        
+        alert('Pagamento adicionado com sucesso!');
+        closeAddPayment();
+    }
+
+    // Função para deletar um pagamento
+    function deletePayment(paymentId) {
+        if (confirm('Tem certeza que deseja excluir este pagamento?')) {
+            const index = paymentsData.findIndex(p => p.id === paymentId);
+            if (index !== -1) {
+                paymentsData.splice(index, 1);
+                saveToLocalStorage();
+                updatePaymentsList();
+                alert('Pagamento excluído com sucesso!');
+            }
+        }
+    }
+
+    // Função para pagar um único pagamento
+    function paySinglePayment(paymentId) {
+        const payment = paymentsData.find(p => p.id === paymentId);
+        if (payment) {
+            payment.status = 'paid';
+            saveToLocalStorage();
+            updatePaymentsList();
+            
+            // Fechar o modal de detalhes se estiver aberto
+            if (paymentDetailModal.classList.contains('active')) {
+                closePaymentDetail();
+            }
+            
+            alert('Pagamento realizado com sucesso!');
+        }
+    }
+
+    // Função para pagar todos os itens pendentes
+    function payAll() {
+        const pendingPayments = paymentsData.filter(p => p.status === 'pending');
+        
+        if (pendingPayments.length === 0) {
+            alert('Nenhum pagamento pendente para realizar!');
+            return;
+        }
+        
+        if (!confirm(`Deseja realmente pagar todos os ${pendingPayments.length} itens pendentes?`)) {
+            return;
+        }
+        
+        paymentsData.forEach(payment => {
+            if (payment.status === 'pending') {
+                payment.status = 'paid';
+            }
+        });
+        
+        saveToLocalStorage();
+        updatePaymentsList();
+        closePayAllModal();
+        alert('Todos os pagamentos foram realizados com sucesso!');
+    }
+
+    // Função para atualizar a lista de pagamentos
+    function updatePaymentsList() {
+        const paymentsList = document.querySelector('.payments-list');
+        if (!paymentsList) return;
+        
+        // Limpar todos os itens de pagamento (exceto cabeçalho e total)
+        const items = paymentsList.querySelectorAll('.payment-item');
+        items.forEach(item => item.remove());
+        
+        if (paymentsData.length === 0) {
+            // Mostrar estado vazio
+            const emptyState = document.createElement('div');
+            emptyState.className = 'empty-state';
+            emptyState.innerHTML = `
+                <div class="empty-icon">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+                <h3 class="empty-title">Nenhum pagamento encontrado</h3>
+                <p class="empty-description">Adicione um novo pagamento para começar a gerenciar suas contas e impostos.</p>
+            `;
+            paymentsList.insertBefore(emptyState, paymentsList.querySelector('.payment-total'));
+        } else {
+            // Adicionar cada pagamento à lista
+            paymentsData.forEach(payment => {
+                const paymentItem = document.createElement('div');
+                paymentItem.className = 'payment-item';
+                paymentItem.setAttribute('data-id', payment.id);
+                
+                // Determinar o status e a classe CSS
                 let statusText = 'Pendente';
                 let statusClass = 'status-pending';
                 
@@ -1170,577 +1540,288 @@
                     statusClass = 'status-pending';
                 }
                 
-                const statusSpan = document.createElement('span');
-                statusSpan.className = statusClass;
-                statusSpan.textContent = statusText;
-                statusElement.appendChild(statusSpan);
+                paymentItem.innerHTML = `
+                    <div class="payment-name">${payment.name}</div>
+                    <div class="payment-entity">${payment.entity || 'N/A'}</div>
+                    <div class="payment-due">${formatDate(payment.dueDate)}</div>
+                    <div class="payment-status ${statusClass}">${statusText}</div>
+                    <div class="payment-amount">${formatCurrency(payment.amount || 0)}</div>
+                    <div class="payment-actions">
+                        <button class="action-btn detail-btn" onclick="openPaymentDetail('${payment.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        ${(payment.documentUrl || payment.documentData) ? `
+                        <button class="action-btn document-btn" onclick="openDocumentModal('${payment.id}')">
+                            <i class="fas fa-file-alt"></i>
+                        </button>
+                        ` : `
+                        <button class="action-btn document-btn" disabled>
+                            <i class="fas fa-file-alt"></i>
+                        </button>
+                        `}
+                        <button class="action-btn delete-btn" onclick="deletePayment('${payment.id}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        ${payment.status === 'paid' ? `
+                        <button class="action-btn" disabled>
+                            <i class="fas fa-check"></i>
+                        </button>
+                        ` : `
+                        <button class="action-btn pay-btn" onclick="paySinglePayment('${payment.id}')">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </button>
+                        `}
+                    </div>
+                `;
                 
-                document.getElementById('detail-amount').textContent = formatCurrency(payment.amount || 0);
-                document.getElementById('detail-barcode').textContent = payment.barcode || 'N/A';
-                document.getElementById('detail-notes').textContent = payment.notes || 'Nenhuma observação.';
+                // Inserir antes do total
+                paymentsList.insertBefore(paymentItem, paymentsList.querySelector('.payment-total'));
+            });
+        }
+        
+        // Atualizar o total a pagar
+        updateTotal();
+    }
+
+    // Função para atualizar o total a pagar
+    function updateTotal() {
+        let total = 0;
+        
+        paymentsData.forEach(payment => {
+            if (payment.status === 'pending') {
+                total += payment.amount || 0;
+            }
+        });
+        
+        const totalElement = document.getElementById('totalAmount');
+        if (totalElement) {
+            totalElement.textContent = formatCurrency(total);
+        }
+    }
+
+    // Função para filtrar pagamentos
+    function filterPayments() {
+        const typeFilter = document.getElementById('filterType').value;
+        const statusFilter = document.getElementById('filterStatus').value;
+        const dueFilter = document.getElementById('filterDue').value;
+        const minValue = parseFloat(document.getElementById('filterMinValue').value) || 0;
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        const endOfWeek = new Date();
+        endOfWeek.setDate(today.getDate() + (6 - today.getDay())); // Sábado
+        endOfWeek.setHours(23, 59, 59, 999);
+        
+        const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        endOfMonth.setHours(23, 59, 59, 999);
+        
+        const filteredPayments = paymentsData.filter(payment => {
+            // Filtrar por tipo
+            if (typeFilter && payment.type !== typeFilter) {
+                return false;
+            }
+            
+            // Filtrar por status
+            if (statusFilter === 'pendente' && payment.status !== 'pending') {
+                return false;
+            }
+            if (statusFilter === 'pago' && payment.status !== 'paid') {
+                return false;
+            }
+            if (statusFilter === 'atrasado' && 
+                (payment.status !== 'pending' || (payment.dueDate && new Date(payment.dueDate) >= today))) {
+                return false;
+            }
+            
+            // Filtrar por vencimento
+            if (dueFilter && payment.dueDate) {
+                const paymentDate = new Date(payment.dueDate);
+                paymentDate.setHours(0, 0, 0, 0);
                 
-                // Configurar botão de pagamento
-                const payButton = document.getElementById('payButton');
+                if (dueFilter === 'hoje' && paymentDate.getTime() !== today.getTime()) {
+                    return false;
+                }
+                if (dueFilter === 'semana' && (paymentDate < today || paymentDate > endOfWeek)) {
+                    return false;
+                }
+                if (dueFilter === 'mes' && (paymentDate < today || paymentDate > endOfMonth)) {
+                    return false;
+                }
+            }
+            
+            // Filtrar por valor mínimo
+            if (payment.amount < minValue) {
+                return false;
+            }
+            
+            return true;
+        });
+        
+        // Atualizar a lista com os pagamentos filtrados
+        updateFilteredPaymentsList(filteredPayments);
+    }
+
+    // Função para atualizar a lista com pagamentos filtrados
+    function updateFilteredPaymentsList(filteredPayments) {
+        const paymentsList = document.querySelector('.payments-list');
+        if (!paymentsList) return;
+        
+        // Limpar todos os itens de pagamento (exceto cabeçalho e total)
+        const items = paymentsList.querySelectorAll('.payment-item');
+        items.forEach(item => item.remove());
+        
+        if (filteredPayments.length === 0) {
+            // Mostrar estado vazio
+            const emptyState = document.createElement('div');
+            emptyState.className = 'empty-state';
+            emptyState.innerHTML = `
+                <div class="empty-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3 class="empty-title">Nenhum pagamento encontrado</h3>
+                <p class="empty-description">Nenhum pagamento corresponde aos filtros aplicados.</p>
+            `;
+            paymentsList.insertBefore(emptyState, paymentsList.querySelector('.payment-total'));
+        } else {
+            // Adicionar cada pagamento filtrado à lista
+            filteredPayments.forEach(payment => {
+                const paymentItem = document.createElement('div');
+                paymentItem.className = 'payment-item';
+                paymentItem.setAttribute('data-id', payment.id);
+                
+                // Determinar o status e a classe CSS
+                let statusText = 'Pendente';
+                let statusClass = 'status-pending';
+                
                 if (payment.status === 'paid') {
-                    payButton.disabled = true;
-                    payButton.innerHTML = '<i class="fas fa-check"></i> Já pago';
-                } else {
-                    payButton.disabled = false;
-                    payButton.innerHTML = '<i class="fas fa-money-bill-wave"></i> Realizar Pagamento';
-                    payButton.onclick = () => paySinglePayment(paymentId);
+                    statusText = 'Pago';
+                    statusClass = 'status-paid';
+                } else if (payment.dueDate && new Date(payment.dueDate) < new Date()) {
+                    statusText = 'Atrasado';
+                    statusClass = 'status-pending';
                 }
                 
-                paymentDetailModal.classList.add('active');
-            } else {
-                alert('Pagamento não encontrado!');
-            }
-        }
-
-        function closePaymentDetail() {
-            currentPaymentId = null;
-            paymentDetailModal.classList.remove('active');
-        }
-
-        function openAddPayment() {
-            // Resetar o formulário ao abrir
-            document.getElementById('payment-type').value = '';
-            document.getElementById('payment-name').value = '';
-            
-            // Definir data padrão para 7 dias no futuro
-            const today = new Date();
-            const nextWeek = new Date(today);
-            nextWeek.setDate(today.getDate() + 7);
-            const formattedDate = nextWeek.toISOString().split('T')[0];
-            
-            document.getElementById('payment-due').value = formattedDate;
-            document.getElementById('payment-value').value = '';
-            document.getElementById('payment-file').value = '';
-            
-            addPaymentModal.classList.add('active');
-        }
-
-        function closeAddPayment() {
-            addPaymentModal.classList.remove('active');
-        }
-
-        // Função para abrir o modal de pagar tudo
-        function openPayAllModal() {
-            const payAllList = document.getElementById('payAllList');
-            payAllList.innerHTML = '';
-            
-            const pendingPayments = paymentsData.filter(p => p.status === 'pending');
-            
-            if (pendingPayments.length === 0) {
-                payAllList.innerHTML = '<div style="padding: 20px; text-align: center;">Nenhum pagamento pendente encontrado.</div>';
-                document.getElementById('payAllTotal').textContent = formatCurrency(0);
-            } else {
-                let total = 0;
+                paymentItem.innerHTML = `
+                    <div class="payment-name">${payment.name}</div>
+                    <div class="payment-entity">${payment.entity || 'N/A'}</div>
+                    <div class="payment-due">${formatDate(payment.dueDate)}</div>
+                    <div class="payment-status ${statusClass}">${statusText}</div>
+                    <div class="payment-amount">${formatCurrency(payment.amount || 0)}</div>
+                    <div class="payment-actions">
+                        <button class="action-btn detail-btn" onclick="openPaymentDetail('${payment.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        ${(payment.documentUrl || payment.documentData) ? `
+                        <button class="action-btn document-btn" onclick="openDocumentModal('${payment.id}')">
+                            <i class="fas fa-file-alt"></i>
+                        </button>
+                        ` : `
+                        <button class="action-btn document-btn" disabled>
+                            <i class="fas fa-file-alt"></i>
+                        </button>
+                        `}
+                        <button class="action-btn delete-btn" onclick="deletePayment('${payment.id}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        ${payment.status === 'paid' ? `
+                        <button class="action-btn" disabled>
+                            <i class="fas fa-check"></i>
+                        </button>
+                        ` : `
+                        <button class="action-btn pay-btn" onclick="paySinglePayment('${payment.id}')">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </button>
+                        `}
+                    </div>
+                `;
                 
-                pendingPayments.forEach(payment => {
-                    const itemElement = document.createElement('div');
-                    itemElement.className = 'pay-all-item';
-                    itemElement.innerHTML = `
-                        <div class="pay-all-item-name">${payment.name}</div>
-                        <div class="pay-all-item-amount">${formatCurrency(payment.amount || 0)}</div>
-                    `;
-                    payAllList.appendChild(itemElement);
-                    
-                    total += payment.amount || 0;
-                });
-                
-                document.getElementById('payAllTotal').textContent = formatCurrency(total);
-            }
-            
-            payAllModal.classList.add('active');
+                // Inserir antes do total
+                paymentsList.insertBefore(paymentItem, paymentsList.querySelector('.payment-total'));
+            });
         }
+        
+        // Atualizar o total a pagar com base nos filtros
+        updateFilteredTotal(filteredPayments);
+    }
 
-        function closePayAllModal() {
-            payAllModal.classList.remove('active');
+    // Função para atualizar o total a pagar com base nos filtros
+    function updateFilteredTotal(filteredPayments) {
+        let total = 0;
+        
+        filteredPayments.forEach(payment => {
+            if (payment.status === 'pending') {
+                total += payment.amount || 0;
+            }
+        });
+        
+        const totalElement = document.getElementById('totalAmount');
+        if (totalElement) {
+            totalElement.textContent = formatCurrency(total);
         }
+    }
 
-        // Função para abrir o modal de documento
-        async function openDocumentModal(paymentId) {
-            currentPaymentId = paymentId;
-            
-            const payment = paymentsData.find(p => p.id === paymentId);
-            if (payment) {
-                if (payment.documentUrl || payment.documentData) {
-                    document.getElementById('document-title').textContent = payment.documentName || 'Documento.pdf';
-                    
-                    // Se tiver dados no localStorage, criar URL temporária
-                    if (payment.documentData) {
-                        const link = document.getElementById('documentLink');
-                        link.href = payment.documentData;
-                        link.setAttribute('download', payment.documentName || 'documento.pdf');
-                        link.innerHTML = '<i class="fas fa-download"></i> Baixar documento';
-                    } else {
-                        document.getElementById('documentLink').href = payment.documentUrl;
-                        document.getElementById('documentLink').innerHTML = '<i class="fas fa-external-link-alt"></i> Acessar documento';
-                    }
-                    
-                    documentModal.classList.add('active');
-                } else {
-                    alert('Nenhum documento anexado a este pagamento.');
-                }
-            } else {
-                alert('Pagamento não encontrado!');
-            }
+    // Função para resetar os filtros
+    function resetFilters() {
+        document.getElementById('filterType').value = '';
+        document.getElementById('filterStatus').value = '';
+        document.getElementById('filterDue').value = '';
+        document.getElementById('filterMinValue').value = '';
+        
+        updatePaymentsList();
+    }
+
+    // Função para fazer logout
+    function logout() {
+        if (confirm('Tem certeza que deseja sair?')) {
+            // Simular logout redirecionando para a página de login
+            window.location.href = 'login.html';
         }
+    }
 
-        function closeDocumentModal() {
-            currentPaymentId = null;
-            documentModal.classList.remove('active');
+    // Inicializar a aplicação
+    document.addEventListener('DOMContentLoaded', () => {
+        // Carregar dados do localStorage se existirem
+        const savedPayments = loadFromLocalStorage();
+        if (savedPayments && savedPayments.length > 0) {
+            paymentsData = savedPayments;
         }
+        
+        // Configurar botão de logout
+        document.getElementById('logoutButton').addEventListener('click', logout);
+        
+        // Carregar pagamentos
+        updatePaymentsList();
+        
+        // Exibir nome do usuário (simulado)
+        const userName = localStorage.getItem('bbpUserName') || 'Usuário';
+        document.getElementById('user-name').textContent = `Olá, ${userName}`;
+    });
 
-        // Função para adicionar um novo pagamento
-        async function addNewPayment() {
-            const type = document.getElementById('payment-type').value;
-            const name = document.getElementById('payment-name').value;
-            const due = document.getElementById('payment-due').value;
-            let value = document.getElementById('payment-value').value;
-            const file = document.getElementById('payment-file').files[0];
-            
-            // Validação dos campos obrigatórios
-            if (!type || !name || !due) {
-                alert('Por favor, preencha todos os campos obrigatórios');
-                return;
-            }
-            
-            // Tratamento do valor
-            if (!value || isNaN(value.replace(',', '.'))) {
-                value = '0';
-            }
-            
-            const amount = parseFloat(value.replace(',', '.'));
-            
-            // Determinar a entidade com base no tipo
-            let entity = '';
-            switch (type) {
-                case 'imposto':
-                    entity = 'Receita Federal';
-                    break;
-                case 'conta':
-                    entity = 'Fornecedor';
-                    break;
-                case 'taxa':
-                    entity = 'Órgão Público';
-                    break;
-                default:
-                    entity = 'Outro';
-            }
-            
-            // Criar novo ID
-            const newId = (paymentsData.length + 1).toString();
-            
-            // Processar arquivo se existir
-            let documentData = null;
-            if (file) {
-                try {
-                    documentData = await readFileAsBase64(file);
-                } catch (error) {
-                    console.error('Erro ao ler arquivo:', error);
-                    alert('Erro ao processar o arquivo. Por favor, tente novamente.');
-                    return;
-                }
-            }
-            
-            // Criar objeto do pagamento
-            const newPayment = {
-                id: newId,
-                name: name,
-                type: type,
-                entity: entity,
-                dueDate: due,
-                amount: amount,
-                status: 'pending',
-                barcode: "00000000000-0 00000000000-0 00000000000-0 00000000000-0",
-                notes: file ? `Documento anexado: ${file.name}` : "Sem documento anexado",
-                documentUrl: file ? '#' : null,
-                documentName: file ? file.name : null,
-                documentData: documentData
-            };
-            
-            // Adicionar ao array de pagamentos
-            paymentsData.push(newPayment);
-            
-            // Salvar no localStorage
-            saveToLocalStorage();
-            
-            // Atualizar a lista de pagamentos
-            updatePaymentsList();
-            
-            alert('Pagamento adicionado com sucesso!');
+    // Fechar modais ao clicar fora
+    paymentDetailModal.addEventListener('click', (e) => {
+        if (e.target === paymentDetailModal) {
+            closePaymentDetail();
+        }
+    });
+
+    addPaymentModal.addEventListener('click', (e) => {
+        if (e.target === addPaymentModal) {
             closeAddPayment();
         }
+    });
 
-        // Função para deletar um pagamento
-        function deletePayment(paymentId) {
-            if (confirm('Tem certeza que deseja excluir este pagamento?')) {
-                const index = paymentsData.findIndex(p => p.id === paymentId);
-                if (index !== -1) {
-                    paymentsData.splice(index, 1);
-                    saveToLocalStorage();
-                    updatePaymentsList();
-                    alert('Pagamento excluído com sucesso!');
-                }
-            }
-        }
-
-        // Função para pagar um único pagamento
-        function paySinglePayment(paymentId) {
-            const payment = paymentsData.find(p => p.id === paymentId);
-            if (payment) {
-                payment.status = 'paid';
-                saveToLocalStorage();
-                updatePaymentsList();
-                closePaymentDetail();
-                alert('Pagamento realizado com sucesso!');
-            }
-        }
-
-        // Função para pagar todos os itens pendentes
-        function payAll() {
-            paymentsData.forEach(payment => {
-                if (payment.status === 'pending') {
-                    payment.status = 'paid';
-                }
-            });
-            
-            saveToLocalStorage();
-            updatePaymentsList();
+    payAllModal.addEventListener('click', (e) => {
+        if (e.target === payAllModal) {
             closePayAllModal();
-            alert('Todos os pagamentos foram realizados com sucesso!');
         }
+    });
 
-        // Função para atualizar a lista de pagamentos
-        function updatePaymentsList() {
-            const paymentsList = document.getElementById('paymentsList');
-            const header = paymentsList.querySelector('.payments-header');
-            const totalDiv = paymentsList.querySelector('.payment-total');
-            
-            // Limpar todos os itens de pagamento
-            while (paymentsList.firstChild) {
-                paymentsList.removeChild(paymentsList.firstChild);
-            }
-            
-            // Adicionar o cabeçalho de volta
-            paymentsList.appendChild(header);
-            
-            if (paymentsData.length === 0) {
-                // Mostrar estado vazio
-                const emptyState = document.createElement('div');
-                emptyState.className = 'empty-state';
-                emptyState.innerHTML = `
-                    <div class="empty-icon">
-                        <i class="fas fa-file-invoice-dollar"></i>
-                    </div>
-                    <h3 class="empty-title">Nenhum pagamento encontrado</h3>
-                    <p class="empty-description">Adicione um novo pagamento para começar a gerenciar suas contas e impostos.</p>
-                `;
-                paymentsList.appendChild(emptyState);
-            } else {
-                // Adicionar cada pagamento à lista
-                paymentsData.forEach(payment => {
-                    const paymentItem = document.createElement('div');
-                    paymentItem.className = 'payment-item';
-                    paymentItem.setAttribute('data-id', payment.id);
-                    
-                    // Determinar o status e a classe CSS
-                    let statusText = 'Pendente';
-                    let statusClass = 'status-pending';
-                    
-                    if (payment.status === 'paid') {
-                        statusText = 'Pago';
-                        statusClass = 'status-paid';
-                    } else if (payment.dueDate && new Date(payment.dueDate) < new Date()) {
-                        statusText = 'Atrasado';
-                        statusClass = 'status-pending';
-                    }
-                    
-                    paymentItem.innerHTML = `
-                        <div class="payment-name">${payment.name}</div>
-                        <div class="payment-entity">${payment.entity || 'N/A'}</div>
-                        <div class="payment-due">${formatDate(payment.dueDate)}</div>
-                        <div class="payment-status ${statusClass}">${statusText}</div>
-                        <div class="payment-amount">${formatCurrency(payment.amount || 0)}</div>
-                        <div class="payment-actions">
-                            <button class="action-btn detail-btn" onclick="openPaymentDetail('${payment.id}')">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            ${(payment.documentUrl || payment.documentData) ? `
-                            <button class="action-btn document-btn" onclick="openDocumentModal('${payment.id}')">
-                                <i class="fas fa-file-alt"></i>
-                            </button>
-                            ` : `
-                            <button class="action-btn document-btn" disabled>
-                                <i class="fas fa-file-alt"></i>
-                            </button>
-                            `}
-                            <button class="action-btn delete-btn" onclick="deletePayment('${payment.id}')">
-                                <i class="fas fa-times"></i>
-                            </button>
-                            ${payment.status === 'paid' ? `
-                            <button class="action-btn" disabled>
-                                <i class="fas fa-check"></i>
-                            </button>
-                            ` : `
-                            <button class="action-btn pay-btn" onclick="paySinglePayment('${payment.id}')">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </button>
-                            `}
-                        </div>
-                    `;
-                    
-                    // Inserir antes do total
-                    paymentsList.insertBefore(paymentItem, totalDiv);
-                });
-            }
-            
-            // Adicionar o total de volta
-            paymentsList.appendChild(totalDiv);
-            
-            // Atualizar o total a pagar
-            updateTotal();
+    documentModal.addEventListener('click', (e) => {
+        if (e.target === documentModal) {
+            closeDocumentModal();
         }
-
-        // Função para atualizar o total a pagar
-        function updateTotal() {
-            let total = 0;
-            
-            paymentsData.forEach(payment => {
-                if (payment.status === 'pending') {
-                    total += payment.amount || 0;
-                }
-            });
-            
-            document.getElementById('totalAmount').textContent = formatCurrency(total);
-        }
-
-        // Função para filtrar pagamentos
-        function filterPayments() {
-            const typeFilter = document.getElementById('filterType').value;
-            const statusFilter = document.getElementById('filterStatus').value;
-            const dueFilter = document.getElementById('filterDue').value;
-            const minValue = parseFloat(document.getElementById('filterMinValue').value) || 0;
-            
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            const endOfWeek = new Date();
-            endOfWeek.setDate(today.getDate() + (6 - today.getDay())); // Sábado
-            endOfWeek.setHours(23, 59, 59, 999);
-            
-            const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-            endOfMonth.setHours(23, 59, 59, 999);
-            
-            const filteredPayments = paymentsData.filter(payment => {
-                // Filtrar por tipo
-                if (typeFilter && payment.type !== typeFilter) {
-                    return false;
-                }
-                
-                // Filtrar por status
-                if (statusFilter === 'pendente' && payment.status !== 'pending') {
-                    return false;
-                }
-                if (statusFilter === 'pago' && payment.status !== 'paid') {
-                    return false;
-                }
-                if (statusFilter === 'atrasado' && 
-                    (payment.status !== 'pending' || new Date(payment.dueDate) >= today)) {
-                    return false;
-                }
-                
-                // Filtrar por vencimento
-                if (dueFilter) {
-                    const paymentDate = new Date(payment.dueDate);
-                    paymentDate.setHours(0, 0, 0, 0);
-                    
-                    if (dueFilter === 'hoje' && paymentDate.getTime() !== today.getTime()) {
-                        return false;
-                    }
-                    if (dueFilter === 'semana' && (paymentDate < today || paymentDate > endOfWeek)) {
-                        return false;
-                    }
-                    if (dueFilter === 'mes' && (paymentDate < today || paymentDate > endOfMonth)) {
-                        return false;
-                    }
-                }
-                
-                // Filtrar por valor mínimo
-                if (payment.amount < minValue) {
-                    return false;
-                }
-                
-                return true;
-            });
-            
-            // Atualizar a lista com os pagamentos filtrados
-            updateFilteredPaymentsList(filteredPayments);
-        }
-
-        // Função para atualizar a lista com pagamentos filtrados
-        function updateFilteredPaymentsList(filteredPayments) {
-            const paymentsList = document.getElementById('paymentsList');
-            const header = paymentsList.querySelector('.payments-header');
-            const totalDiv = paymentsList.querySelector('.payment-total');
-            
-            // Limpar todos os itens de pagamento
-            while (paymentsList.firstChild) {
-                paymentsList.removeChild(paymentsList.firstChild);
-            }
-            
-            // Adicionar o cabeçalho de volta
-            paymentsList.appendChild(header);
-            
-            if (filteredPayments.length === 0) {
-                // Mostrar estado vazio
-                const emptyState = document.createElement('div');
-                emptyState.className = 'empty-state';
-                emptyState.innerHTML = `
-                    <div class="empty-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <h3 class="empty-title">Nenhum pagamento encontrado</h3>
-                    <p class="empty-description">Nenhum pagamento corresponde aos filtros aplicados.</p>
-                `;
-                paymentsList.appendChild(emptyState);
-            } else {
-                // Adicionar cada pagamento filtrado à lista
-                filteredPayments.forEach(payment => {
-                    const paymentItem = document.createElement('div');
-                    paymentItem.className = 'payment-item';
-                    paymentItem.setAttribute('data-id', payment.id);
-                    
-                    // Determinar o status e a classe CSS
-                    let statusText = 'Pendente';
-                    let statusClass = 'status-pending';
-                    
-                    if (payment.status === 'paid') {
-                        statusText = 'Pago';
-                        statusClass = 'status-paid';
-                    } else if (payment.dueDate && new Date(payment.dueDate) < new Date()) {
-                        statusText = 'Atrasado';
-                        statusClass = 'status-pending';
-                    }
-                    
-                    paymentItem.innerHTML = `
-                        <div class="payment-name">${payment.name}</div>
-                        <div class="payment-entity">${payment.entity || 'N/A'}</div>
-                        <div class="payment-due">${formatDate(payment.dueDate)}</div>
-                        <div class="payment-status ${statusClass}">${statusText}</div>
-                        <div class="payment-amount">${formatCurrency(payment.amount || 0)}</div>
-                        <div class="payment-actions">
-                            <button class="action-btn detail-btn" onclick="openPaymentDetail('${payment.id}')">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            ${(payment.documentUrl || payment.documentData) ? `
-                            <button class="action-btn document-btn" onclick="openDocumentModal('${payment.id}')">
-                                <i class="fas fa-file-alt"></i>
-                            </button>
-                            ` : `
-                            <button class="action-btn document-btn" disabled>
-                                <i class="fas fa-file-alt"></i>
-                            </button>
-                            `}
-                            <button class="action-btn delete-btn" onclick="deletePayment('${payment.id}')">
-                                <i class="fas fa-times"></i>
-                            </button>
-                            ${payment.status === 'paid' ? `
-                            <button class="action-btn" disabled>
-                                <i class="fas fa-check"></i>
-                            </button>
-                            ` : `
-                            <button class="action-btn pay-btn" onclick="paySinglePayment('${payment.id}')">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </button>
-                            `}
-                        </div>
-                    `;
-                    
-                    // Inserir antes do total
-                    paymentsList.insertBefore(paymentItem, totalDiv);
-                });
-            }
-            
-            // Adicionar o total de volta
-            paymentsList.appendChild(totalDiv);
-            
-            // Atualizar o total a pagar com base nos filtros
-            updateFilteredTotal(filteredPayments);
-        }
-
-        // Função para atualizar o total a pagar com base nos filtros
-        function updateFilteredTotal(filteredPayments) {
-            let total = 0;
-            
-            filteredPayments.forEach(payment => {
-                if (payment.status === 'pending') {
-                    total += payment.amount || 0;
-                }
-            });
-            
-            document.getElementById('totalAmount').textContent = formatCurrency(total);
-        }
-
-        // Função para resetar os filtros
-        function resetFilters() {
-            document.getElementById('filterType').value = '';
-            document.getElementById('filterStatus').value = '';
-            document.getElementById('filterDue').value = '';
-            document.getElementById('filterMinValue').value = '';
-            
-            updatePaymentsList();
-        }
-
-        // Função para fazer logout
-        function logout() {
-            if (confirm('Tem certeza que deseja sair?')) {
-                // Simular logout redirecionando para a página de login
-                window.location.href = 'login.html';
-            }
-        }
-
-        // Inicializar a aplicação
-        document.addEventListener('DOMContentLoaded', () => {
-            // Carregar dados do localStorage se existirem
-            const savedPayments = loadFromLocalStorage();
-            if (savedPayments) {
-                paymentsData.length = 0; // Limpar array existente
-                savedPayments.forEach(p => paymentsData.push(p));
-            }
-            
-            // Configurar botão de logout
-            document.getElementById('logoutButton').addEventListener('click', logout);
-            
-            // Carregar pagamentos
-            updatePaymentsList();
-        });
-
-        // Fechar modais ao clicar fora
-        paymentDetailModal.addEventListener('click', (e) => {
-            if (e.target === paymentDetailModal) {
-                closePaymentDetail();
-            }
-        });
-
-        addPaymentModal.addEventListener('click', (e) => {
-            if (e.target === addPaymentModal) {
-                closeAddPayment();
-            }
-        });
-
-        payAllModal.addEventListener('click', (e) => {
-            if (e.target === payAllModal) {
-                closePayAllModal();
-            }
-        });
-
-        documentModal.addEventListener('click', (e) => {
-            if (e.target === documentModal) {
-                closeDocumentModal();
-            }
-        });
-    </script>
+    });
+</script>
 </body>
 </html>
