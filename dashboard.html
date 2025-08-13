@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - BBP - BANKBRAS PAGAMENTOS</title>
+    <title>Dashboard - BBP</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -16,10 +16,6 @@
             --preto: #000000;
             --cinza-claro: #f5f5f5;
             --cinza-escuro: #333333;
-            --cinza-medio: #e0e0e0;
-            --vermelho: #e74c3c;
-            --verde-escuro-hover: #005a32;
-            --azul-hover: #001f5e;
         }
         
         * {
@@ -32,247 +28,81 @@
         body {
             background-color: var(--cinza-claro);
             color: var(--cinza-escuro);
-            line-height: 1.6;
             min-height: 100vh;
         }
 
-        /* Cabeçalho Premium */
         header {
             background: var(--branco);
-            padding: 0 20px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            height: 80px;
-            border-bottom: 4px solid transparent;
-            background-image: linear-gradient(to right, 
-                var(--verde-escuro) 0%, 
-                var(--verde-claro) 25%, 
-                var(--amarelo) 50%, 
-                var(--azul) 75%, 
-                var(--preto) 100%);
-            background-size: 100% 4px;
-            background-repeat: no-repeat;
-            background-position: bottom;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-bottom: 4px solid;
+            border-image: linear-gradient(to right, 
+                var(--verde-escuro), 
+                var(--verde-claro), 
+                var(--amarelo), 
+                var(--azul), 
+                var(--preto)) 1;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             text-decoration: none;
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--verde-escuro) 0%, var(--azul) 100%);
-            border-radius: 8px;
+            width: 30px;
+            height: 30px;
+            background: var(--verde-escuro);
+            border-radius: 5px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--branco);
             font-weight: bold;
-            font-size: 18px;
         }
 
         .logo-text {
             color: var(--preto);
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .logo-text span {
-            color: var(--verde-escuro);
-        }
-
-        .nav-container {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+            font-weight: 600;
         }
 
         .menu-toggle {
             cursor: pointer;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--verde-claro) 0%, var(--azul) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
+            background: none;
             border: none;
-            outline: none;
+            font-size: 1.2rem;
         }
 
-        .menu-toggle:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .menu-toggle .hamburger {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .menu-toggle .hamburger span {
-            display: block;
-            width: 20px;
-            height: 2px;
-            background-color: var(--branco);
-            transition: all 0.3s ease;
-        }
-
-        .menu-toggle.active .hamburger span:nth-child(1) {
-            transform: translateY(7px) rotate(45deg);
-        }
-
-        .menu-toggle.active .hamburger span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-toggle.active .hamburger span:nth-child(3) {
-            transform: translateY(-7px) rotate(-45deg);
-        }
-
-        .menu-toggle .bbp-logo {
-            position: absolute;
-            color: var(--branco);
-            font-weight: bold;
-            font-size: 18px;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: all 0.3s ease;
-        }
-
-        .menu-toggle.active .bbp-logo {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .menu-toggle.active .hamburger {
-            opacity: 0;
-            transform: scale(0.5);
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            right: 20px;
-            top: 80px;
-            background-color: var(--branco);
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            z-index: 100;
-            width: 240px;
-            overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .dropdown-menu.show {
-            display: block;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .dropdown-menu a {
-            display: flex;
-            align-items: center;
-            padding: 14px 20px;
-            color: var(--cinza-escuro);
-            text-decoration: none;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .dropdown-menu a:hover {
-            background-color: var(--cinza-claro);
-            color: var(--verde-escuro);
-            padding-left: 24px;
-        }
-
-        .dropdown-menu a:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-menu a i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-            color: var(--verde-escuro);
-        }
-
-        /* Estilos do Dashboard */
         .dashboard-container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 15px;
         }
 
         .dashboard-header {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            gap: 20px;
+            margin-bottom: 20px;
         }
 
         .dashboard-title {
             color: var(--verde-escuro);
-            font-size: 1.8rem;
-            font-weight: 700;
             margin-bottom: 5px;
-        }
-
-        .user-name {
-            color: var(--azul);
-            font-size: 1.2rem;
-            margin-bottom: 5px;
-        }
-
-        .dashboard-subtitle {
-            color: var(--cinza-escuro);
-            font-size: 1rem;
-            margin-top: 5px;
-            opacity: 0.8;
-        }
-
-        .dashboard-actions {
-            display: flex;
-            gap: 15px;
         }
 
         .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 20px;
-            border-radius: 6px;
+            padding: 8px 15px;
+            border-radius: 5px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
             border: none;
             cursor: pointer;
-            gap: 8px;
-            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .btn-primary {
@@ -280,181 +110,76 @@
             color: var(--branco);
         }
 
-        .btn-primary:hover {
-            background: var(--verde-escuro-hover);
-        }
-
-        .btn-secondary {
-            background: var(--cinza-medio);
-            color: var(--cinza-escuro);
-        }
-
-        .btn-secondary:hover {
-            background: #d0d0d0;
-        }
-
         .filters-container {
             background: var(--branco);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .filters-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-radius: 5px;
+            padding: 15px;
             margin-bottom: 15px;
-        }
-
-        .filters-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--azul);
-        }
-
-        .filter-reset {
-            color: var(--verde-escuro);
-            font-size: 0.9rem;
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .filter-reset:hover {
-            text-decoration: underline;
-        }
-
-        .filter-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .filter-group {
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
 
-        .filter-label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.85rem;
-            color: var(--cinza-escuro);
-            font-weight: 500;
-        }
-
-        .filter-select, .filter-input {
+        .filter-select {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--cinza-medio);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            background-color: var(--branco);
-            transition: border-color 0.3s ease;
-        }
-
-        .filter-select:focus, .filter-input:focus {
-            outline: none;
-            border-color: var(--verde-claro);
-            box-shadow: 0 0 0 2px rgba(0, 150, 57, 0.1);
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
 
         .payments-list {
             background: var(--branco);
-            border-radius: 8px;
+            border-radius: 5px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .payments-header, .payment-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 100px 80px;
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
         }
 
         .payments-header {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 100px 120px;
-            padding: 15px 20px;
-            background: var(--cinza-claro);
+            background: #f9f9f9;
             font-weight: 600;
-            color: var(--azul);
-            font-size: 0.9rem;
-            border-bottom: 1px solid var(--cinza-medio);
-        }
-
-        .payment-item {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 100px 120px;
-            padding: 15px 20px;
-            align-items: center;
-            border-bottom: 1px solid var(--cinza-medio);
-            transition: background 0.2s ease;
-        }
-
-        .payment-item:last-child {
-            border-bottom: none;
-        }
-
-        .payment-item:hover {
-            background: rgba(0, 107, 60, 0.03);
-        }
-
-        .payment-name {
-            font-weight: 600;
-            color: var(--cinza-escuro);
-        }
-
-        .payment-entity {
-            color: var(--cinza-escuro);
-            font-size: 0.9rem;
-        }
-
-        .payment-due {
-            color: var(--cinza-escuro);
-            font-size: 0.9rem;
         }
 
         .payment-status {
             font-size: 0.8rem;
-            font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 12px;
+            padding: 3px 6px;
+            border-radius: 10px;
             text-align: center;
+            width: fit-content;
         }
 
         .status-pending {
-            background: rgba(255, 193, 7, 0.2);
-            color: #ff9800;
+            background: #fff3e0;
+            color: #e65100;
         }
 
         .status-paid {
-            background: rgba(76, 175, 80, 0.2);
-            color: #4caf50;
-        }
-
-        .payment-amount {
-            font-weight: 600;
-            color: var(--cinza-escuro);
+            background: #e8f5e9;
+            color: #2e7d32;
         }
 
         .payment-actions {
             display: flex;
-            justify-content: flex-end;
             gap: 5px;
         }
 
         .action-btn {
-            width: 30px;
-            height: 30px;
-            border-radius: 6px;
+            width: 25px;
+            height: 25px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: none;
-            background: transparent;
-            color: var(--cinza-escuro);
-        }
-
-        .action-btn:hover {
-            background: var(--cinza-claro);
         }
 
         .action-btn.pay-btn {
@@ -462,290 +187,25 @@
             color: white;
         }
 
-        .action-btn.pay-btn:hover {
-            background: var(--verde-claro);
-        }
-
-        .action-btn.detail-btn {
-            background: var(--azul);
-            color: white;
-        }
-
-        .action-btn.detail-btn:hover {
-            background: #003399;
-        }
-
-        .action-btn.delete-btn {
-            background: var(--vermelho);
-            color: white;
-        }
-
-        .action-btn.delete-btn:hover {
-            background: #c0392b;
-        }
-
-        .action-btn.document-btn {
-            background: var(--amarelo);
-            color: var(--preto);
-        }
-
-        .action-btn.document-btn:hover {
-            background: #e6c115;
-        }
-
         .payment-total {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            padding: 20px;
-            background: var(--cinza-claro);
-            font-weight: 700;
-            color: var(--azul);
-            border-top: 2px solid var(--cinza-medio);
-            align-items: center;
-        }
-
-        .total-info {
             display: flex;
-            flex-direction: column;
-        }
-
-        .total-label {
-            font-size: 0.9rem;
-            margin-bottom: 5px;
+            justify-content: space-between;
+            padding: 15px;
+            background: #f9f9f9;
         }
 
         .total-amount {
             color: var(--verde-escuro);
-            font-size: 1.1rem;
-        }
-
-        .total-action {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .btn-pay-all {
-            padding: 8px 20px;
-            background: var(--verde-escuro);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-pay-all:hover {
-            background: var(--verde-claro);
-        }
-
-        .empty-state {
-            padding: 40px 20px;
-            text-align: center;
-            color: var(--cinza-escuro);
-        }
-
-        .empty-icon {
-            font-size: 3rem;
-            color: var(--cinza-medio);
-            margin-bottom: 20px;
-        }
-
-        .empty-title {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: var(--azul);
-        }
-
-        .empty-description {
-            margin-bottom: 20px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal {
-            background: white;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            transform: translateY(20px);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.active .modal {
-            transform: translateY(0);
-        }
-
-        .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--cinza-medio);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-title {
-            font-size: 1.3rem;
-            color: var(--verde-escuro);
             font-weight: 600;
         }
 
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--cinza-escuro);
-        }
-
-        .modal-body {
-            padding: 20px;
-        }
-
-        .payment-detail {
-            margin-bottom: 20px;
-        }
-
-        .detail-row {
-            display: flex;
-            margin-bottom: 15px;
-        }
-
-        .detail-label {
-            width: 150px;
-            font-weight: 600;
-            color: var(--cinza-escuro);
-        }
-
-        .detail-value {
-            flex: 1;
-        }
-
-        .modal-footer {
-            padding: 15px 20px;
-            border-top: 1px solid var(--cinza-medio);
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        /* Modal de Pagar Tudo */
-        .pay-all-list {
-            max-height: 400px;
-            overflow-y: auto;
-            margin: 20px 0;
-            border: 1px solid var(--cinza-medio);
-            border-radius: 6px;
-        }
-
-        .pay-all-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 15px;
-            border-bottom: 1px solid var(--cinza-medio);
-        }
-
-        .pay-all-item:last-child {
-            border-bottom: none;
-        }
-
-        .pay-all-item-name {
-            font-weight: 600;
-        }
-
-        .pay-all-item-amount {
-            color: var(--verde-escuro);
-            font-weight: 600;
-        }
-
-        /* Modal de Documento */
-        .document-preview {
-            margin-top: 20px;
-            border: 1px solid var(--cinza-medio);
-            border-radius: 6px;
-            padding: 15px;
-            background: var(--cinza-claro);
-        }
-
-        .document-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--azul);
-        }
-
-        .document-link {
-            color: var(--verde-escuro);
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 10px;
-        }
-
-        .document-link:hover {
-            text-decoration: underline;
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .dashboard-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            
-            .dashboard-actions {
-                width: 100%;
-                justify-content: flex-end;
-            }
-            
+        @media (max-width: 600px) {
             .payments-header, .payment-item {
-                grid-template-columns: 2fr 1fr 1fr 80px 80px;
+                grid-template-columns: 2fr 1fr 60px;
             }
             
-            .payment-entity {
+            .payment-entity, .payment-due {
                 display: none;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .payments-header, .payment-item {
-                grid-template-columns: 2fr 1fr 60px 60px;
-            }
-            
-            .payment-due {
-                display: none;
-            }
-            
-            .filter-options {
-                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -754,1074 +214,81 @@
     <header>
         <a href="#" class="logo">
             <div class="logo-icon">BBP</div>
-            <div class="logo-text">BANK<span>BRAS</span> PAGAMENTOS</div>
+            <div class="logo-text">BANKBRAS PAGAMENTOS</div>
         </a>
         
-        <div class="nav-container">
-            <button class="menu-toggle" id="menuToggle" aria-label="Menu">
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <div class="bbp-logo">BBP</div>
-            </button>
-            <div class="dropdown-menu" id="dropdownMenu">
-                <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
-                <a href="perfil.html"><i class="fas fa-user-circle"></i> Meu Perfil</a>
-                <a href="historico.html"><i class="fas fa-history"></i> Histórico</a>
-                <a href="configuracoes.html"><i class="fas fa-cog"></i> Configurações</a>
-                <a href="#" id="logoutButton"><i class="fas fa-sign-out-alt"></i> Sair</a>
-            </div>
-        </div>
+        <button class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
     </header>
 
     <div class="dashboard-container">
         <div class="dashboard-header">
-            <div>
-                <div class="user-name" id="user-name">Olá, Usuário</div>
-                <h1 class="dashboard-title">Meus Pagamentos</h1>
-                <p class="dashboard-subtitle">Gerencie e realize seus pagamentos de impostos e contas</p>
-            </div>
-            <div class="dashboard-actions">
-                <button class="btn btn-primary" onclick="openAddPayment()">
-                    <i class="fas fa-plus"></i>
-                    Adicionar
-                </button>
-            </div>
+            <h1 class="dashboard-title">Meus Pagamentos</h1>
+            <button class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                Adicionar
+            </button>
         </div>
 
         <div class="filters-container">
-            <div class="filters-header">
-                <h3 class="filters-title">Filtrar Pagamentos</h3>
-                <a href="#" class="filter-reset" onclick="resetFilters()">Limpar filtros</a>
+            <div class="filter-group">
+                <select class="filter-select">
+                    <option>Todos os tipos</option>
+                    <option>Imposto</option>
+                    <option>Conta</option>
+                </select>
             </div>
-            <div class="filter-options">
-                <div class="filter-group">
-                    <label class="filter-label">Tipo</label>
-                    <select class="filter-select" id="filterType" onchange="filterPayments()">
-                        <option value="">Todos</option>
-                        <option value="imposto">Imposto</option>
-                        <option value="conta">Conta</option>
-                        <option value="taxa">Taxa</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">Status</label>
-                    <select class="filter-select" id="filterStatus" onchange="filterPayments()">
-                        <option value="">Todos</option>
-                        <option value="pendente">Pendente</option>
-                        <option value="pago">Pago</option>
-                        <option value="atrasado">Atrasado</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">Vencimento</label>
-                    <select class="filter-select" id="filterDue" onchange="filterPayments()">
-                        <option value="">Todos</option>
-                        <option value="hoje">Hoje</option>
-                        <option value="semana">Esta semana</option>
-                        <option value="mes">Este mês</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">Valor mínimo</label>
-                    <input type="number" class="filter-input" id="filterMinValue" placeholder="R$ 0,00" onchange="filterPayments()">
-                </div>
+            <div class="filter-group">
+                <select class="filter-select">
+                    <option>Todos os status</option>
+                    <option>Pendente</option>
+                    <option>Pago</option>
+                </select>
             </div>
         </div>
+        
+        <div class="payments-list">
+            <div class="payments-header">
+                <div>Descrição</div>
+                <div>Entidade</div>
+                <div>Vencimento</div>
+                <div>Status</div>
+                <div>Ações</div>
+            </div>
             
             <div class="payment-item">
-                <div class="payment-name">Energia Elétrica</div>
-                <div class="payment-entity">Light</div>
-                <div class="payment-due">10/03/2023</div>
-                <div class="payment-status status-paid">Pago</div>
-                <div class="payment-amount">R$ 350,00</div>
+                <div>IPTU 2023</div>
+                <div>Prefeitura</div>
+                <div>15/03/2023</div>
+                <div class="payment-status status-pending">Pendente</div>
                 <div class="payment-actions">
-                    <button class="action-btn detail-btn" onclick="openPaymentDetail('2')">
-                        <i class="fas fa-eye"></i>
+                    <button class="action-btn pay-btn">
+                        <i class="fas fa-money-bill-wave"></i>
                     </button>
-                    <button class="action-btn document-btn" onclick="openDocumentModal('2')">
-                        <i class="fas fa-file-alt"></i>
-                    </button>
-                    <button class="action-btn delete-btn" onclick="deletePayment('2')">
-                        <i class="fas fa-times"></i>
-                    </button>
+                </div>
+            </div>
+            
+            <div class="payment-item">
+                <div>Energia Elétrica</div>
+                <div>Light</div>
+                <div>10/03/2023</div>
+                <div class="payment-status status-paid">Pago</div>
+                <div class="payment-actions">
                     <button class="action-btn" disabled>
                         <i class="fas fa-check"></i>
                     </button>
                 </div>
             </div>
             
-            <div class="payment-item">
-                <div class="payment-name">IRPF 2023</div>
-                <div class="payment-entity">Receita Federal</div>
-                <div class="payment-due">30/04/2023</div>
-                <div class="payment-status status-pending">Pendente</div>
-                <div class="payment-amount">R$ 2.850,00</div>
-                <div class="payment-actions">
-                    <button class="action-btn detail-btn" onclick="openPaymentDetail('3')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="action-btn document-btn" onclick="openDocumentModal('3')">
-                        <i class="fas fa-file-alt"></i>
-                    </button>
-                    <button class="action-btn delete-btn" onclick="deletePayment('3')">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <button class="action-btn pay-btn" onclick="paySinglePayment('3')">
-                        <i class="fas fa-money-bill-wave"></i>
-                    </button>
-                </div>
-            </div>
-            
             <div class="payment-total">
-                <div class="total-info">
-                    <span class="total-label">Total a pagar:</span>
-                    <span class="total-amount" id="totalAmount">R$ 4.100,00</span>
-                </div>
-                <div class="total-action">
-                    <button class="btn-pay-all" onclick="openPayAllModal()">
-                        <i class="fas fa-money-bill-wave"></i>
-                        Pagar Tudo
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Detalhes -->
-    <div class="modal-overlay" id="paymentDetailModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Detalhes do Pagamento</h3>
-                <button class="modal-close" onclick="closePaymentDetail()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="payment-detail">
-                    <div class="detail-row">
-                        <div class="detail-label">Descrição:</div>
-                        <div class="detail-value" id="detail-name">IPTU 2023</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Entidade:</div>
-                        <div class="detail-value" id="detail-entity">Prefeitura</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Tipo:</div>
-                        <div class="detail-value" id="detail-type">Imposto</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Vencimento:</div>
-                        <div class="detail-value" id="detail-due">15/03/2023</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Status:</div>
-                        <div class="detail-value" id="detail-status"><span class="status-pending">Pendente</span></div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Valor:</div>
-                        <div class="detail-value" id="detail-amount">R$ 1.250,00</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Código de Barras:</div>
-                        <div class="detail-value" id="detail-barcode">85690000001-0 25000000000-0 00000000000-0 90000000000-0</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Observações:</div>
-                        <div class="detail-value" id="detail-notes">Pagamento referente ao IPTU do ano de 2023</div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closePaymentDetail()">Fechar</button>
-                <button class="btn btn-primary" id="payButton" onclick="paySinglePayment('1')">
+                <div>Total a pagar: <span class="total-amount">R$ 1.250,00</span></div>
+                <button class="btn btn-primary">
                     <i class="fas fa-money-bill-wave"></i>
-                    Realizar Pagamento
+                    Pagar Tudo
                 </button>
             </div>
         </div>
     </div>
-
-    <!-- Modal de Adicionar Pagamento -->
-    <div class="modal-overlay" id="addPaymentModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Adicionar Novo Pagamento</h3>
-                <button class="modal-close" onclick="closeAddPayment()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="payment-detail">
-                    <div class="detail-row">
-                        <div class="detail-label">Tipo de Débito:</div>
-                        <div class="detail-value">
-                            <select id="payment-type" class="filter-select" style="width: 100%">
-                                <option value="">Selecione</option>
-                                <option value="imposto">Imposto</option>
-                                <option value="conta">Conta</option>
-                                <option value="fatura">Fatura</option>
-                                <option value="taxa">Taxa</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Nome:</div>
-                        <div class="detail-value">
-                            <input type="text" id="payment-name" class="filter-input" placeholder="Nome do provedor ou entidade">
-                        </div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Data de Vencimento:</div>
-                        <div class="detail-value">
-                            <input type="date" id="payment-due" class="filter-input">
-                        </div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Valor:</div>
-                        <div class="detail-value">
-                            <input type="number" step="0.01" id="payment-value" class="filter-input" placeholder="R$ 0,00">
-                        </div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Anexar Documento:</div>
-                        <div class="detail-value">
-                            <input type="file" id="payment-file" class="filter-input">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeAddPayment()">Cancelar</button>
-                <button class="btn btn-primary" onclick="addNewPayment()">
-                    <i class="fas fa-plus"></i>
-                    Adicionar
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Pagar Tudo -->
-    <div class="modal-overlay" id="payAllModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Confirmar Pagamento de Todos os Itens</h3>
-                <button class="modal-close" onclick="closePayAllModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>Você está prestes a realizar o pagamento dos seguintes itens pendentes:</p>
-                
-                <div class="pay-all-list" id="payAllList">
-                    <div class="pay-all-item">
-                        <div class="pay-all-item-name">IPTU 2023</div>
-                        <div class="pay-all-item-amount">R$ 1.250,00</div>
-                    </div>
-                    <div class="pay-all-item">
-                        <div class="pay-all-item-name">IRPF 2023</div>
-                        <div class="pay-all-item-amount">R$ 2.850,00</div>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 20px; font-weight: 600; text-align: right;">
-                    <div>Total a pagar: <span id="payAllTotal" style="color: var(--verde-escuro);">R$ 4.100,00</span></div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closePayAllModal()">Fechar</button>
-                <button class="btn btn-primary" onclick="payAll()">
-                    <i class="fas fa-money-bill-wave"></i>
-                    Realizar Pagamento
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Documento -->
-    <div class="modal-overlay" id="documentModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Documento Anexado</h3>
-                <button class="modal-close" onclick="closeDocumentModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="document-preview">
-                    <div class="document-title" id="document-title">Boleto_IPTU_2023.pdf</div>
-                    <p>Este documento foi anexado ao pagamento e está armazenado em nossos servidores.</p>
-                    <a href="#" class="document-link" target="_blank" id="documentLink">
-                        <i class="fas fa-external-link-alt"></i> Acessar documento
-                    </a>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeDocumentModal()">Fechar</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-    // Dados de exemplo (simulando um banco de dados)
-    let paymentsData = [
-        {
-            id: "1",
-            name: "IPTU 2023",
-            type: "imposto",
-            entity: "Prefeitura",
-            dueDate: "2023-03-15",
-            amount: 1250.00,
-            status: "pending",
-            barcode: "85690000001-0 25000000000-0 00000000000-0 90000000000-0",
-            notes: "Pagamento referente ao IPTU do ano de 2023"
-        },
-        {
-            id: "2",
-            name: "Energia Elétrica",
-            type: "conta",
-            entity: "Light",
-            dueDate: "2023-03-10",
-            amount: 350.00,
-            status: "paid",
-            barcode: "84610000003-5 00000000000-0 00000000000-0 50000000000-0",
-            notes: "Conta de energia elétrica - março/2023"
-        },
-        {
-            id: "3",
-            name: "IRPF 2023",
-            type: "imposto",
-            entity: "Receita Federal",
-            dueDate: "2023-04-30",
-            amount: 2850.00,
-            status: "pending",
-            barcode: "85890000002-8 50000000000-0 00000000000-0 80000000000-0",
-            notes: "Declaração anual de imposto de renda"
-        }
-    ];
-
-    // Carregar dados do localStorage se existirem
-    function loadFromLocalStorage() {
-        const savedPayments = localStorage.getItem('bbpPayments');
-        if (savedPayments) {
-            try {
-                const parsed = JSON.parse(savedPayments);
-                if (Array.isArray(parsed)) {
-                    return parsed;
-                }
-            } catch (e) {
-                console.error("Erro ao analisar dados do localStorage:", e);
-            }
-        }
-        return paymentsData; // Retorna dados padrão se não houver dados salvos
-    }
-
-    // Salvar dados no localStorage
-    function saveToLocalStorage() {
-        localStorage.setItem('bbpPayments', JSON.stringify(paymentsData));
-    }
-
-    // Função para formatar data no padrão brasileiro
-    function formatDate(dateString) {
-        if (!dateString) return 'N/A';
-        
-        try {
-            const date = new Date(dateString);
-            if (isNaN(date.getTime())) {
-                return 'Data inválida';
-            }
-            return date.toLocaleDateString('pt-BR');
-        } catch (e) {
-            console.error("Erro ao formatar data:", e);
-            return dateString;
-        }
-    }
-
-    // Função para formatar valor monetário
-    function formatCurrency(value) {
-        if (isNaN(value)) return 'R$ 0,00';
-        
-        return value.toLocaleString('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
-        });
-    }
-
-    // Menu dropdown com animação
-    const menuToggle = document.getElementById('menuToggle');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-
-    menuToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        menuToggle.classList.toggle('active');
-        dropdownMenu.classList.toggle('show');
-    });
-
-    // Fechar menu quando clicar fora
-    document.addEventListener('click', (e) => {
-        if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
-            menuToggle.classList.remove('active');
-            dropdownMenu.classList.remove('show');
-        }
-    });
-
-    // Animação ao rolar
-    window.addEventListener('scroll', () => {
-        const header = document.querySelector('header');
-        if (window.scrollY > 10) {
-            header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
-        } else {
-            header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
-        }
-    });
-
-    // Modal de detalhes
-    const paymentDetailModal = document.getElementById('paymentDetailModal');
-    const addPaymentModal = document.getElementById('addPaymentModal');
-    const payAllModal = document.getElementById('payAllModal');
-    const documentModal = document.getElementById('documentModal');
-    
-    // ID do pagamento atualmente selecionado
-    let currentPaymentId = null;
-
-    // Função para ler arquivo como base64
-    function readFileAsBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-            reader.readAsDataURL(file);
-        });
-    }
-
-    // Função para abrir detalhes do pagamento
-    function openPaymentDetail(paymentId) {
-        currentPaymentId = paymentId;
-        
-        const payment = paymentsData.find(p => p.id === paymentId);
-        if (payment) {
-            document.getElementById('detail-name').textContent = payment.name || 'N/A';
-            document.getElementById('detail-entity').textContent = payment.entity || 'N/A';
-            document.getElementById('detail-type').textContent = payment.type || 'N/A';
-            document.getElementById('detail-due').textContent = formatDate(payment.dueDate);
-            
-            const statusElement = document.getElementById('detail-status');
-            statusElement.innerHTML = '';
-            
-            let statusText = 'Pendente';
-            let statusClass = 'status-pending';
-            
-            if (payment.status === 'paid') {
-                statusText = 'Pago';
-                statusClass = 'status-paid';
-            } else if (payment.dueDate && new Date(payment.dueDate) < new Date()) {
-                statusText = 'Atrasado';
-                statusClass = 'status-pending';
-            }
-            
-            const statusSpan = document.createElement('span');
-            statusSpan.className = statusClass;
-            statusSpan.textContent = statusText;
-            statusElement.appendChild(statusSpan);
-            
-            document.getElementById('detail-amount').textContent = formatCurrency(payment.amount || 0);
-            document.getElementById('detail-barcode').textContent = payment.barcode || 'N/A';
-            document.getElementById('detail-notes').textContent = payment.notes || 'Nenhuma observação.';
-            
-            // Configurar botão de pagamento
-            const payButton = document.getElementById('payButton');
-            if (payment.status === 'paid') {
-                payButton.disabled = true;
-                payButton.innerHTML = '<i class="fas fa-check"></i> Já pago';
-            } else {
-                payButton.disabled = false;
-                payButton.innerHTML = '<i class="fas fa-money-bill-wave"></i> Realizar Pagamento';
-                payButton.onclick = () => paySinglePayment(paymentId);
-            }
-            
-            paymentDetailModal.classList.add('active');
-        } else {
-            alert('Pagamento não encontrado!');
-        }
-    }
-
-    function closePaymentDetail() {
-        currentPaymentId = null;
-        paymentDetailModal.classList.remove('active');
-    }
-
-    function openAddPayment() {
-        // Resetar o formulário ao abrir
-        document.getElementById('payment-type').value = '';
-        document.getElementById('payment-name').value = '';
-        
-        // Definir data padrão para 7 dias no futuro
-        const today = new Date();
-        const nextWeek = new Date(today);
-        nextWeek.setDate(today.getDate() + 7);
-        const formattedDate = nextWeek.toISOString().split('T')[0];
-        
-        document.getElementById('payment-due').value = formattedDate;
-        document.getElementById('payment-value').value = '';
-        document.getElementById('payment-file').value = '';
-        
-        addPaymentModal.classList.add('active');
-    }
-
-    function closeAddPayment() {
-        addPaymentModal.classList.remove('active');
-    }
-
-    // Função para abrir o modal de pagar tudo
-    function openPayAllModal() {
-        const payAllList = document.getElementById('payAllList');
-        payAllList.innerHTML = '';
-        
-        const pendingPayments = paymentsData.filter(p => p.status === 'pending');
-        
-        if (pendingPayments.length === 0) {
-            payAllList.innerHTML = '<div style="padding: 20px; text-align: center;">Nenhum pagamento pendente encontrado.</div>';
-            document.getElementById('payAllTotal').textContent = formatCurrency(0);
-        } else {
-            let total = 0;
-            
-            pendingPayments.forEach(payment => {
-                const itemElement = document.createElement('div');
-                itemElement.className = 'pay-all-item';
-                itemElement.innerHTML = `
-                    <div class="pay-all-item-name">${payment.name}</div>
-                    <div class="pay-all-item-amount">${formatCurrency(payment.amount || 0)}</div>
-                `;
-                payAllList.appendChild(itemElement);
-                
-                total += payment.amount || 0;
-            });
-            
-            document.getElementById('payAllTotal').textContent = formatCurrency(total);
-        }
-        
-        payAllModal.classList.add('active');
-    }
-
-    function closePayAllModal() {
-        payAllModal.classList.remove('active');
-    }
-
-    // Função para abrir o modal de documento
-    async function openDocumentModal(paymentId) {
-        currentPaymentId = paymentId;
-        
-        const payment = paymentsData.find(p => p.id === paymentId);
-        if (payment) {
-            if (payment.documentUrl || payment.documentData) {
-                document.getElementById('document-title').textContent = payment.documentName || 'Documento.pdf';
-                
-                // Se tiver dados no localStorage, criar URL temporária
-                if (payment.documentData) {
-                    const link = document.getElementById('documentLink');
-                    link.href = payment.documentData;
-                    link.setAttribute('download', payment.documentName || 'documento.pdf');
-                    link.innerHTML = '<i class="fas fa-download"></i> Baixar documento';
-                } else {
-                    document.getElementById('documentLink').href = payment.documentUrl || '#';
-                    document.getElementById('documentLink').innerHTML = '<i class="fas fa-external-link-alt"></i> Acessar documento';
-                }
-                
-                documentModal.classList.add('active');
-            } else {
-                alert('Nenhum documento anexado a este pagamento.');
-            }
-        } else {
-            alert('Pagamento não encontrado!');
-        }
-    }
-
-    function closeDocumentModal() {
-        currentPaymentId = null;
-        documentModal.classList.remove('active');
-    }
-
-    // Função para adicionar um novo pagamento
-    async function addNewPayment() {
-        const type = document.getElementById('payment-type').value;
-        const name = document.getElementById('payment-name').value.trim();
-        const due = document.getElementById('payment-due').value;
-        let value = document.getElementById('payment-value').value.trim();
-        const file = document.getElementById('payment-file').files[0];
-        
-        // Validação dos campos obrigatórios
-        if (!type) {
-            alert('Por favor, selecione o tipo de débito');
-            return;
-        }
-        
-        if (!name) {
-            alert('Por favor, informe o nome do pagamento');
-            return;
-        }
-        
-        if (!due) {
-            alert('Por favor, informe a data de vencimento');
-            return;
-        }
-        
-        // Tratamento do valor
-        if (!value) {
-            value = '0';
-        }
-        
-        // Substituir vírgula por ponto para parseFloat
-        value = value.replace(',', '.');
-        
-        if (isNaN(value)) {
-            alert('Por favor, informe um valor válido');
-            return;
-        }
-        
-        const amount = parseFloat(value);
-        
-        if (amount < 0) {
-            alert('O valor não pode ser negativo');
-            return;
-        }
-        
-        // Determinar a entidade com base no tipo
-        let entity = '';
-        switch (type) {
-            case 'imposto':
-                entity = 'Receita Federal';
-                break;
-            case 'conta':
-                entity = 'Fornecedor';
-                break;
-            case 'taxa':
-                entity = 'Órgão Público';
-                break;
-            case 'fatura':
-                entity = 'Cartão de Crédito';
-                break;
-            default:
-                entity = 'Outro';
-        }
-        
-        // Criar novo ID (garantir que seja único)
-        const newId = Date.now().toString();
-        
-        // Processar arquivo se existir
-        let documentData = null;
-        let documentName = null;
-        if (file) {
-            try {
-                documentData = await readFileAsBase64(file);
-                documentName = file.name;
-            } catch (error) {
-                console.error('Erro ao ler arquivo:', error);
-                alert('Erro ao processar o arquivo. Por favor, tente novamente.');
-                return;
-            }
-        }
-        
-        // Criar objeto do pagamento
-        const newPayment = {
-            id: newId,
-            name: name,
-            type: type,
-            entity: entity,
-            dueDate: due,
-            amount: amount,
-            status: 'pending',
-            barcode: "00000000000-0 00000000000-0 00000000000-0 00000000000-0",
-            notes: file ? `Documento anexado: ${file.name}` : "Sem documento anexado",
-            documentUrl: file ? '#' : null,
-            documentName: documentName,
-            documentData: documentData
-        };
-        
-        // Adicionar ao array de pagamentos
-        paymentsData.push(newPayment);
-        
-        // Salvar no localStorage
-        saveToLocalStorage();
-        
-        // Atualizar a lista de pagamentos
-        updatePaymentsList();
-        
-        alert('Pagamento adicionado com sucesso!');
-        closeAddPayment();
-    }
-
-    // Função para deletar um pagamento
-    function deletePayment(paymentId) {
-        if (confirm('Tem certeza que deseja excluir este pagamento?')) {
-            const index = paymentsData.findIndex(p => p.id === paymentId);
-            if (index !== -1) {
-                paymentsData.splice(index, 1);
-                saveToLocalStorage();
-                updatePaymentsList();
-                alert('Pagamento excluído com sucesso!');
-            }
-        }
-    }
-
-    // Função para pagar um único pagamento
-    function paySinglePayment(paymentId) {
-        const payment = paymentsData.find(p => p.id === paymentId);
-        if (payment) {
-            payment.status = 'paid';
-            saveToLocalStorage();
-            updatePaymentsList();
-            
-            // Fechar o modal de detalhes se estiver aberto
-            if (paymentDetailModal.classList.contains('active')) {
-                closePaymentDetail();
-            }
-            
-            alert('Pagamento realizado com sucesso!');
-        }
-    }
-
-    // Função para pagar todos os itens pendentes
-    function payAll() {
-        const pendingPayments = paymentsData.filter(p => p.status === 'pending');
-        
-        if (pendingPayments.length === 0) {
-            alert('Nenhum pagamento pendente para realizar!');
-            return;
-        }
-        
-        if (!confirm(`Deseja realmente pagar todos os ${pendingPayments.length} itens pendentes?`)) {
-            return;
-        }
-        
-        paymentsData.forEach(payment => {
-            if (payment.status === 'pending') {
-                payment.status = 'paid';
-            }
-        });
-        
-        saveToLocalStorage();
-        updatePaymentsList();
-        closePayAllModal();
-        alert('Todos os pagamentos foram realizados com sucesso!');
-    }
-
-    // Função para atualizar a lista de pagamentos
-    function updatePaymentsList() {
-        const paymentsList = document.querySelector('.payments-list');
-        if (!paymentsList) return;
-        
-        // Limpar todos os itens de pagamento (exceto cabeçalho e total)
-        const items = paymentsList.querySelectorAll('.payment-item');
-        items.forEach(item => item.remove());
-        
-        if (paymentsData.length === 0) {
-            // Mostrar estado vazio
-            const emptyState = document.createElement('div');
-            emptyState.className = 'empty-state';
-            emptyState.innerHTML = `
-                <div class="empty-icon">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                </div>
-                <h3 class="empty-title">Nenhum pagamento encontrado</h3>
-                <p class="empty-description">Adicione um novo pagamento para começar a gerenciar suas contas e impostos.</p>
-            `;
-            paymentsList.insertBefore(emptyState, paymentsList.querySelector('.payment-total'));
-        } else {
-            // Adicionar cada pagamento à lista
-            paymentsData.forEach(payment => {
-                const paymentItem = document.createElement('div');
-                paymentItem.className = 'payment-item';
-                paymentItem.setAttribute('data-id', payment.id);
-                
-                // Determinar o status e a classe CSS
-                let statusText = 'Pendente';
-                let statusClass = 'status-pending';
-                
-                if (payment.status === 'paid') {
-                    statusText = 'Pago';
-                    statusClass = 'status-paid';
-                } else if (payment.dueDate && new Date(payment.dueDate) < new Date()) {
-                    statusText = 'Atrasado';
-                    statusClass = 'status-pending';
-                }
-                
-                paymentItem.innerHTML = `
-                    <div class="payment-name">${payment.name}</div>
-                    <div class="payment-entity">${payment.entity || 'N/A'}</div>
-                    <div class="payment-due">${formatDate(payment.dueDate)}</div>
-                    <div class="payment-status ${statusClass}">${statusText}</div>
-                    <div class="payment-amount">${formatCurrency(payment.amount || 0)}</div>
-                    <div class="payment-actions">
-                        <button class="action-btn detail-btn" onclick="openPaymentDetail('${payment.id}')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        ${(payment.documentUrl || payment.documentData) ? `
-                        <button class="action-btn document-btn" onclick="openDocumentModal('${payment.id}')">
-                            <i class="fas fa-file-alt"></i>
-                        </button>
-                        ` : `
-                        <button class="action-btn document-btn" disabled>
-                            <i class="fas fa-file-alt"></i>
-                        </button>
-                        `}
-                        <button class="action-btn delete-btn" onclick="deletePayment('${payment.id}')">
-                            <i class="fas fa-times"></i>
-                        </button>
-                        ${payment.status === 'paid' ? `
-                        <button class="action-btn" disabled>
-                            <i class="fas fa-check"></i>
-                        </button>
-                        ` : `
-                        <button class="action-btn pay-btn" onclick="paySinglePayment('${payment.id}')">
-                            <i class="fas fa-money-bill-wave"></i>
-                        </button>
-                        `}
-                    </div>
-                `;
-                
-                // Inserir antes do total
-                paymentsList.insertBefore(paymentItem, paymentsList.querySelector('.payment-total'));
-            });
-        }
-        
-        // Atualizar o total a pagar
-        updateTotal();
-    }
-
-    // Função para atualizar o total a pagar
-    function updateTotal() {
-        let total = 0;
-        
-        paymentsData.forEach(payment => {
-            if (payment.status === 'pending') {
-                total += payment.amount || 0;
-            }
-        });
-        
-        const totalElement = document.getElementById('totalAmount');
-        if (totalElement) {
-            totalElement.textContent = formatCurrency(total);
-        }
-    }
-
-    // Função para filtrar pagamentos
-    function filterPayments() {
-        const typeFilter = document.getElementById('filterType').value;
-        const statusFilter = document.getElementById('filterStatus').value;
-        const dueFilter = document.getElementById('filterDue').value;
-        const minValue = parseFloat(document.getElementById('filterMinValue').value) || 0;
-        
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        
-        const endOfWeek = new Date();
-        endOfWeek.setDate(today.getDate() + (6 - today.getDay())); // Sábado
-        endOfWeek.setHours(23, 59, 59, 999);
-        
-        const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-        endOfMonth.setHours(23, 59, 59, 999);
-        
-        const filteredPayments = paymentsData.filter(payment => {
-            // Filtrar por tipo
-            if (typeFilter && payment.type !== typeFilter) {
-                return false;
-            }
-            
-            // Filtrar por status
-            if (statusFilter === 'pendente' && payment.status !== 'pending') {
-                return false;
-            }
-            if (statusFilter === 'pago' && payment.status !== 'paid') {
-                return false;
-            }
-            if (statusFilter === 'atrasado' && 
-                (payment.status !== 'pending' || (payment.dueDate && new Date(payment.dueDate) >= today))) {
-                return false;
-            }
-            
-            // Filtrar por vencimento
-            if (dueFilter && payment.dueDate) {
-                const paymentDate = new Date(payment.dueDate);
-                paymentDate.setHours(0, 0, 0, 0);
-                
-                if (dueFilter === 'hoje' && paymentDate.getTime() !== today.getTime()) {
-                    return false;
-                }
-                if (dueFilter === 'semana' && (paymentDate < today || paymentDate > endOfWeek)) {
-                    return false;
-                }
-                if (dueFilter === 'mes' && (paymentDate < today || paymentDate > endOfMonth)) {
-                    return false;
-                }
-            }
-            
-            // Filtrar por valor mínimo
-            if (payment.amount < minValue) {
-                return false;
-            }
-            
-            return true;
-        });
-        
-        // Atualizar a lista com os pagamentos filtrados
-        updateFilteredPaymentsList(filteredPayments);
-    }
-
-    // Função para atualizar a lista com pagamentos filtrados
-    function updateFilteredPaymentsList(filteredPayments) {
-        const paymentsList = document.querySelector('.payments-list');
-        if (!paymentsList) return;
-        
-        // Limpar todos os itens de pagamento (exceto cabeçalho e total)
-        const items = paymentsList.querySelectorAll('.payment-item');
-        items.forEach(item => item.remove());
-        
-        if (filteredPayments.length === 0) {
-            // Mostrar estado vazio
-            const emptyState = document.createElement('div');
-            emptyState.className = 'empty-state';
-            emptyState.innerHTML = `
-                <div class="empty-icon">
-                    <i class="fas fa-search"></i>
-                </div>
-                <h3 class="empty-title">Nenhum pagamento encontrado</h3>
-                <p class="empty-description">Nenhum pagamento corresponde aos filtros aplicados.</p>
-            `;
-            paymentsList.insertBefore(emptyState, paymentsList.querySelector('.payment-total'));
-        } else {
-            // Adicionar cada pagamento filtrado à lista
-            filteredPayments.forEach(payment => {
-                const paymentItem = document.createElement('div');
-                paymentItem.className = 'payment-item';
-                paymentItem.setAttribute('data-id', payment.id);
-                
-                // Determinar o status e a classe CSS
-                let statusText = 'Pendente';
-                let statusClass = 'status-pending';
-                
-                if (payment.status === 'paid') {
-                    statusText = 'Pago';
-                    statusClass = 'status-paid';
-                } else if (payment.dueDate && new Date(payment.dueDate) < new Date()) {
-                    statusText = 'Atrasado';
-                    statusClass = 'status-pending';
-                }
-                
-                paymentItem.innerHTML = `
-                    <div class="payment-name">${payment.name}</div>
-                    <div class="payment-entity">${payment.entity || 'N/A'}</div>
-                    <div class="payment-due">${formatDate(payment.dueDate)}</div>
-                    <div class="payment-status ${statusClass}">${statusText}</div>
-                    <div class="payment-amount">${formatCurrency(payment.amount || 0)}</div>
-                    <div class="payment-actions">
-                        <button class="action-btn detail-btn" onclick="openPaymentDetail('${payment.id}')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        ${(payment.documentUrl || payment.documentData) ? `
-                        <button class="action-btn document-btn" onclick="openDocumentModal('${payment.id}')">
-                            <i class="fas fa-file-alt"></i>
-                        </button>
-                        ` : `
-                        <button class="action-btn document-btn" disabled>
-                            <i class="fas fa-file-alt"></i>
-                        </button>
-                        `}
-                        <button class="action-btn delete-btn" onclick="deletePayment('${payment.id}')">
-                            <i class="fas fa-times"></i>
-                        </button>
-                        ${payment.status === 'paid' ? `
-                        <button class="action-btn" disabled>
-                            <i class="fas fa-check"></i>
-                        </button>
-                        ` : `
-                        <button class="action-btn pay-btn" onclick="paySinglePayment('${payment.id}')">
-                            <i class="fas fa-money-bill-wave"></i>
-                        </button>
-                        `}
-                    </div>
-                `;
-                
-                // Inserir antes do total
-                paymentsList.insertBefore(paymentItem, paymentsList.querySelector('.payment-total'));
-            });
-        }
-        
-        // Atualizar o total a pagar com base nos filtros
-        updateFilteredTotal(filteredPayments);
-    }
-
-    // Função para atualizar o total a pagar com base nos filtros
-    function updateFilteredTotal(filteredPayments) {
-        let total = 0;
-        
-        filteredPayments.forEach(payment => {
-            if (payment.status === 'pending') {
-                total += payment.amount || 0;
-            }
-        });
-        
-        const totalElement = document.getElementById('totalAmount');
-        if (totalElement) {
-            totalElement.textContent = formatCurrency(total);
-        }
-    }
-
-    // Função para resetar os filtros
-    function resetFilters() {
-        document.getElementById('filterType').value = '';
-        document.getElementById('filterStatus').value = '';
-        document.getElementById('filterDue').value = '';
-        document.getElementById('filterMinValue').value = '';
-        
-        updatePaymentsList();
-    }
-
-    // Função para fazer logout
-    function logout() {
-        if (confirm('Tem certeza que deseja sair?')) {
-            // Simular logout redirecionando para a página de login
-            window.location.href = 'login.html';
-        }
-    }
-
-    // Inicializar a aplicação
-    document.addEventListener('DOMContentLoaded', () => {
-        // Carregar dados do localStorage se existirem
-        const savedPayments = loadFromLocalStorage();
-        if (savedPayments && savedPayments.length > 0) {
-            paymentsData = savedPayments;
-        }
-        
-        // Configurar botão de logout
-        document.getElementById('logoutButton').addEventListener('click', logout);
-        
-        // Carregar pagamentos
-        updatePaymentsList();
-        
-        // Exibir nome do usuário (simulado)
-        const userName = localStorage.getItem('bbpUserName') || 'Usuário';
-        document.getElementById('user-name').textContent = `Olá, ${userName}`;
-    });
-
-    // Fechar modais ao clicar fora
-    paymentDetailModal.addEventListener('click', (e) => {
-        if (e.target === paymentDetailModal) {
-            closePaymentDetail();
-        }
-    });
-
-    addPaymentModal.addEventListener('click', (e) => {
-        if (e.target === addPaymentModal) {
-            closeAddPayment();
-        }
-    });
-
-    payAllModal.addEventListener('click', (e) => {
-        if (e.target === payAllModal) {
-            closePayAllModal();
-        }
-    });
-
-    documentModal.addEventListener('click', (e) => {
-        if (e.target === documentModal) {
-            closeDocumentModal();
-        }
-    });
-</script>
 </body>
 </html>
