@@ -1320,118 +1320,70 @@
             documentModal.classList.remove('active');
         }
 
-        // Adicione esta variável no início do seu script
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzw91oGk9KLWRZO7p4JGJwoTrLtPkWxwPEFxaAikoDn5_Y8PQ-HsV3aoRLH6hkpIHdqtQ/exec";
-
-// Modifique a função addNewPayment
-async function addNewPayment() {
-    const type = document.getElementById('payment-type').value;
-    const name = document.getElementById('payment-name').value;
-    const due = document.getElementById('payment-due').value;
-    let value = document.getElementById('payment-value').value;
-    const fileInput = document.getElementById('payment-file');
-    const file = fileInput.files[0];
-    
-    // Validação dos campos obrigatórios
-    if (!type || !name || !due) {
-        alert('Por favor, preencha todos os campos obrigatórios');
-        return;
-    }
-    
-    // Tratamento do valor
-    if (!value || isNaN(value.replace(',', '.'))) {
-        value = '0';
-    }
-    
-    const amount = parseFloat(value.replace(',', '.'));
-    
-    // Determinar a entidade com base no tipo
-    let entity = '';
-    switch (type) {
-        case 'imposto':
-            entity = 'Receita Federal';
-            break;
-        case 'conta':
-            entity = 'Fornecedor';
-            break;
-        case 'taxa':
-            entity = 'Órgão Público';
-            break;
-        default:
-            entity = 'Outro';
-    }
-    
-    // Criar novo ID
-    const newId = (paymentsData.length + 1).toString();
-    
-    // Processar o arquivo, se existir
-    let documentUrl = null;
-    let documentName = null;
-    
-    if (file) {
-        try {
-            // Ler o arquivo como base64
-            const reader = new FileReader();
+        // Função para adicionar um novo pagamento
+        function addNewPayment() {
+            const type = document.getElementById('payment-type').value;
+            const name = document.getElementById('payment-name').value;
+            const due = document.getElementById('payment-due').value;
+            let value = document.getElementById('payment-value').value;
+            const file = document.getElementById('payment-file').files[0];
             
-            // Usar Promise para esperar a leitura do arquivo
-            const fileData = await new Promise((resolve, reject) => {
-                reader.onload = (event) => resolve(event.target.result.split(',')[1]);
-                reader.onerror = (error) => reject(error);
-                reader.readAsDataURL(file);
-            });
-            
-            // Enviar para o Google Drive
-            const response = await fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    file: fileData,
-                    name: file.name,
-                    mimeType: file.type
-                })
-            });
-            
-            const result = await response.json();
-            
-            if (result.status === "success") {
-                documentUrl = result.fileUrl;
-                documentName = result.fileName;
-            } else {
-                console.error("Erro ao enviar arquivo:", result.message);
-                alert("O arquivo foi salvo, mas houve um problema ao enviá-lo para o Drive.");
+            // Validação dos campos obrigatórios
+            if (!type || !name || !due) {
+                alert('Por favor, preencha todos os campos obrigatórios');
+                return;
             }
-        } catch (error) {
-            console.error("Erro ao processar arquivo:", error);
-            alert("Erro ao processar o arquivo. O pagamento será salvo sem o documento.");
+            
+            // Tratamento do valor
+            if (!value || isNaN(value.replace(',', '.'))) {
+                value = '0';
+            }
+            
+            const amount = parseFloat(value.replace(',', '.'));
+            
+            // Determinar a entidade com base no tipo
+            let entity = '';
+            switch (type) {
+                case 'imposto':
+                    entity = 'Receita Federal';
+                    break;
+                case 'conta':
+                    entity = 'Fornecedor';
+                    break;
+                case 'taxa':
+                    entity = 'Órgão Público';
+                    break;
+                default:
+                    entity = 'Outro';
+            }
+            
+            // Criar novo ID
+            const newId = (paymentsData.length + 1).toString();
+            
+            // Criar objeto do pagamento
+            const newPayment = {
+                id: newId,
+                name: name,
+                type: type,
+                entity: entity,
+                dueDate: due,
+                amount: amount,
+                status: 'pending',
+                barcode: "00000000000-0 00000000000-0 00000000000-0 00000000000-0",
+                notes: file ? `Documento anexado: ${file.name}` : "Sem documento anexado",
+                documentUrl: file ? '#' : null,
+                documentName: file ? file.name : null
+            };
+            
+            // Adicionar ao array de pagamentos
+            paymentsData.push(newPayment);
+            
+            // Atualizar a lista de pagamentos
+            updatePaymentsList();
+            
+            alert('Pagamento adicionado com sucesso!');
+            closeAddPayment();
         }
-    }
-    
-    // Criar objeto do pagamento
-    const newPayment = {
-        id: newId,
-        name: name,
-        type: type,
-        entity: entity,
-        dueDate: due,
-        amount: amount,
-        status: 'pending',
-        barcode: "00000000000-0 00000000000-0 00000000000-0 00000000000-0",
-        notes: file ? `Documento anexado: ${file.name}` : "Sem documento anexado",
-        documentUrl: documentUrl,
-        documentName: documentName
-    };
-    
-    // Adicionar ao array de pagamentos
-    paymentsData.push(newPayment);
-    
-    // Atualizar a lista de pagamentos
-    updatePaymentsList();
-    
-    alert('Pagamento adicionado com sucesso!');
-    closeAddPayment();
-}
 
         // Função para deletar um pagamento
         function deletePayment(paymentId) {
