@@ -6,7 +6,7 @@
     <title>BANKBRAS | Conexão Direta Empresas-Investidores</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -19,7 +19,10 @@
             --light: #ffffff;            /* Branco */
             --gray: #6c757d;            /* Cinza */
             --light-gray: #f8f9fa;       /* Cinza claro */
-            --transition: all 0.3s ease;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 10px 20px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
         
         * {
@@ -55,7 +58,9 @@
         }
         
         .btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             padding: 0.8rem 2rem;
             border-radius: 50px;
             font-weight: 600;
@@ -65,41 +70,84 @@
             font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
         
         .btn-primary {
             background-color: var(--primary);
             color: var(--dark);
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            box-shadow: var(--shadow-sm);
+            transform: translateY(0);
         }
         
         .btn-primary:hover {
-            background-color: var(--primary-dark);
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            box-shadow: var(--shadow-md);
+            color: var(--dark);
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-light), var(--primary-dark));
+            z-index: -1;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .btn-primary:hover::before {
+            opacity: 1;
         }
         
         .btn-outline {
             background: transparent;
             border: 2px solid var(--primary);
             color: var(--primary);
+            box-shadow: none;
         }
         
         .btn-outline:hover {
             background: var(--primary);
             color: var(--dark);
+            box-shadow: var(--shadow-sm);
         }
         
         .btn-dark {
             background-color: var(--dark);
             color: var(--light);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-sm);
         }
         
         .btn-dark:hover {
             background-color: var(--primary);
             color: var(--dark);
             transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-login {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.6rem 1.5rem;
+            margin-right: 1rem;
+        }
+        
+        .btn-login:hover {
+            background-color: var(--primary);
+            color: var(--dark);
+        }
+        
+        .btn-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
         
         /* Header Sofisticado */
@@ -111,7 +159,7 @@
             background: rgba(255, 255, 255, 0.98);
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
             border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
             transition: var(--transition);
         }
         
@@ -142,12 +190,18 @@
         
         .logo:hover .logo-icon {
             transform: rotate(15deg) scale(1.1);
+            animation: pulse 2s infinite;
         }
         
         .logo-text h1 {
             font-size: 1.8rem;
             color: var(--dark);
             font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
         }
         
         .logo-text span {
@@ -218,6 +272,11 @@
             color: var(--dark);
             cursor: pointer;
             z-index: 1001;
+            transition: var(--transition);
+        }
+        
+        .mobile-menu-btn:hover {
+            color: var(--primary);
         }
         
         /* Hero Section */
@@ -240,18 +299,15 @@
             height: 200%;
             background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0) 70%);
             z-index: 0;
-            animation: float 6s ease-in-out infinite;
+            animation: float 8s ease-in-out infinite;
         }
         
         @keyframes float {
-            0% {
+            0%, 100% {
                 transform: translateY(0) rotate(0deg);
             }
             50% {
                 transform: translateY(-20px) rotate(2deg);
-            }
-            100% {
-                transform: translateY(0) rotate(0deg);
             }
         }
         
@@ -312,6 +368,38 @@
             }
         }
         
+        /* Floating Coins Animation */
+        .floating-coins {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .coin {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle at center, var(--primary-light) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float-coin linear infinite;
+            filter: drop-shadow(0 5px 5px rgba(212, 175, 55, 0.3));
+        }
+        
+        @keyframes float-coin {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+        
         /* Sections */
         .section {
             padding: 6rem 0;
@@ -360,16 +448,35 @@
             background: var(--light);
             padding: 2.5rem 2rem;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow-sm);
             text-align: center;
             border: 1px solid rgba(212, 175, 55, 0.1);
             transition: var(--transition);
             transform: translateY(0);
+            position: relative;
+            overflow: hidden;
         }
         
         .feature-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary-dark));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
         }
         
         .feature-icon {
@@ -390,16 +497,27 @@
         .feature-card:hover .feature-icon {
             background: var(--primary);
             color: var(--light);
-            transform: rotateY(180deg);
+            transform: rotateY(180deg) scale(1.1);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
         }
         
         .feature-card h3 {
             font-size: 1.4rem;
             margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+        
+        .feature-card:hover h3 {
+            color: var(--primary-dark);
         }
         
         .feature-card p {
             color: var(--gray);
+            transition: var(--transition);
+        }
+        
+        .feature-card:hover p {
+            color: var(--dark);
         }
         
         /* Services */
@@ -413,7 +531,7 @@
             background: var(--light);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow-sm);
             transition: var(--transition);
             border: 1px solid rgba(0, 0, 0, 0.05);
             transform: translateY(0);
@@ -421,7 +539,7 @@
         
         .service-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-md);
         }
         
         .service-img {
@@ -444,6 +562,16 @@
         
         .service-card:hover .service-img i {
             transform: scale(1.2);
+            animation: bounce 1s;
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: scale(1.2);
+            }
+            50% {
+                transform: scale(1.3);
+            }
         }
         
         .service-img::before {
@@ -476,11 +604,21 @@
             font-size: 1.5rem;
             margin-bottom: 1rem;
             color: var(--dark);
+            transition: var(--transition);
+        }
+        
+        .service-card:hover .service-content h3 {
+            color: var(--primary-dark);
         }
         
         .service-content p {
             color: var(--gray);
             margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+        
+        .service-card:hover .service-content p {
+            color: var(--dark);
         }
         
         .service-content a {
@@ -489,19 +627,36 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            transition: var(--transition);
         }
         
         .service-content a i {
             transition: var(--transition);
         }
         
+        .service-content a:hover {
+            color: var(--primary-dark);
+        }
+        
         .service-content a:hover i {
             transform: translateX(5px);
         }
         
+        .how-it-works {
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-light));
+            color: var(--light);
+        }
+        
+        .how-it-works .section-title h2 {
+            color: var(--light);
+        }
+        
+        .how-it-works .section-title h2::after {
+            background: var(--light);
+        }
+        
         .how-it-works .section-title p {
-            color: var(--light) !important;
-            opacity: 0.9;
+            color: rgba(255, 255, 255, 0.8) !important;
         }
         
         .steps {
@@ -524,6 +679,7 @@
         .step:hover {
             transform: translateY(-10px);
             background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
         
         .step-number {
@@ -538,18 +694,22 @@
             margin: 0 auto 1.5rem;
             font-weight: 700;
             font-size: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-sm);
             transition: var(--transition);
         }
         
         .step:hover .step-number {
-            transform: rotate(360deg);
+            transform: rotate(360deg) scale(1.1);
             background: var(--light);
         }
         
         .step h3 {
             font-size: 1.3rem;
             margin-bottom: 1rem;
+        }
+        
+        .step p {
+            opacity: 0.9;
         }
         
         /* Stats */
@@ -567,6 +727,11 @@
         .stat-item {
             padding: 2rem;
             position: relative;
+            transition: var(--transition);
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
         }
         
         .stat-item::before {
@@ -579,6 +744,11 @@
             background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), transparent);
             border-radius: 8px;
             z-index: 0;
+            transition: var(--transition);
+        }
+        
+        .stat-item:hover::before {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), transparent);
         }
         
         .stat-number {
@@ -628,12 +798,18 @@
         .cta h2 {
             font-size: 2.5rem;
             margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease-out;
         }
         
         .cta p {
             max-width: 700px;
             margin: 0 auto 2.5rem;
             font-size: 1.2rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+        
+        .cta .btn {
+            animation: fadeInUp 1s ease-out 0.4s both;
         }
         
         /* Footer Simplificado */
@@ -662,12 +838,22 @@
         .footer-logo-icon {
             font-size: 2.5rem;
             color: var(--primary);
+            transition: var(--transition);
+        }
+        
+        .footer-logo:hover .footer-logo-icon {
+            transform: rotate(15deg) scale(1.1);
         }
         
         .footer-logo-text h2 {
             font-size: 2rem;
             color: var(--light);
             font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
         }
         
         .footer-logo-text span {
@@ -692,11 +878,27 @@
             opacity: 0.8;
             transition: var(--transition);
             font-weight: 600;
+            position: relative;
+        }
+        
+        .footer-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
         }
         
         .footer-links a:hover {
             opacity: 1;
             color: var(--primary);
+        }
+        
+        .footer-links a:hover::after {
+            width: 100%;
         }
         
         .social-links {
@@ -721,7 +923,7 @@
         .social-links a:hover {
             background: var(--primary);
             color: var(--dark);
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.1);
         }
         
         .footer-contact {
@@ -731,11 +933,20 @@
         .footer-contact p {
             margin-bottom: 0.5rem;
             opacity: 0.8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
         
         .footer-contact a {
             color: var(--primary);
             font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .footer-contact a:hover {
+            color: var(--primary-light);
         }
         
         .footer-bottom {
@@ -752,6 +963,24 @@
             background: rgba(212, 175, 55, 0.3);
             border-radius: 50%;
             pointer-events: none;
+            animation: float-particle linear infinite;
+        }
+        
+        @keyframes float-particle {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
         }
         
         /* Responsivo */
@@ -800,6 +1029,10 @@
             }
             
             .auth-btn {
+                display: none;
+            }
+            
+            .btn-group {
                 display: none;
             }
             
@@ -863,7 +1096,10 @@
                     <li><a href="#services">Serviços</a></li>
                     <li><a href="#how-it-works">Como Funciona</a></li>
                     <li><a href="#contact">Contato</a></li>
-                    <li><a href="#" class="btn btn-primary auth-btn">Cadastre-se</a></li>
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-login">Login</a>
+                        <a href="#" class="btn btn-primary auth-btn">Cadastre-se</a>
+                    </div>
                 </ul>
                 
                 <button class="mobile-menu-btn">
@@ -875,6 +1111,7 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
+        <div class="floating-coins" id="floatingCoins"></div>
         <div class="container">
             <div class="hero-content">
                 <h1>Conexão direta entre <span>empresas</span> e <span>investidores</span></h1>
@@ -1021,7 +1258,8 @@
         <div class="container">
             <div class="section-title">
                 <h2>Como Funciona</h2>
-                </div>
+                <p>Um processo simples e transparente para conectar empresas e investidores</p>
+            </div>
             
             <div class="steps">
                 <div class="step">
@@ -1056,7 +1294,10 @@
         <div class="container">
             <h2>Pronto para transformar sua relação com o crédito e investimentos?</h2>
             <p>Cadastre-se agora e descubra como nossa plataforma pode conectar você às melhores oportunidades do mercado.</p>
-            <a href="#" class="btn btn-dark">Comece Agora</a>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-dark">Comece Agora</a>
+                <a href="#" class="btn btn-outline">Fale com um especialista</a>
+            </div>
         </div>
     </section>
 
@@ -1080,6 +1321,8 @@
                     <li><a href="#services">Serviços</a></li>
                     <li><a href="#how-it-works">Como Funciona</a></li>
                     <li><a href="#contact">Contato</a></li>
+                    <li><a href="#">Termos de Uso</a></li>
+                    <li><a href="#">Política de Privacidade</a></li>
                 </ul>
                 
                 <div class="social-links">
@@ -1141,10 +1384,38 @@
             }
         });
         
-        // Efeito de partículas no footer
+        // Criar moedas flutuantes
+        function createFloatingCoins() {
+            const container = document.getElementById('floatingCoins');
+            const coinCount = 15;
+            
+            for (let i = 0; i < coinCount; i++) {
+                const coin = document.createElement('div');
+                coin.classList.add('coin');
+                
+                // Tamanho aleatório
+                const size = Math.random() * 20 + 10;
+                coin.style.width = `${size}px`;
+                coin.style.height = `${size}px`;
+                
+                // Posição inicial aleatória
+                coin.style.left = `${Math.random() * 100}%`;
+                coin.style.bottom = `-${size}px`;
+                
+                // Duração e delay aleatórios
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 15;
+                
+                coin.style.animation = `float-coin ${duration}s linear ${delay}s infinite`;
+                
+                container.appendChild(coin);
+            }
+        }
+        
+        // Criar partículas no footer
         function createParticles() {
             const footer = document.querySelector('footer');
-            const particleCount = 15;
+            const particleCount = 30;
             
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
@@ -1163,20 +1434,17 @@
                 particle.style.opacity = Math.random() * 0.5 + 0.1;
                 
                 // Animação
-                const duration = Math.random() * 10 + 5;
-                particle.style.animation = `float ${duration}s infinite ease-in-out`;
+                const duration = Math.random() * 15 + 10;
+                particle.style.animation = `float-particle ${duration}s linear infinite`;
                 particle.style.animationDelay = `${Math.random() * 5}s`;
                 
                 footer.appendChild(particle);
             }
         }
         
-        // Criar partículas quando a página carregar
-        window.addEventListener('load', createParticles);
-        
         // Animação ao rolar a página
         const animateOnScroll = () => {
-            const elements = document.querySelectorAll('.feature-card, .service-card, .step');
+            const elements = document.querySelectorAll('.feature-card, .service-card, .step, .stat-item');
             
             elements.forEach(element => {
                 const elementPosition = element.getBoundingClientRect().top;
@@ -1190,7 +1458,7 @@
         };
         
         // Inicializar elementos com opacidade 0 para animação
-        document.querySelectorAll('.feature-card, .service-card, .step').forEach(el => {
+        document.querySelectorAll('.feature-card, .service-card, .step, .stat-item').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(20px)';
             el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
@@ -1199,8 +1467,26 @@
         // Adicionar evento de scroll
         window.addEventListener('scroll', animateOnScroll);
         
-        // Executar uma vez no carregamento para verificar elementos já visíveis
-        window.addEventListener('load', animateOnScroll);
+        // Executar funções quando a página carregar
+        window.addEventListener('load', () => {
+            createFloatingCoins();
+            createParticles();
+            animateOnScroll();
+            
+            // Adicionar hover effect aos botões
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', () => {
+                    button.style.transform = 'translateY(-3px)';
+                    button.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.2)';
+                });
+                
+                button.addEventListener('mouseleave', () => {
+                    button.style.transform = 'translateY(0)';
+                    button.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+                });
+            });
+        });
     </script>
 </body>
 </html>
