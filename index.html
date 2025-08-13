@@ -1,6 +1,3 @@
-# BANKBRAS - Plataforma de Investimentos Diretos (Redesign Avançado)
-
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -13,20 +10,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #006341;
-            --primary-dark: #004d34;
-            --secondary: #009B3A;
-            --accent: #FEDD00;
-            --accent-dark: #e6c800;
-            --dark: #1a1a1a;
-            --light: #f8f9fa;
-            --gray: #6c757d;
-            --white: #ffffff;
-            --success: #28a745;
-            --info: #17a2b8;
-            --warning: #ffc107;
-            --danger: #dc3545;
-        }
+    --primary: #003366;  /* Azul escuro */
+    --primary-dark: #002244;
+    --secondary: #0066cc;  /* Azul médio */
+    --accent: #FFD700;  /* Dourado no lugar do amarelo */
+    --accent-dark: #e6c800;
+    --dark: #121212;  /* Preto mais escuro */
+    --light: #f8f9fa;
+    --gray: #6c757d;
+    --white: #ffffff;
+    --success: #28a745;
+    --info: #17a2b8;
+    --warning: #ffc107;
+    --danger: #dc3545;
+}
         
         * {
             margin: 0;
@@ -284,15 +281,15 @@
         }
         
         .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);  /* Força 4 colunas */
+    gap: 1rem;  /* Reduzi o gap */
+}
         
         .feature-card {
             background-color: var(--white);
             border-radius: 10px;
-            padding: 2.5rem 2rem;
+            padding: 1.5rem 1rem;
             text-align: center;
             box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
@@ -305,8 +302,8 @@
         }
         
         .feature-icon {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             background-color: rgba(0, 155, 58, 0.1);
             border-radius: 50%;
             display: flex;
@@ -314,7 +311,7 @@
             justify-content: center;
             margin: 0 auto 1.5rem;
             color: var(--primary);
-            font-size: 2rem;
+            font-size: 1.5rem;
         }
         
         .feature-card h3 {
@@ -973,7 +970,7 @@
                         <h3>Empréstimos Empresariais</h3>
                         <p>Para CNPJs que buscam capital para expansão, capital de giro ou investimentos em infraestrutura com condições negociáveis diretamente com os investidores.</p>
                         <div class="service-meta">
-                            <span class="price">Taxa única R$30</span>
+                            <span class="price">Taxa única</span>
                         </div>
                     </div>
                 </div>
